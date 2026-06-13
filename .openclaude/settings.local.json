@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3:*)",
+      "Bash(python:*)",
+      "Bash(ls -la /d/projectss/elm/v2/js/*.js)",
+      "Bash(wc:*)",
+      "Bash(grep -rn \"#1E3A8A\\\\|#DC2626\\\\|#B91C1C\\\\|#F59E0B\\\\|#1e40af\\\\|#3b82f6\\\\|#EF4444\\\\|#4B5563\\\\|#e5e7eb\" --include=*.js --include=*.html --include=*.css .)",
+      "Bash(grep -rn \"#e5e7eb\\\\|#1E3A8A\\\\|#1e40af\\\\|#3b82f6\\\\|#4B5563\\\\|#B91C1C\\\\|#b91c1c\" --include=*.js --include=*.html --include=*.css .)"
+    ]
+  }
+}

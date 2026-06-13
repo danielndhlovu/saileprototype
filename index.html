@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saile Financial Services</title>
+
+  <!-- Google Fonts: Inter 300-700 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS v3 Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            surface: '#e5e5e5',
+            card: '#ffffff',
+            primary: '#0f766e',
+            secondary: '#6b7280',
+            accent: '#0f766e',
+            info: '#0ea5e9',
+            error: '#d94f4f',
+            warning: '#f59e0b',
+            border: '#d1d5db',
+            dark: '#111827',
+            'input-bg': '#f4f4f5',
+            'nav-active-bg': '#f0fdf4'
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif']
+          },
+          borderRadius: {
+            card: '1rem'
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/custom.css">
+</head>
+<body class="bg-[#e5e5e5] font-sans min-h-screen">
+
+  <!-- Skip to content link (accessibility) -->
+  <a href="#app-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[10000] focus:bg-white focus:px-4 focus:py-2 focus:rounded focus:shadow-lg focus:text-primary focus:underline">
+    Skip to content
+  </a>
+
+  <!-- Offline banner (hidden by default) -->
+  <div id="offline-banner" class="hidden fixed top-0 left-0 right-0 z-[9999] bg-warning text-dark text-center py-2 px-4 text-sm font-medium">
+    Network disconnected. Operating in offline mode. Data will sync when connectivity returns.
+  </div>
+
+  <!-- Auth container (login screens render here) -->
+  <div id="auth-container"></div>
+
+  <!-- App shell (hidden until authenticated) -->
+  <div id="app-shell" class="hidden">
+
+    <!-- Top utility bar -->
+    <header id="top-bar" class="fixed top-0 left-0 right-0 h-14 bg-white border-b border-[#d1d5db] z-50 flex items-center px-4 lg:px-5">
+    </header>
+
+    <!-- Left-rail navigation (desktop) -->
+    <nav id="left-rail" class="hidden lg:block fixed top-14 left-0 bottom-0 w-56 bg-white border-r border-[#d1d5db] z-40 overflow-y-auto">
+    </nav>
+
+    <!-- Main content area -->
+    <main id="app-content" class="pt-20 lg:ml-56 xl:mr-72 min-h-screen px-5 pb-6 lg:px-6 lg:pb-8">
+    </main>
+
+    <!-- Right panel (notifications & info) -->
+    <aside id="right-panel" class="hidden xl:block fixed top-14 right-0 bottom-0 w-72 p-4 overflow-y-auto">
+    </aside>
+
+    <!-- Mobile bottom tabs -->
+    <nav id="mobile-tabs" class="block lg:hidden fixed bottom-0 left-0 right-0 h-16 px-4 bg-white border-t border-[#d1d5db] z-50 flex items-center justify-around">
+    </nav>
+
+  </div>
+
+  <!-- Session timeout modal (hidden) -->
+  <div id="timeout-modal" class="hidden fixed inset-0 z-[10000] flex items-center justify-center bg-black/50">
+    <div class="bg-white rounded-2xl p-6 max-w-sm w-full mx-4 shadow-xl">
+      <h2 class="text-lg font-semibold text-primary mb-2">Session Timeout</h2>
+      <p class="text-secondary text-sm mb-4">Your session is about to expire due to inactivity. Would you like to continue?</p>
+      <div class="flex gap-3">
+        <button id="timeout-extend" class="flex-1 bg-[#111827] text-white py-2.5 px-4 rounded-xl text-sm font-medium hover:bg-[#047857] transition-colors">Extend Session</button>
+        <button id="timeout-logout" class="flex-1 bg-white border border-[#d1d5db] text-[#0f766e] py-2.5 px-4 rounded-xl text-sm font-medium hover:bg-[#f4f4f5] transition-colors">Log Out</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Access denied modal (hidden) -->
+  <div id="access-denied-modal" class="hidden fixed inset-0 z-[10000] flex items-center justify-center bg-black/50">
+    <div class="bg-white rounded-2xl p-6 max-w-sm w-full mx-4 shadow-xl text-center">
+      <div class="w-12 h-12 bg-error/10 rounded-full flex items-center justify-center mx-auto mb-3">
+        <svg class="w-6 h-6 text-error" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+        </svg>
+      </div>
+      <h2 class="text-lg font-semibold text-primary mb-2">Access Denied</h2>
+      <p class="text-secondary text-sm mb-4">You don't have permission to access this module.</p>
+      <button id="access-denied-back" class="bg-[#111827] text-white py-2.5 px-6 rounded-xl text-sm font-medium hover:bg-[#047857] transition-colors">Go Back</button>
+    </div>
+  </div>
+
+  <!-- JavaScript files in correct load order -->
+  <script src="js/utils.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/audit.js"></script>
+  <script src="js/rbac.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/screens/navigation.js"></script>
+  <script src="js/screens/s00-dashboard.js"></script>
+  <script src="js/screens/s01-clients.js"></script>
+  <script src="js/screens/s02-groups.js"></script>
+  <script src="js/screens/s03-loans.js"></script>
+  <script src="js/screens/s04-repayment.js"></script>
+  <script src="js/screens/s05-collections.js"></script>
+  <script src="js/screens/s06-followup.js"></script>
+  <script src="js/screens/s07-accounting.js"></script>
+  <script src="js/screens/s08-reports.js"></script>
+  <script src="js/screens/s09-users.js"></script>
+  <script src="js/screens/s10-settings.js"></script>
+  <script src="js/screens/s11-audit.js"></script>
+  <script src="js/screens/s12-sync.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,801 @@
+
+# **COMPREHENSIVE DEVELOPMENT PROMPT: Loan Module & Phase 1 Enhancements**
+
+## **Context**
+You are enhancing an existing microfinance management system prototype for **Saile Financial Services Limited, Malawi**. This is a **client-facing demo system** that will be pitched to Mr. Elias Kafinyangwe (Managing Director). The prototype currently has basic loan functionality but uses generic data, wrong product names, and lacks critical features. **All changes must be additive** — do not remove existing working functionality unless explicitly instructed.
+
+---
+
+## **SECTION 1: LOAN PRODUCT CONFIGURATION (CRITICAL — P0)**
+
+### **1.1 Replace All Loan Products with Saile's Actual 7 Products**
+
+**REMOVE/MODIFY:** Delete all existing generic loan products (Agriculture Loan, Business Loan, Emergency Loan, etc.) and replace with Saile's actual portfolio:
+
+| # | Product Name | Duration | Target Client | Key Features | Interest Calculation |
+|---|---|---|---|---|---|
+| 1 | **Payday Loan** | Next payday (typically 30 days) | Salaried employees with payslips | Signature product; 30-minute processing promise | Flat rate on principal |
+| 2 | **3-Month Loan** | 3 months | Salaried employees | Short-term credit for employees | Reducing balance |
+| 3 | **6-Month Loan (SML)** | 6 months | Salaried employees & small business owners | "SML" is the abbreviation used internally | Reducing balance |
+| 4 | **Special Scheme** | 10 months | High-salary employees (senior staff, lecturers, managers) | Higher loan amounts, preferential rates | Reducing balance |
+| 5 | **Executive Scheme** | 12 months | Managers, lecturers, senior civil servants | Premium product for established professionals | Reducing balance |
+| 6 | **Business Loan** | 10–12 months | Business people, traders, SMEs | For working capital and business expansion | Reducing balance |
+| 7 | **Enterprise Loan** | 18 months | Established businesses with track record | Largest amounts, requires business documentation | Reducing balance |
+
+**REQUIREMENTS:**
+- [ ] Create a `loan_products` table/entity with all fields above
+- [ ] Each product must have: `product_code` (unique, e.g., "PDL", "3ML", "SML", "SSC", "ESC", "BSL", "ENT"), `product_name`, `min_amount`, `max_amount`, `duration_months`, `interest_rate`, `target_client_description`, `processing_time_minutes`, `required_documents` (JSON array), `status` (active/inactive)
+- [ ] **Payday Loan must be flagged as `is_signature_product = true`** for demo emphasis
+- [ ] All interest rates must use **reducing balance method** except Payday Loan (flat rate)
+- [ ] Include RBM-compliant fields: `effective_interest_rate` (calculated per Fourth Schedule), `total_cost_of_credit` disclosure
+- [ ] Add `compulsory_savings_percentage` field (per RBM Directive — up to 20% of loan amount)
+
+### **1.2 Loan Application Workflow (Payday Loan Demo Flow)**
+
+**CREATE:** A complete loan application and disbursement workflow optimized for the Payday Loan demo:
+
+**Step-by-Step Flow:**
+1. **Client Search/Registration** — Search by NRC number or phone; if not found, quick registration with: `first_name`, `last_name`, `nrc_number`, `phone`, `email`, `employer_name`, `monthly_salary`, `branch_id`, `client_photo` (upload), `payslip_upload`
+2. **Product Selection** — Default to Payday Loan (signature product); show product details: amount range (MWK 50,000–500,000), duration, interest rate, total repayment
+3. **Loan Calculator** — Real-time calculation showing:
+   - Principal: MWK [input]
+   - Interest: MWK [calculated]
+   - Compulsory Savings (20%): MWK [calculated]
+   - Processing Fee: MWK [calculated]
+   - **Total Cost of Credit**: MWK [sum]
+   - Monthly/Weekly repayment amount
+   - **Effective Interest Rate** (annualized, per RBM Fourth Schedule)
+4. **Document Upload** — Payslip (mandatory for Payday), NRC copy, employer confirmation letter
+5. **Credit Check** — Internal check: existing loans? arrears? credit score if available
+6. **Approval Workflow** — 
+   - Loan Officer submits → Branch Manager approves (if under threshold) → System auto-disburse OR MD approval (if over threshold)
+   - **Payday Loan must have express approval path** (30-minute promise)
+7. **Disbursement** — Record disbursement method (cash/bank transfer/mobile money), generate disbursement voucher, update client savings account with compulsory savings amount
+8. **Loan Schedule Generation** — Auto-generate repayment schedule with exact dates and amounts
+9. **Notification** — SMS to client (if SMS module ready) with disbursement confirmation and first payment date
+
+**REQUIREMENTS:**
+- [ ] All calculations must be **RBM-compliant** (reducing balance, proper EIR disclosure)
+- [ ] **Audit trail** logged at every step (who did what, when, from which branch)
+- [ ] Loan status tracking: `DRAFT` → `SUBMITTED` → `UNDER_REVIEW` → `APPROVED` → `DISBURSED` → `ACTIVE` → `CLOSED` / `WRITTEN_OFF`
+- [ ] Rejection path with mandatory reason field
+- [ ] **Demo data must include at least 3 Payday Loans in various stages** for the pitch
+
+---
+
+## **SECTION 2: BRANCH STRUCTURE (CRITICAL — P0)**
+
+### **2.1 Replace All Branch Data with Saile's Actual 6 Branches**
+
+**REMOVE/MODIFY:** Delete all generic branch names. Replace with:
+
+| Branch Code | Branch Name | Branch Type | Location | Manager Name (Demo) | Contact |
+|---|---|---|---|---|---|
+| MZE | Mzuzu — Employees & Pensioners Loans Branch | Employee/Pensioner Loans | Mzuzu | Mr. Blessings Chirwa | mze@saile.mw |
+| MZB | Mzuzu — Business Loans Branch | Business Loans | Mzuzu | Mrs. Agness Mhango | mzb@saile.mw |
+| LLW | Lilongwe Branch | Mixed Portfolio | Lilongwe | Mr. Patrick Kalua | llw@saile.mw |
+| BLN | Blantyre Branch | Mixed Portfolio | Blantyre | Mrs. Esnart Tembo | bln@saile.mw |
+| KRG | Karonga Branch | Mixed Portfolio | Karonga | Mr. Geoffrey Ngwira | krg@saile.mw |
+| ZBA | Zomba Branch | Mixed Portfolio | Zomba | Mrs. Mary Chavula | zba@saile.mw |
+
+**CRITICAL DETAIL:** Saile has **TWO separate branches in Mzuzu** — one for employees/pensioners loans and one for business loans. This is a significant operational detail that must be visible in the system.
+
+**REQUIREMENTS:**
+- [ ] Update `branches` table with all 6 branches including the two Mzuzu locations
+- [ ] Branch type field determines which loan products are available (MZE: Payday, 3-Month, SML, Special, Executive; MZB: Business, Enterprise, SML; others: all products)
+- [ ] Each branch has: `branch_code`, `branch_name`, `branch_type`, `physical_address`, `phone`, `email`, `manager_name`, `opening_date`, `status`
+- [ ] **Dashboard must show portfolio split by all 6 branches with Mzuzu split visible**
+- [ ] Demo users assigned to correct branches with realistic Malawian names
+
+---
+
+## **SECTION 3: REALISTIC DEMO DATA & NAMES (CRITICAL — P0)**
+
+### **3.1 Replace All Generic Names with Realistic Malawian Names**
+
+**REMOVE:** All fictional names like "Grace Mwanza," "Daniel Msiska," "Chimwemwe Banda," "Sarah Phiri"
+
+**REPLACE WITH:** Realistic Malawian names across all roles:
+
+**Management Team (for role mapping during pitch):**
+| System Role | Demo Name | Actual Saile Role (for pitch reference) |
+|---|---|---|
+| MD Dashboard | Mr. Elias Kafinyangwe | Managing Director |
+| Finance Manager | Mr. Matias Kafinyangwe | Finance Manager |
+| Admin Manager | Mr. Isaac Nkhambule | Administration Manager |
+| Internal Audit | Mrs. Yuki Kafinyangwe | Internal Audit Manager |
+
+**Branch Staff (Demo Users):**
+| Branch | Role | Demo Name | Username |
+|---|---|---|---|
+| MZE | Branch Manager | Mr. Blessings Chirwa | bchirwa |
+| MZE | Loan Officer | Ms. Mercy Jere | mjere |
+| MZE | Loan Officer | Mr. Francis Moyo | fmoyo |
+| MZB | Branch Manager | Mrs. Agness Mhango | amhango |
+| MZB | Loan Officer | Mr. Steven Gondwe | sgondwe |
+| LLW | Branch Manager | Mr. Patrick Kalua | pkalua |
+| LLW | Loan Officer | Ms. Liness Nkhata | lnkhata |
+| BLN | Branch Manager | Mrs. Esnart Tembo | etembo |
+| BLN | Loan Officer | Mr. Jones Mwalwanda | jmwalwanda |
+| KRG | Branch Manager | Mr. Geoffrey Ngwira | gngwira |
+| KRG | Loan Officer | Ms. Bertha Mwale | bmwale |
+| ZBA | Branch Manager | Mrs. Mary Chavula | mchavula |
+| ZBA | Loan Officer | Mr. Charles Mwase | cmwase |
+
+**REQUIREMENTS:**
+- [ ] Update all `users`, `clients`, `staff`, `audit_logs` tables with realistic Malawian names
+- [ ] Client names must be realistic: mix of Chewa, Tumbuka, Yao, Ngoni surnames (e.g., Banda, Phiri, Nkhoma, Mwale, Chirwa, Tembo, Gondwe, Jere, Moyo, Ngwira, etc.)
+- [ ] NRC numbers in valid Malawian format: e.g., "MW123456", "AB987654"
+- [ ] Phone numbers in Malawian format: +265 88X XXX XXX, +265 99X XXX XXX
+- [ ] **DO NOT use the actual Saile management names in the demo system** — use the realistic demo names above, but document the mapping for the pitch
+
+### **3.2 Scale Demo Portfolio to Realistic Size**
+
+**REMOVE:** Current unrealistic data (MWK 500,000 outstanding, 6 clients, 1 active loan)
+
+**REPLACE WITH:**
+| Metric | Current (Wrong) | Target (Realistic) |
+|---|---|---|
+| Total Portfolio Outstanding | MWK 500,000 | MWK 75,000,000 |
+| Active Clients | 6 | 850 |
+| Active Loans | 1 | 320 |
+| Closed Loans (historical) | 0 | 1,200 |
+| Branches | 4 | 6 |
+| Loan Officers | 2 | 12 |
+| Average Loan Size | MWK 500,000 | MWK 234,375 |
+| PAR > 30 days | N/A | 4.2% |
+
+**REQUIREMENTS:**
+- [ ] Generate 850 realistic client records with proper Malawian names, addresses, employers
+- [ ] Generate 320 active loans distributed across all 7 products and 6 branches
+- [ ] Generate 1,200 historical closed loans with realistic dates (2020–2026)
+- [ ] Ensure portfolio distribution reflects real MFI patterns: 40% Payday, 25% SML, 15% Business, 10% 3-Month, 5% Special, 3% Executive, 2% Enterprise
+- [ ] Include realistic arrears: 15 loans at 30 days, 8 at 60 days, 4 at 90 days, 2 at 120+ days
+- [ ] All amounts in MWK with proper formatting (commas, "MWK" prefix)
+
+---
+
+## **SECTION 4: RBM REPORTING MODULE (HIGH PRIORITY — P1)**
+
+### **4.1 Create RBM-Compliant Report Templates**
+
+**ENHANCE:** Existing reports page with one-click quarterly report generation for the Reserve Bank of Malawi (RBM).
+
+**Required RBM Reports (Quarterly — NDMFI 017/22 Compliance):**
+
+| Report Code | Report Name | Frequency | Data Required | Output Format |
+|---|---|---|---|---|
+| RBM-001 | Statement of Financial Position | Quarterly | Assets, liabilities, equity by category | Excel/PDF |
+| RBM-002 | Statement of Comprehensive Income | Quarterly | Revenue, expenses, net income | Excel/PDF |
+| RBM-003 | Loan Portfolio Report | Quarterly | Portfolio by product, branch, PAR, provisions | Excel/PDF |
+| RBM-004 | Savings & Deposits Report | Quarterly | Deposit balances by type, branch | Excel/PDF |
+| RBM-005 | Capital Adequacy Report | Quarterly | Capital, risk-weighted assets, ratio | Excel/PDF |
+| RBM-006 | Liquidity Report | Quarterly | Cash, liquid assets, short-term liabilities | Excel/PDF |
+| RBM-007 | Large Exposures Report | Quarterly | Loans > 10% of capital, concentrations | Excel/PDF |
+| RBM-008 | Governance & Operations Report | Quarterly | Board changes, staff, branches, policies | Excel/PDF |
+
+**REQUIREMENTS:**
+- [ ] Each report has a **"Generate" button** that auto-populates all fields from system data
+- [ ] **One-click export** to Excel (.xlsx) and PDF with RBM-compliant formatting
+- [ ] Report header must include: Institution Name (Saile Financial Services), License Number (NDMFI 017/22), Reporting Period, Date Generated, Prepared By
+- [ ] **Validation checks**: System warns if data is incomplete or inconsistent before generation
+- [ ] **Audit log**: Who generated which report, when, and any manual adjustments made
+- [ ] **Comparison feature**: Compare current quarter vs. previous quarter (variance analysis)
+- [ ] **Demo data must show a complete RBM-003 (Loan Portfolio Report)** ready for the pitch
+
+### **4.2 RBM Compliance Fields in Loan Module**
+
+**ADD** the following RBM-required fields to every loan record:
+
+| Field | Description | Calculation/Validation |
+|---|---|---|
+| `effective_interest_rate` | Annualized EIR per Fourth Schedule | Auto-calculated using XIRR method on all cash flows |
+| `total_cost_of_credit` | Sum of all fees, interest, insurance | Principal + Interest + Fees + Insurance + Savings |
+| `compulsory_savings_amount` | 20% of loan (per RBM Directive) | Auto-calculated, held in savings account |
+| `interest_calculation_method` | Reducing balance or Flat | Enum: REDUCING_BALANCE, FLAT |
+| `disclosure_statement_generated` | Client received TCC disclosure | Boolean, timestamp, PDF generated |
+| `rbm_reporting_category` | Product classification for RBM | Enum: SHORT_TERM, MEDIUM_TERM, LONG_TERM, MICRO_ENTERPRISE, SMALL_ENTERPRISE |
+
+**REQUIREMENTS:**
+- [ ] All new fields must be populated automatically during loan creation
+- [ ] `effective_interest_rate` must use proper financial formula (XIRR or equivalent)
+- [ ] `total_cost_of_credit` must appear on loan agreement and disclosure statement
+- [ ] Generate **RBM-compliant loan agreement template** with all disclosures
+
+---
+
+## **SECTION 5: SAVINGS PRODUCTS MODULE (HIGH PRIORITY — P1)**
+
+### **5.1 Configure Savings Products for Saile's Operations**
+
+**ENHANCE:** Existing savings module with Saile-specific product configuration.
+
+| Product Code | Product Name | Type | Description | Interest Rate | Min Balance | Withdrawal Rules |
+|---|---|---|---|---|---|---|
+| SAV-COMP | Compulsory Savings | Mandatory | 20% of loan amount held as collateral | 2% p.a. | MWK 5,000 | Withdrawable only on loan closure |
+| SAV-REC | Recurring Deposit | Voluntary | Regular monthly deposits | 4% p.a. | MWK 1,000 | Monthly, min balance MWK 5,000 |
+| SAV-FIX | Fixed Deposit | Voluntary | Locked for 3/6/12 months | 6% p.a. | MWK 50,000 | No withdrawal until maturity |
+| SAV-VOL | Voluntary Savings | Voluntary | Flexible deposits/withdrawals | 2% p.a. | MWK 500 | Anytime, no restrictions |
+
+**REQUIREMENTS:**
+- [ ] Each savings product has: `product_code`, `product_name`, `type` (COMPULSORY/RECURRING/FIXED/VOLUNTARY), `interest_rate`, `interest_calculation_method` (daily balance), `minimum_balance`, `minimum_opening_amount`, `withdrawal_restrictions`, `maturity_period` (for fixed), `status`
+- [ ] **Compulsory Savings** auto-created when loan is disbursed (20% of principal)
+- [ ] Interest calculated daily, posted monthly
+- [ ] **Link savings to loans**: Show compulsory savings balance on loan card; block loan closure until compulsory savings released
+- [ ] Withdrawal workflow with approval for amounts over threshold
+- [ ] **Demo data**: 850 clients with compulsory savings, 200 with recurring, 50 with fixed, 300 with voluntary
+
+### **5.2 Savings-Ledger Integration**
+
+**REQUIREMENTS:**
+- [ ] Every savings transaction creates double-entry ledger posting (Debit/Credit)
+- [ ] Compulsory savings release on loan closure automatically updates general ledger
+- [ ] Monthly interest accrual journal entries auto-generated
+- [ ] Reconciliation report: savings balances vs. general ledger control account
+
+---
+
+## **SECTION 6: PAR AUTO-CALCULATION & RISK MANAGEMENT (PHASE 1 DELIVERABLE)**
+
+### **6.1 Portfolio at Risk (PAR) Dashboard**
+
+**CREATE:** Real-time PAR calculation and visualization.
+
+| PAR Bucket | Definition | Color Code | Alert Threshold |
+|---|---|---|---|
+| PAR 1-30 | 1–30 days late | Yellow | > 5% |
+| PAR 31-60 | 31–60 days late | Orange | > 3% |
+| PAR 61-90 | 61–90 days late | Red | > 2% |
+| PAR 90+ | 90+ days late (write-off risk) | Dark Red | > 1% |
+
+**REQUIREMENTS:**
+- [ ] Auto-calculate PAR at 3:00 AM daily for all active loans
+- [ ] PAR displayed on: Dashboard KPI cards, Branch comparison report, Loan officer performance report, RBM-003 report
+- [ ] **Drill-down**: Click PAR number → see list of all loans in that bucket
+- [ ] **Trend chart**: PAR trend over last 12 months
+- [ ] **Alert system**: Email/SMS to branch manager when PAR exceeds threshold
+- [ ] **Provision calculation**: Auto-calculate loan loss provisions per RBM guidelines:
+  - PAR 1-30: 5%
+  - PAR 31-60: 20%
+  - PAR 61-90: 50%
+  - PAR 90+: 100%
+
+### **6.2 Branch Performance Comparison**
+
+**CREATE:** Side-by-side branch comparison dashboard.
+
+**Metrics per Branch:**
+- Portfolio outstanding
+- Number of active clients
+- Number of active loans
+- Average loan size
+- PAR 30, 60, 90+
+- Loan officer productivity (loans disbursed per officer)
+- Client growth (new clients this month/quarter/year)
+- Disbursement volume this month
+
+**REQUIREMENTS:**
+- [ ] Table view + Bar chart view
+- [ ] Sortable by any metric
+- [ ] Export to Excel/PDF
+- [ ] **Highlight best and worst performing branches**
+- [ ] **Trend indicators** (up/down arrows vs. previous period)
+
+---
+
+## **SECTION 7: EFFECTIVE INTEREST RATE (EIR) DISCLOSURE (PHASE 1 DELIVERABLE)**
+
+### **7.1 EIR Calculation Engine**
+
+**CREATE:** RBM Fourth Schedule-compliant EIR calculation.
+
+**Formula:** Use XIRR (internal rate of return) on all cash flows:
+- Outflows: Loan disbursement (principal minus fees/savings)
+- Inflows: All scheduled repayments (principal + interest)
+
+**REQUIREMENTS:**
+- [ ] EIR calculated automatically for every loan at origination
+- [ ] EIR displayed on: Loan calculator, Loan agreement, Client disclosure statement, RBM reports
+- [ ] **Comparison**: Show nominal rate vs. EIR (e.g., "Nominal: 3.5% per month | EIR: 42% annual")
+- [ ] **Validation**: System prevents loan creation if EIR exceeds RBM usury cap (if applicable)
+- [ ] Generate **client disclosure statement** PDF with:
+  - Principal amount
+  - Total interest
+  - All fees (processing, insurance, etc.)
+  - Compulsory savings
+  - **Total Cost of Credit**
+  - **Effective Interest Rate (annualized)**
+  - Repayment schedule
+
+---
+
+## **SECTION 8: SMS NOTIFICATION INTEGRATION (PHASE 1 DELIVERABLE)**
+
+### **8.1 SMS Notification Templates**
+
+**CREATE:** Automated SMS triggers and templates.
+
+| Trigger | Recipient | Template | Status |
+|---|---|---|---|
+| Loan Disbursed | Client | "Saile Financial Services: Your [PRODUCT] of MWK [AMOUNT] has been disbursed. First payment of MWK [AMOUNT] due on [DATE]. Account: [ACCOUNT]" | Active |
+| Payment Due (3 days before) | Client | "Reminder: Your loan payment of MWK [AMOUNT] is due on [DATE]. Please pay at any Saile branch or via Airtel Money/TNM Mpamba." | Active |
+| Payment Received | Client | "Thank you! Payment of MWK [AMOUNT] received. Outstanding balance: MWK [BALANCE]. Next due: [DATE]." | Active |
+| Payment Overdue (1 day) | Client + Loan Officer | "URGENT: Your loan payment of MWK [AMOUNT] was due yesterday. Please pay immediately to avoid penalties." | Active |
+| PAR 30 Alert | Branch Manager | "ALERT: Branch [BRANCH] PAR 30 is now [X]%. Loans: [COUNT]. Please review immediately." | Active |
+| Monthly Portfolio Summary | MD | "Saile Monthly Summary: Portfolio MWK [AMOUNT], Clients [COUNT], Disbursements MWK [AMOUNT], Collections MWK [AMOUNT], PAR 30: [X]%" | Active |
+
+**REQUIREMENTS:**
+- [ ] SMS gateway integration placeholder (TNM Mpamba, Airtel Money APIs — ready for Phase 3)
+- [ ] **Demo mode**: Log SMS to table instead of sending; show "Would send: [message]" in UI
+- [ ] Template editor for admin users
+- [ ] Delivery status tracking (pending, sent, failed, delivered)
+- [ ] **Opt-out management** for clients
+
+---
+
+## **SECTION 9: DATA MIGRATION STRATEGY**
+
+### **9.1 Migration Framework**
+
+**CREATE:** A comprehensive data migration module for Saile's historical data.
+
+**Migration Sources:**
+| Source | Data Type | Format | Priority |
+|---|---|---|---|
+| Excel/CSV files | Client registers, loan ledgers, repayment history | .xlsx, .csv | P0 |
+| Existing database (if any) | Structured data | SQL dump | P1 |
+| Paper records | Client files, loan agreements | Scanned PDFs | P2 |
+| QuickBooks/Sage | Accounting data | Export files | P2 |
+
+**Migration Process:**
+
+**Phase 1: Data Extraction & Cleansing**
+- [ ] Upload interface for Excel/CSV files
+- [ ] **Data validation engine**: Check for duplicates, missing required fields, invalid formats
+- [ ] **Cleansing rules**: Standardize names (title case), phone numbers (+265 format), NRC numbers, dates
+- [ ] **Duplicate detection**: Fuzzy matching on name + NRC + phone
+- [ ] **Exception report**: List all records that failed validation with reason
+
+**Phase 2: Data Mapping**
+- [ ] Field mapping interface: Map source columns to system fields
+- [ ] Predefined templates for common formats (Saile's current Excel structure)
+- [ ] Preview first 10 rows before import
+- [ ] **Rollback capability**: Full backup before any import
+
+**Phase 3: Import & Verification**
+- [ ] Batch import (500 records at a time to prevent timeout)
+- [ ] Progress bar with real-time status
+- [ ] **Post-import verification**: 
+  - Source count vs. imported count match
+  - Sample 20 records for accuracy check
+  - Total portfolio amount reconciliation
+  - Client count reconciliation
+- [ ] **Audit log**: Who imported what, when, how many records, any errors
+
+**Phase 4: Historical Loan Reconstruction**
+- [ ] Import closed loans with full history (disbursement date, repayment schedule, actual payments, closure date)
+- [ ] Import active loans with current balance, arrears status
+- [ ] **Critical**: Maintain historical PAR accuracy for RBM reporting
+- [ ] Generate "migration certificate" report showing before/after totals
+
+**REQUIREMENTS:**
+- [ ] All migration operations logged in audit trail
+- [ ] **Dry-run mode**: Simulate import without writing to database
+- [ ] **Error handling**: Detailed error messages, resume from failure point
+- [ ] **Performance**: Handle up to 10,000 client records and 50,000 loan records
+- [ ] **Security**: Only users with MIGRATION_ADMIN role can access
+
+### **9.2 Migration Demo for Pitch**
+
+**PREPARE:** A demo scenario showing migration of Saile's current Excel-based records:
+
+1. Show current Excel file structure (sample with 50 realistic records)
+2. Upload to system
+3. Show validation results (3 duplicates found, 2 invalid phone numbers)
+4. Show cleansed data preview
+5. Execute import
+6. Show "Migration Complete" summary: 47 clients imported, 3 duplicates flagged, 2 errors to fix
+7. Show imported clients now searchable in system
+8. Show portfolio dashboard updated with imported data
+
+**REQUIREMENTS:**
+- [ ] Prepare sample Excel file with 50 realistic Malawian client records
+- [ ] Include common data quality issues (typos, inconsistent formatting) to demonstrate cleansing
+- [ ] **This demo must take under 5 minutes during the pitch**
+
+---
+
+## **SECTION 10: DASHBOARD & CRITICAL DEMO MOMENTS**
+
+### **10.1 Dashboard Opening — "Mr. Kafinyangwe's Morning View"**
+
+**ENHANCE:** Dashboard to show:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  [SFS LOGO]  Saile Financial Services LTD Co.    June 11, 2026 │
+├─────────────────────────────────────────────────────────────────┤
+│  PORTFOLIO OVERVIEW — ALL 6 BRANCHES                             │
+│                                                                  │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐│
+│  │ MWK 75.2M   │ │   850       │ │   320       │ │   4.2%      ││
+│  │ Portfolio   │ │ Clients     │ │ Active Loans│ │ PAR 30      ││
+│  │ Outstanding │ │             │ │             │ │             ││
+│  └─────────────┘ └─────────────┘ └─────────────┘ └─────────────┘│
+│                                                                  │
+│  BRANCH BREAKDOWN                                                │
+│  ┌─────────────────────────────────────────────────────────────┐│
+│  │ Mzuzu-Emp │ Mzuzu-Bus │ Lilongwe │ Blantyre │ Karonga │ Zomba │
+│  │  MWK 18.5M│  MWK 12.3M│ MWK 22.1M│ MWK 15.7M│ MWK 4.2M│ MWK 2.4M│
+│  │   210 clts│   145 clts│   198 clts│   142 clts│  85 clts│  70 clts│
+│  └─────────────────────────────────────────────────────────────┘│
+│                                                                  │
+│  TODAY'S ACTIVITY                                                │
+│  • 3 new loan applications (Payday: 2, SML: 1)                │
+│  • MWK 1.2M disbursed                                          │
+│  • MWK 850,000 collected                                        │
+│  • 2 payments due today                                         │
+│                                                                  │
+│  ALERTS                                                          │
+│  ⚠️  Karonga PAR 30 at 6.8% (above 5% threshold)               │
+│  ⚠️  4 loans pending approval > 24 hours                        │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**REQUIREMENTS:**
+- [ ] All 6 branches visible with correct names
+- [ ] Both Mzuzu branches shown separately
+- [ ] KPIs use realistic numbers (MWK 75M+ portfolio)
+- [ ] **Alert section** with actionable items
+- [ ] **Today's activity** feed
+- [ ] **Quick actions**: New Loan Application, Record Payment, Generate RBM Report
+
+### **10.2 Loan Processing Demo — "The Payday Loan"**
+
+**PREPARE:** A scripted 5-minute demo flow:
+
+1. **Start at Dashboard** — "This is what your morning could look like, Mr. Kafinyangwe — portfolio overview across all six branches, including both Mzuzu locations."
+2. **Click "New Loan Application"** — Search for client "John Banda" (pre-seeded)
+3. **Select Payday Loan** — "Let me process a Payday Loan — your signature product. The system calculates the reducing-balance interest automatically, exactly as RBM requires."
+4. **Show Loan Calculator** — Enter MWK 150,000; show real-time calculation:
+   - Principal: MWK 150,000
+   - Interest (flat, 30 days): MWK 11,250 (7.5%)
+   - Compulsory Savings (20%): MWK 30,000
+   - Processing Fee: MWK 3,000
+   - **Total Cost of Credit: MWK 194,250**
+   - **Repayment: MWK 161,250 on [date]**
+5. **Upload Documents** — Show payslip upload, NRC scan
+6. **Submit for Approval** — "For Payday Loans under MWK 200,000, the branch manager can approve immediately — that's your 30-minute promise."
+7. **Approve & Disburse** — Show approval, disbursement voucher generation, SMS notification log
+8. **Show Updated Dashboard** — Portfolio increased by MWK 150,000, new loan in active list
+
+**REQUIREMENTS:**
+- [ ] Pre-seed demo client "John Banda" with complete profile
+- [ ] Pre-configure Payday Loan product with correct parameters
+- [ ] **Demo must be executable in under 5 minutes**
+- [ ] **No fake data** — all calculations must be mathematically correct
+
+### **10.3 RBM Reporting Demo — "Two Weeks to Two Minutes"**
+
+**PREPARE:** One-click RBM report generation demo:
+
+1. Navigate to Reports → RBM Reports
+2. "This is what your finance manager will love — one-click quarterly reports for the Reserve Bank. What takes two weeks now takes two minutes."
+3. Select Q2 2026, click "Generate RBM-003 Loan Portfolio Report"
+4. Show progress bar (2-3 seconds)
+5. Display report preview with:
+   - Institution: Saile Financial Services
+   - License: NDMFI 017/22
+   - Period: April 1 – June 30, 2026
+   - All 7 loan products with balances
+   - All 6 branches with breakdowns
+   - PAR analysis
+   - Provision calculations
+6. Click "Export to Excel" and "Export to PDF"
+7. "Matias can review, sign, and submit. No more manual Excel compilation."
+
+**REQUIREMENTS:**
+- [ ] Report generation must complete in under 5 seconds
+- [ ] Export must produce properly formatted files
+- [ ] **Pre-generate the report** as fallback if live generation fails during demo
+
+### **10.4 Mobile App Demo — "Offline Repayments in Karonga and Zomba"**
+
+**PREPARE:** Mobile app simulation (if Flutter app exists) or web-based mobile view:
+
+1. "Your field officers in Karonga and Zomba can record repayments even without signal. When they get back to the office, everything syncs."
+2. Show mobile login screen
+3. Show "Record Repayment" screen:
+   - Search client by name/NRC
+   - Select loan
+   - Enter amount paid
+   - Select payment method (cash/bank/mobile)
+   - Take photo of receipt/record
+   - Save (locally if offline)
+4. Show "Sync Queue" with 3 pending transactions
+5. "When they connect to WiFi, all transactions sync automatically. The branch manager sees them in real-time."
+
+**REQUIREMENTS:**
+- [ ] Mobile-responsive UI or Flutter app screen recordings
+- [ ] **Offline mode simulation**: Show "No connection" indicator, data saves locally
+- [ ] **Sync demonstration**: Show pending items → synced → appear in main system
+- [ ] **Photo capture**: Simulate receipt photo attachment
+
+---
+
+## **SECTION 11: BRAND ALIGNMENT (CRITICAL — P0)**
+
+### **11.1 Color Palette & Visual Identity**
+
+**APPLY** Saile's brand colors throughout the system:
+
+| Role | Color | Hex | Usage |
+|---|---|---|---|
+| Primary | Saile Blue | `#1E3A8A` | Sidebar, headers, primary buttons |
+| Secondary | Saile Red | `#DC2626` | CTAs, highlights, accent bars, alerts |
+| Accent | Gold | `#F59E0B` | KPI numbers, warnings, milestones |
+| Background | Light Gray | `#F5F6FA` | Content page backgrounds |
+| Surface | White | `#FFFFFF` | Cards, tables, containers |
+| Text Primary | Dark Gray | `#1F2937` | Headings, body text |
+| Text Secondary | Medium Gray | `#6B7280` | Labels, hints |
+
+**REQUIREMENTS:**
+- [ ] Replace ALL green colors (current sidebar #0D9488) with Saile Blue
+- [ ] Login page: Red/blue gradient background with SFS logo
+- [ ] Dashboard header: Saile Blue with SFS logo
+- [ ] Primary buttons: Saile Red
+- [ ] KPI card accents: Gold for numbers, Blue for icons
+- [ ] Tables: White surface, light gray alternating rows
+- [ ] **Consistent application** — no green, no generic colors anywhere
+
+### **11.2 Logo & Typography**
+
+**REQUIREMENTS:**
+- [ ] Add SFS logo (red cursive "SFS" + "Saile Financial Services LTD Co.") to:
+  - Login page (centered, large)
+  - Dashboard header (small, left-aligned)
+  - PDF reports (header)
+  - Exported Excel files (header image)
+- [ ] Use sans-serif fonts throughout (Inter, Roboto, or system sans-serif)
+- [ ] Bold headings, regular body text
+- [ ] **No default/system-looking fonts**
+
+### **11.3 Content Language**
+
+**REPLACE** generic labels with Saile-specific language:
+
+| Current (Generic) | Change To (Saile-Specific) |
+|---|---|
+| "Organization Overview" | "Saile Portfolio Overview" |
+| "Branch Management" | "Branch Network — 6 Locations" |
+| "Loan Products" | "Saile Loan Products (7)" |
+| "6-Month Loan" | "SML (6-Month Loan)" |
+| "Reports" | "RBM Reports & Analytics" |
+| "Settings" | "System Configuration" |
+| "Clients" | "Saile Client Registry" |
+
+---
+
+## **SECTION 12: AUDIT TRAIL & SECURITY**
+
+### **12.1 Comprehensive Audit Logging**
+
+**ENSURE** every action is logged:
+
+| Event Type | Data Captured | Retention |
+|---|---|---|
+| Loan created | User, timestamp, branch, client, amount, IP address | 7 years |
+| Loan approved | User, timestamp, approval level, notes | 7 years |
+| Loan disbursed | User, timestamp, method, amount, voucher number | 7 years |
+| Payment received | User, timestamp, amount, method, receipt number | 7 years |
+| Report generated | User, timestamp, report type, period, format | 7 years |
+| Login/Logout | User, timestamp, IP, device, success/failure | 7 years |
+| Data export | User, timestamp, data type, record count | 7 years |
+| Configuration change | User, timestamp, setting, old value, new value | 7 years |
+
+**REQUIREMENTS:**
+- [ ] Immutable audit log (append-only, no delete/edit)
+- [ ] Searchable by user, date range, event type, branch
+- [ ] Export to PDF/Excel for audit purposes
+- [ ] **Yuki Kafinyangwe's demo role**: Full read-only access to all audit logs
+
+---
+
+## **SECTION 13: MILESTONES & COMPLETION CHECKLIST**
+
+### **Milestone 1: Foundation (Days 1-3)**
+| # | Task | Status | Verified By |
+|---|---|---|---|
+| 1.1 | Loan products table created with all 7 Saile products | ☐ | Manual review |
+| 1.2 | Branch table updated with all 6 branches (2 Mzuzu) | ☐ | Manual review |
+| 1.3 | All demo names replaced with realistic Malawian names | ☐ | Spot check 20 records |
+| 1.4 | Demo portfolio scaled to MWK 75M, 850 clients, 320 loans | ☐ | Dashboard verification |
+| 1.5 | Brand colors applied (blue/red/gold, no green) | ☐ | Visual inspection |
+| 1.6 | SFS logo added to login, header, reports | ☐ | Visual inspection |
+| 1.7 | Payday Loan demo flow executable end-to-end | ☐ | Walkthrough test |
+
+### **Milestone 2: RBM & Compliance (Days 4-6)**
+| # | Task | Status | Verified By |
+|---|---|---|---|
+| 2.1 | RBM report templates created (RBM-001 through RBM-008) | ☐ | Generate each report |
+| 2.2 | EIR calculation engine implemented (XIRR method) | ☐ | Mathematical verification |
+| 2.3 | Total Cost of Credit disclosure generated per loan | ☐ | Review sample loan |
+| 2.4 | Compulsory savings (20%) auto-calculated and tracked | ☐ | Verify on 5 loans |
+| 2.5 | RBM-003 report generates in <5 seconds with demo data | ☐ | Timer test |
+| 2.6 | One-click export to Excel and PDF working | ☐ | Download and verify |
+
+### **Milestone 3: Savings & Risk (Days 7-9)**
+| # | Task | Status | Verified By |
+|---|---|---|---|
+| 3.1 | 4 savings products configured (Compulsory, Recurring, Fixed, Voluntary) | ☐ | Product table review |
+| 3.2 | Compulsory savings auto-created on loan disbursement | ☐ | Disburse loan, verify |
+| 3.3 | PAR auto-calculation running daily (buckets: 30/60/90/90+) | ☐ | Check dashboard |
+| 3.4 | Branch performance comparison report functional | ☐ | Generate report |
+| 3.5 | Loan loss provisions auto-calculated per RBM guidelines | ☐ | Verify math |
+| 3.6 | SMS notification templates created and demo-ready | ☐ | Review templates |
+
+### **Milestone 4: Data Migration & Polish (Days 10-12)**
+| # | Task | Status | Verified By |
+|---|---|---|---|
+| 4.1 | Data migration module with upload, validation, cleanse, import | ☐ | Test with sample file |
+| 4.2 | Migration demo scenario prepared (50-record Excel file) | ☐ | Run demo |
+| 4.3 | Mobile offline repayment flow simulated | ☐ | Walkthrough |
+| 4.4 | Audit trail logging all critical events | ☐ | Review logs |
+| 4.5 | All dashboard demo moments scripted and rehearsed | ☐ | Time each demo |
+| 4.6 | System tested end-to-end with no errors | ☐ | Full regression test |
+
+### **Final Verification: Pitch-Ready Checklist**
+| # | Verification Item | Pass Criteria |
+|---|---|---|
+| V1 | Payday Loan demo completes in <5 minutes | ☐ Timer < 5:00 |
+| V2 | RBM report generates in <5 seconds | ☐ Timer < 0:05 |
+| V3 | Dashboard shows all 6 branches with correct names | ☐ Visual check |
+| V4 | No green colors anywhere in UI | ☐ Visual check |
+| V5 | All calculations mathematically correct (EIR, interest, PAR) | ☐ Spreadsheet reconciliation |
+| V6 | All 7 loan products selectable in dropdown | ☐ Dropdown check |
+| V7 | Both Mzuzu branches visible separately | ☐ Branch list check |
+| V8 | Demo data looks realistic (names, amounts, dates) | ☐ Spot check 10 records |
+| V9 | No placeholder text or "Lorem ipsum" | ☐ Global search |
+| V10 | System runs without errors for 30-minute continuous demo | ☐ Stress test |
+
+---
+
+## **SECTION 14: TECHNICAL NOTES**
+
+### **Database Schema Additions**
+```sql
+-- Add to existing schema (DO NOT DROP EXISTING TABLES)
+
+-- Loan products
+CREATE TABLE loan_products (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    product_code VARCHAR(10) UNIQUE NOT NULL, -- PDL, 3ML, SML, etc.
+    product_name VARCHAR(100) NOT NULL,
+    product_type ENUM('SHORT_TERM', 'MEDIUM_TERM', 'LONG_TERM', 'MICRO_ENTERPRISE', 'SMALL_ENTERPRISE'),
+    duration_months INT,
+    min_amount DECIMAL(15,2),
+    max_amount DECIMAL(15,2),
+    interest_rate DECIMAL(5,2), -- monthly rate
+    interest_calculation_method ENUM('FLAT', 'REDUCING_BALANCE') NOT NULL,
+    processing_time_minutes INT, -- 30 for Payday
+    compulsory_savings_percentage DECIMAL(5,2) DEFAULT 20.00,
+    target_client_description TEXT,
+    required_documents JSON,
+    is_signature_product BOOLEAN DEFAULT FALSE,
+    status ENUM('ACTIVE', 'INACTIVE') DEFAULT 'ACTIVE',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Branches (update existing)
+ALTER TABLE branches ADD COLUMN branch_type VARCHAR(50);
+ALTER TABLE branches ADD COLUMN manager_name VARCHAR(100);
+ALTER TABLE branches ADD COLUMN opening_date DATE;
+
+-- Loans (add RBM compliance fields)
+ALTER TABLE loans ADD COLUMN effective_interest_rate DECIMAL(8,4);
+ALTER TABLE loans ADD COLUMN total_cost_of_credit DECIMAL(15,2);
+ALTER TABLE loans ADD COLUMN compulsory_savings_amount DECIMAL(15,2);
+ALTER TABLE loans ADD COLUMN disclosure_statement_generated BOOLEAN DEFAULT FALSE;
+ALTER TABLE loans ADD COLUMN disclosure_statement_pdf VARCHAR(255);
+
+-- Savings products
+CREATE TABLE savings_products (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    product_code VARCHAR(10) UNIQUE NOT NULL,
+    product_name VARCHAR(100) NOT NULL,
+    product_type ENUM('COMPULSORY', 'RECURRING', 'FIXED', 'VOLUNTARY') NOT NULL,
+    interest_rate DECIMAL(5,2),
+    interest_calculation_method ENUM('DAILY_BALANCE') DEFAULT 'DAILY_BALANCE',
+    minimum_balance DECIMAL(15,2),
+    minimum_opening_amount DECIMAL(15,2),
+    withdrawal_restrictions TEXT,
+    maturity_months INT,
+    status ENUM('ACTIVE', 'INACTIVE') DEFAULT 'ACTIVE'
+);
+
+-- PAR tracking
+CREATE TABLE par_snapshots (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    snapshot_date DATE NOT NULL,
+    branch_id BIGINT,
+    par_1_30_count INT,
+    par_1_30_amount DECIMAL(15,2),
+    par_31_60_count INT,
+    par_31_60_amount DECIMAL(15,2),
+    par_61_90_count INT,
+    par_61_90_amount DECIMAL(15,2),
+    par_90_plus_count INT,
+    par_90_plus_amount DECIMAL(15,2),
+    total_provision DECIMAL(15,2),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- SMS logs
+CREATE TABLE sms_logs (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    recipient_phone VARCHAR(20) NOT NULL,
+    template_code VARCHAR(20) NOT NULL,
+    message_content TEXT NOT NULL,
+    trigger_event VARCHAR(50),
+    status ENUM('PENDING', 'SENT', 'DELIVERED', 'FAILED') DEFAULT 'PENDING',
+    sent_at TIMESTAMP NULL,
+    delivered_at TIMESTAMP NULL,
+    error_message TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Migration logs
+CREATE TABLE data_migration_logs (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    migration_type VARCHAR(50) NOT NULL,
+    file_name VARCHAR(255),
+    records_processed INT,
+    records_success INT,
+    records_failed INT,
+    error_details JSON,
+    performed_by BIGINT,
+    started_at TIMESTAMP,
+    completed_at TIMESTAMP,
+    status ENUM('RUNNING', 'COMPLETED', 'FAILED', 'ROLLED_BACK') DEFAULT 'RUNNING'
+);
+```
+
+### **API Endpoints to Add**
+```
+POST   /api/v1/loans/calculate              # Loan calculator (real-time)
+POST   /api/v1/loans                        # Create loan application
+GET    /api/v1/loans/{id}/schedule          # Get repayment schedule
+POST   /api/v1/loans/{id}/approve           # Approve loan
+POST   /api/v1/loans/{id}/disburse          # Disburse loan
+GET    /api/v1/loans/{id}/disclosure        # Get TCC disclosure PDF
+POST   /api/v1/reports/rbm/{reportCode}     # Generate RBM report
+GET    /api/v1/reports/rbm/{reportCode}/export?format=excel|pdf
+GET    /api/v1/dashboard/par                # PAR dashboard data
+GET    /api/v1/branches/performance         # Branch comparison
+POST   /api/v1/migration/upload             # Upload migration file
+POST   /api/v1/migration/validate           # Validate uploaded data
+POST   /api/v1/migration/execute            # Execute migration
+GET    /api/v1/migration/status/{id}        # Check migration status
+POST   /api/v1/sms/send                     # Send SMS (demo mode logs)
+GET    /api/v1/sms/templates                # Get SMS templates
+```
+
+---
+
+## **SECTION 15: NON-NEGOTIABLE REQUIREMENTS**
+
+1. **NO REMOVAL OF EXISTING FUNCTIONALITY** — All current working features must remain intact
+2. **ALL CALCULATIONS MUST BE MATHEMATICALLY ACCURATE** — EIR, interest, PAR, provisions
+3. **ALL DATA MUST BE REALISTIC** — No "Test Client 1", no MWK 1 amounts, no future dates
+4. **NO GREEN COLORS** — Complete replacement with Saile blue/red/gold
+5. **DEMO MUST BE REHEARSABLE** — Every demo moment must work reliably every time
+6. **NO PARTIAL FEATURES** — If a feature is included, it must be complete (UI, backend, data, export)
+7. **DOCUMENT EVERYTHING** — Code comments, API docs, user guide updates
+
+---
+
+**END OF PROMPT**
+
+---
+
