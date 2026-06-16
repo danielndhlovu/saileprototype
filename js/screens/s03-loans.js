@@ -46,7 +46,7 @@ function renderLoans(container, options) {
     } else {
       html += '<div class="overflow-x-auto"><table class="w-full text-sm">';
       html += '<thead class="bg-[#f9fafb] border-b border-[#d1d5db]"><tr>';
-      html += '<th class="text-left px-4 py-3 font-medium text-[#6b7280)">ID</th>';
+      html += '<th class="text-left px-4 py-3 font-medium text-[#6b7280]">ID</th>';
       html += '<th class="text-left px-4 py-3 font-medium text-[#6b7280]">Client</th>';
       html += '<th class="text-left px-4 py-3 font-medium text-[#6b7280] hidden sm:table-cell">Product</th>';
       html += '<th class="text-right px-4 py-3 font-medium text-[#6b7280]">Amount</th>';
@@ -61,12 +61,12 @@ function renderLoans(container, options) {
         var loanNum = i + 1;
         var sClass = 'bg-gray-50 text-[#374151]';
         if (l.status === 'Active') sClass = 'bg-[#0f766e] text-white';
-        else if (l.status === 'Approved') sClass = 'bg-[#10b981] text-white';
+        else if (l.status === 'Approved') sClass = 'bg-[#0f766e] text-white';
         else if (l.status === 'Disbursed') sClass = 'bg-[#0d9488] text-white';
         else if (l.status === 'Rejected') sClass = 'bg-[#111827] text-white';
         else if (l.status === 'Pending') sClass = 'bg-[#F59E0B] text-white';
         else if (l.status === 'Under_Review') sClass = 'bg-[#8b5cf6] text-white';
-        else if (l.status === 'Drafted') sClass = 'bg-gray-100 text-[#374151]';
+        else if (l.status === 'Draft') sClass = 'bg-gray-100 text-[#374151]';
 
         var branch = l.branchId ? getBranchById(l.branchId) : null;
         var branchName = branch ? branch.branchCode : '—';
@@ -83,11 +83,11 @@ function renderLoans(container, options) {
         html += '<td class="px-4 py-3 text-center space-x-1">';
         html += '<button class="text-[#0f766e] text-xs font-medium hover:underline btn-view-loan" data-id="' + l.id + '">View</button>';
         if (!readOnly) {
-          if (l.status === 'Submitted' || l.status === 'Pending') {
+          if (l.status === 'Pending') {
             html += '<button class="text-[#0f766e] text-xs font-medium hover:underline btn-review-loan" data-id="' + l.id + '">Review</button>';
           }
           if (l.status === 'Under_Review') {
-            html += '<button class="text-[#10b981] text-xs font-medium hover:underline btn-approve-loan" data-id="' + l.id + '">Approve</button>';
+            html += '<button class="text-[#0f766e] text-xs font-medium hover:underline btn-approve-loan" data-id="' + l.id + '">Approve</button>';
             html += '<button class="text-[#111827] text-xs font-medium hover:underline btn-reject-loan" data-id="' + l.id + '">Reject</button>';
           }
           if (role === 'admin' || role === 'md' || role === 'finance_manager') {
@@ -319,7 +319,7 @@ function disburseLoan(loanId) {
     productCode: 'SAV-COMP',
     balance: loan.compulsorySavingsAmount || 0,
     linkedLoanId: loanId,
-    status: 'ACTIVE',
+    status: 'Active',
     openedDate: disbDate,
     lastInterestPosted: now,
     createdAt: now,
@@ -398,7 +398,7 @@ function addSMSLog(templateCode, clientId, clientName, productCode, amount, date
     templateCode: templateCode,
     messageContent: 'Would send: ' + message + ' (Demo mode - SMS gateway not connected)',
     triggerEvent: template.triggerEvent,
-    status: 'PENDING',
+    status: 'Pending',
     branchId: branchId,
     createdAt: new Date().toISOString()
   });
@@ -603,7 +603,7 @@ function submitNewLoan(container, options) {
     productName: product.productName,
     requestedAmount: amount,
     proposedInterestRate: product.defaultInterestRate,
-    status: 'Submitted',
+    status: 'Pending',
     rejectionReason: null,
     collateral: collateralDesc ? [{ description: collateralDesc, marketValue: 0 }] : [],
     disbursementDate: null,
@@ -648,7 +648,7 @@ function renderLoanDetail(container, loanId, options) {
 
   var sClass = 'bg-gray-50 text-[#374151]';
   if (loan.status === 'Active') sClass = 'bg-[#0f766e] text-white';
-  else if (loan.status === 'Approved') sClass = 'bg-[#10b981] text-white';
+  else if (loan.status === 'Approved') sClass = 'bg-[#0f766e] text-white';
   else if (loan.status === 'Disbursed') sClass = 'bg-[#0d9488] text-white';
   else if (loan.status === 'Rejected') sClass = 'bg-[#111827] text-white';
   else if (loan.status === 'Pending') sClass = 'bg-[#F59E0B] text-white';
@@ -717,7 +717,7 @@ function renderLoanDetail(container, loanId, options) {
       for (var a = 0; a < trail.length; a++) {
         var action = trail[a].action;
         if (action === 'created') html += '<p class="text-sm text-[#6b7280]">📝 Created: ' + escapeHtml(trail[a].date || 'N/A') + '</p>';
-        else if (action === 'approved') html += '<p class="text-sm text-[#10b981]">✅ Approved</p>';
+        else if (action === 'approved') html += '<p class="text-sm text-[#0f766e]">✅ Approved</p>';
         else if (action === 'rejected') html += '<p class="text-sm text-[#111827]">❌ Rejected: ' + escapeHtml(trail[a].reason || '') + '</p>';
         else if (action === 'disbursed') html += '<p class="text-sm text-[#0d9488]">💰 Disbursed</p>';
         else if (action === 'reviewed') html += '<p class="text-sm text-[#8b5cf6]">🔍 Under Review</p>';
@@ -744,8 +744,8 @@ function renderLoanDetail(container, loanId, options) {
 
     for (var s = 0; s < loan.amortizationSchedule.length; s++) {
       var inst = loan.amortizationSchedule[s];
-      var instClass = inst.status === 'paid' ? 'bg-[#10b981] text-white' :
-                      inst.status === 'overdue' ? 'bg-[#111827] text-white' : 'bg-gray-50 text-[#374151]';
+      var instClass = inst.status === 'Paid' ? 'bg-[#0f766e] text-white' :
+                      inst.status === 'Overdue' ? 'bg-[#111827] text-white' : 'bg-gray-50 text-[#374151]';
       var remBal = 0;
       for (var rb = s; rb < loan.amortizationSchedule.length; rb++) {
         remBal += loan.amortizationSchedule[rb].principal;
@@ -819,7 +819,7 @@ function generateDisclosureStatement(loan) {
   html += '<tr><td style="padding:8px 0;color:#6b7280;">Total Interest:</td><td style="padding:8px 0;font-weight:600;">MWK ' + formatCurrency(Math.round(totalInterest)) + '</td></tr>';
   html += '<tr><td style="padding:8px 0;color:#6b7280;">Processing Fee:</td><td style="padding:8px 0;font-weight:600;">MWK ' + formatCurrency(loan.processingFee || 0) + '</td></tr>';
   html += '<tr><td style="padding:8px 0;color:#6b7280;">Compulsory Savings:</td><td style="padding:8px 0;font-weight:600;color:#0f766e;">MWK ' + formatCurrency(loan.compulsorySavingsAmount || 0) + ' (20%)</td></tr>';
-  html += '<tr style="background:#FEF2F2;"><td style="padding:10px 0;border-top:2px solid #d1d5db;color:#0f766e;font-weight:700;">TOTAL COST OF CREDIT:</td><td style="padding:10px 0;border-top:2px solid #d1d5db;font-weight:700;color:#111827;">MWK ' + formatCurrency(loan.totalCostOfCredit || 0) + '</td></tr>';
+  html += '<tr style="background:#fef2f2;"><td style="padding:10px 0;border-top:2px solid #d1d5db;color:#0f766e;font-weight:700;">TOTAL COST OF CREDIT:</td><td style="padding:10px 0;border-top:2px solid #d1d5db;font-weight:700;color:#111827;">MWK ' + formatCurrency(loan.totalCostOfCredit || 0) + '</td></tr>';
   html += '<tr><td style="padding:8px 0;color:#6b7280;">Monthly Repayment:</td><td style="padding:8px 0;font-weight:600;">MWK ' + formatCurrency(Math.round((loan.totalCostOfCredit || 0) / (loan.amortizationSchedule ? loan.amortizationSchedule.length : 1))) + '</td></tr>';
   html += '<tr style="background:#F5F6FA;"><td style="padding:10px 0;color:#6b7280;font-weight:600;">Effective Interest Rate (EIR):</td><td style="padding:10px 0;font-weight:700;color:#0f766e;">' + (loan.effectiveInterestRateCalculated || '—') + '% p.a.</td></tr>';
   html += '</table>';
@@ -848,9 +848,9 @@ function generateDisclosureStatement(loan) {
 
   var win = window.open('', '_blank');
   if (win) {
-    win.document.write('<!DOCTYPE html><html><head><title>TCC Disclosure - ' + loan.clientName + '</title>';
-    win.document.write('<style>body{font-family:system-ui;padding:40px;color:#0f766e;}table{border-collapse:collapse;width:100%;}td,th{padding:6px;text-align:left;border-bottom:1px solid #d1d5db;}</style>');
-    win.document.write('</head><body>' + html + '</body></html>');
+    win.document.write('<!DOCTYPE html><html><head><title>TCC Disclosure - ' + loan.clientName + '</title></head>');
+    win.document.write('<body><style>body{font-family:system-ui;padding:40px;color:#0f766e;}table{border-collapse:collapse;width:100%;}td,th{padding:6px;text-align:left;border-bottom:1px solid #d1d5db;}</style>');
+    win.document.write(html + '</body></html>');
     win.document.close();
   }
 

@@ -72,7 +72,7 @@ function renderReports(container, options) {
   html += '<div class="flex items-center justify-between mb-4">';
   html += '<h3 id="report-preview-title" class="text-base font-semibold text-[#0f766e]"></h3>';
   html += '<div class="space-x-2">';
-  html += '<button id="btn-export-excel" class="bg-[#10b981] text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-[#059669]">📊 Export Excel</button>';
+  html += '<button id="btn-export-excel" class="bg-[#0f766e] text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-[#059669]">📊 Export Excel</button>';
   html += '<button id="btn-export-pdf" class="bg-[#111827] text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-[#047857]">📄 Export PDF</button>';
   html += '<button id="btn-close-preview" class="bg-white border border-[#d1d5db] text-[#6b7280] px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-[#f4f4f5]">✕ Close</button>';
   html += '</div></div>';
@@ -146,7 +146,7 @@ function renderPortfolioSummary(loans, products, branches, clients, vouchers, sa
   var html = '<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">';
   html += statCard('Total Portfolio', formatCurrency(totalPortfolio), activeLoans.length + ' loans', '#0f766e');
   html += statCard('Total Disbursed', formatCurrency(totalDisbursed), loans.filter(function(l){return l.status==='Disbursed'||l.status==='Active'}).length + ' active', '#111827');
-  html += statCard('Collections (MTD)', formatCurrency(totalCollections), loans.length + ' total apps', '#10b981');
+  html += statCard('Collections (MTD)', formatCurrency(totalCollections), loans.length + ' total apps', '#0f766e');
   html += statCard('Total Savings', formatCurrency(totalSavings), savingsAccounts.length + ' accounts', '#F59E0B');
   html += '</div>';
 
@@ -223,7 +223,7 @@ function parStatCard(label, amount, total, color, threshold) {
   return '<div class="bg-white rounded-xl border p-3 text-center ' + (overThreshold ? 'border-' + color.replace('#', '') : 'border-[#d1d5db]') + '">' +
     '<div class="text-xs text-[#6b7280]">' + label + '</div>' +
     '<div class="text-lg font-bold" style="color:' + color + '">' + formatCurrency(amount) + '</div>' +
-    '<div class="text-xs ' + (overThreshold ? 'text-red-600 font-semibold' : 'text-[#6b7280]') + '">' + pct + '% of portfolio' + (overThreshold ? ' ⚠️' : '') + '</div>' +
+    '<div class="text-xs ' + (overThreshold ? 'text-[#dc2626] font-semibold' : 'text-[#6b7280]') + '">' + pct + '% of portfolio' + (overThreshold ? ' ⚠️' : '') + '</div>' +
   '</div>';
 }
 
@@ -243,7 +243,7 @@ function renderSummaryReport(loans, products, branches, clients, vouchers, savin
   html += '<div class="grid grid-cols-2 md:grid-cols-4 gap-4">';
   html += statCard('Total Portfolio', formatCurrency(totalPortfolio), activeLoans.length + ' active loans', '#0f766e');
   html += statCard('Active Clients', String(clients.filter(function(c){return c.status==='Active'}).length), String(clients.length) + ' registered', '#111827');
-  html += statCard('Branches', String(branches.length), '6 locations', '#10b981');
+  html += statCard('Branches', String(branches.length), '6 locations', '#0f766e');
   html += statCard('Loan Products', String(products.length), 'All active', '#F59E0B');
   html += '</div>';
 
@@ -289,13 +289,13 @@ function generateRBMSpecificReport(code, loans, products, branches, clients, vou
       var totalLiabilities = totalPortfolio;
       var equity = getValue(StorageKeys.CASH_BALANCE) || 0;
       content = '<table class="w-full text-sm"><tr class="font-bold"><td class="py-1 border-b">ASSETS</td><td class="py-1 border-b text-right"></td></tr>';
-      content += '<tr><td class="py-1 pl-4 text-[#6b7280">Loan Portfolio</td><td class="py-1 text-right">' + formatCurrency(totalPortfolio) + '</td></tr>';
-      content += '<tr><td class="py-1 pl-4 text-[#6b7280">Cash & Cash Equivalents</td><td class="py-1 text-right">' + formatCurrency(getValue(StorageKeys.CASH_BALANCE)) + '</td></tr>';
-      content += '<tr><td class="py-1 pl-4 text-[#6b7280">Savings Deposits</td><td class="py-1 text-right">' + formatCurrency(savingsAccounts.reduce(function(s,a){return s+a.balance;},0)) + '</td></tr>';
+      content += '<tr><td class="py-1 pl-4 text-[#6b7280]">Loan Portfolio</td><td class="py-1 text-right">' + formatCurrency(totalPortfolio) + '</td></tr>';
+      content += '<tr><td class="py-1 pl-4 text-[#6b7280]">Cash & Cash Equivalents</td><td class="py-1 text-right">' + formatCurrency(getValue(StorageKeys.CASH_BALANCE)) + '</td></tr>';
+      content += '<tr><td class="py-1 pl-4 text-[#6b7280]">Savings Deposits</td><td class="py-1 text-right">' + formatCurrency(savingsAccounts.reduce(function(s,a){return s+a.balance;},0)) + '</td></tr>';
       content += '<tr class="font-bold"><td class="py-2 border-t border-[#0f766e]">TOTAL ASSETS</td><td class="py-2 border-t border-[#0f766e] text-right">' + formatCurrency(totalAssets) + '</td></tr>';
       content += '<tr class="font-bold mt-4"><td class="py-1 border-b">LIABILITIES & EQUITY</td><td class="py-1 border-b text-right"></td></tr>';
-      content += '<tr><td class="py-1 pl-4 text-[#6b7280">Customer Deposits (Liability)</td><td class="py-1 text-right">' + formatCurrency(savingsAccounts.reduce(function(s,a){return s+a.balance;},0)) + '</td></tr>';
-      content += '<tr><td class="py-1 pl-4 text-[#6b7280">Share Capital & Reserves</td><td class="py-1 text-right">' + formatCurrency(equity) + '</td></tr>';
+      content += '<tr><td class="py-1 pl-4 text-[#6b7280]">Customer Deposits (Liability)</td><td class="py-1 text-right">' + formatCurrency(savingsAccounts.reduce(function(s,a){return s+a.balance;},0)) + '</td></tr>';
+      content += '<tr><td class="py-1 pl-4 text-[#6b7280]">Share Capital & Reserves</td><td class="py-1 text-right">' + formatCurrency(equity) + '</td></tr>';
       content += '<tr class="font-bold"><td class="py-2 border-t border-[#0f766e]">TOTAL LIABILITIES & EQUITY</td><td class="py-2 border-t border-[#0f766e] text-right">' + formatCurrency(totalLiabilities + equity) + '</td></tr>';
       content += '</table>';
       break;
@@ -307,12 +307,12 @@ function generateRBMSpecificReport(code, loans, products, branches, clients, vou
       var totalExpenses = vouchers.filter(function(v) { return v.voucherType === 'credit' && v.description.indexOf('Expenses') !== -1; }).reduce(function(s,v){return s+v.amount;},0);
       var feeIncome = vouchers.filter(function(v) { return v.description && v.description.indexOf('fee') !== -1; }).reduce(function(s,v){return s+v.amount;},0);
       content = '<table class="w-full text-sm"><tr class="font-bold"><td class="py-1 border-b">REVENUE</td><td class="py-1 border-b text-right"></td></tr>';
-      content += '<tr><td class="py-1 pl-4 text-[#6b7280">Interest Income</td><td class="py-1 text-right">' + formatCurrency(totalInterest) + '</td></tr>';
-      content += '<tr><td class="py-1 pl-4 text-[#6b7280">Fee Income</td><td class="py-1 text-right">' + formatCurrency(feeIncome) + '</td></tr>';
+      content += '<tr><td class="py-1 pl-4 text-[#6b7280]">Interest Income</td><td class="py-1 text-right">' + formatCurrency(totalInterest) + '</td></tr>';
+      content += '<tr><td class="py-1 pl-4 text-[#6b7280]">Fee Income</td><td class="py-1 text-right">' + formatCurrency(feeIncome) + '</td></tr>';
       content += '<tr class="font-bold"><td class="py-2">TOTAL REVENUE</td><td class="py-2 text-right">' + formatCurrency(totalInterest + feeIncome) + '</td></tr>';
       content += '<tr class="font-bold mt-4"><td class="py-1 border-b">EXPENSES</td><td class="py-1 border-b text-right"></td></tr>';
-      content += '<tr><td class="py-1 pl-4 text-[#6b7280">Operating Expenses</td><td class="py-1 text-right">' + formatCurrency(totalExpenses) + '</td></tr>';
-      content += '<tr class="font-bold"><td class="py-2 border-t border-[#0f766e]">NET INCOME</td><td class="py-2 border-t border-[#0f766e] text-right font-bold text-[#10b981]">' + formatCurrency(totalInterest + feeIncome - totalExpenses) + '</td></tr>';
+      content += '<tr><td class="py-1 pl-4 text-[#6b7280]">Operating Expenses</td><td class="py-1 text-right">' + formatCurrency(totalExpenses) + '</td></tr>';
+      content += '<tr class="font-bold"><td class="py-2 border-t border-[#0f766e]">NET INCOME</td><td class="py-2 border-t border-[#0f766e] text-right font-bold text-[#0f766e]">' + formatCurrency(totalInterest + feeIncome - totalExpenses) + '</td></tr>';
       content += '</table>';
       break;
 
@@ -327,7 +327,7 @@ function generateRBMSpecificReport(code, loans, products, branches, clients, vou
         pLoans.forEach(function(l) { pAmt += (l.approvedAmount || 0); });
         var par1 = pLoans.filter(function(l) { return getOverdueDays(l) > 0 && getOverdueDays(l) <= 30; }).reduce(function(s,l){return s+(l.approvedAmount||0);},0);
         var par2 = pLoans.filter(function(l) { return getOverdueDays(l) > 30 && getOverdueDays(l) <= 60; }).reduce(function(s,l){return s+(l.approvedAmount||0);},0);
-        content += '<tr class="border-b"><td class="px-2 py-1 font-semibold">' + escapeHtml(p.productCode) + '</td><td class="px-2 py-1">' + escapeHtml(p.productName) + '</td><td class="px-2 py-1 text-right">' + formatCurrency(pAmt) + '</td><td class="px-2 py-1 text-right">' + pLoans.length + '</td><td class="px-2 py-1 text-right text-red-600">' + formatCurrency(par1) + '</td><td class="px-2 py-1 text-right text-red-600">' + formatCurrency(par2) + '</td><td class="px-2 py-1 text-right">' + (p.interestMethod === 'flat' ? 'Flat' : 'Reducing Bal.') + '</td></tr>';
+        content += '<tr class="border-b"><td class="px-2 py-1 font-semibold">' + escapeHtml(p.productCode) + '</td><td class="px-2 py-1">' + escapeHtml(p.productName) + '</td><td class="px-2 py-1 text-right">' + formatCurrency(pAmt) + '</td><td class="px-2 py-1 text-right">' + pLoans.length + '</td><td class="px-2 py-1 text-right text-[#dc2626]">' + formatCurrency(par1) + '</td><td class="px-2 py-1 text-right text-[#dc2626]">' + formatCurrency(par2) + '</td><td class="px-2 py-1 text-right">' + (p.interestMethod === 'flat' ? 'Flat' : 'Reducing Bal.') + '</td></tr>';
       });
       content += '</table></div>';
 
@@ -348,11 +348,11 @@ function generateRBMSpecificReport(code, loans, products, branches, clients, vou
       parRows.forEach(function(r) {
         var pct = totalPortfolio > 0 ? (r.amt / totalPortfolio * 100).toFixed(2) : 0;
         var prov = r.amt * r.prov;
-        var amtStyle = r.amt > 0 ? 'text-red-600 font-semibold' : '';
+        var amtStyle = r.amt > 0 ? 'text-[#dc2626] font-semibold' : '';
         content += '<tr class="border-b"><td class="px-2 py-1 font-medium">' + r.label + '</td><td class="px-2 py-1 text-right ' + amtStyle + '">' + formatCurrency(r.amt) + '</td><td class="px-2 py-1 text-right">' + pct + '%</td><td class="px-2 py-1 text-right">' + (r.prov*100) + '%</td><td class="px-2 py-1 text-right font-semibold">' + formatCurrency(Math.round(prov)) + '</td></tr>';
       });
       var totalProv = Math.round(par1_30_tot*0.05 + par31_60_tot*0.20 + par61_90_tot*0.50 + par90_tot*1.00);
-      content += '<tr class="font-bold"><td class="px-2 py-2 border-t border-[#0f766e]">TOTAL PROVISIONS</td><td class="px-2 py-2 border-t border-[#0f766e] text-right" colspan="3"></td><td class="px-2 py-2 border-t border-[#0f766e] text-right text-red-600">' + formatCurrency(totalProv) + '</td></tr>';
+      content += '<tr class="font-bold"><td class="px-2 py-2 border-t border-[#0f766e]">TOTAL PROVISIONS</td><td class="px-2 py-2 border-t border-[#0f766e] text-right" colspan="3"></td><td class="px-2 py-2 border-t border-[#0f766e] text-right text-[#dc2626]">' + formatCurrency(totalProv) + '</td></tr>';
       content += '</table></div>';
       content += '</div>';
       break;
@@ -389,7 +389,7 @@ function generateRBMSpecificReport(code, loans, products, branches, clients, vou
       var tier1Capital = getValue(StorageKeys.CASH_BALANCE) || 0;
       var riskWeightedAssets = totalPortfolio * 0.75; // Simplified 75% risk weight
       var car = tier1Capital > 0 ? (tier1Capital / riskWeightedAssets * 100).toFixed(2) : 0;
-      var carColor = parseFloat(car) >= 15 ? '#10b981' : parseFloat(car) >= 10 ? '#F59E0B' : '#111827';
+      var carColor = parseFloat(car) >= 15 ? '#0f766e' : parseFloat(car) >= 10 ? '#F59E0B' : '#111827';
       content += '<div class="grid grid-cols-2 gap-4">';
       content += statCard('Tier 1 Capital', formatCurrency(tier1Capital), 'Cash & reserves', '#0f766e');
       content += statCard('Risk-Weighted Assets', formatCurrency(riskWeightedAssets), 'Loans × 75%', '#111827');
@@ -397,7 +397,7 @@ function generateRBMSpecificReport(code, loans, products, branches, clients, vou
       content += '<div class="bg-[#F9FAFB] rounded-xl p-4 text-center">';
       content += '<div class="text-sm text-[#6b7280] mb-1">Capital Adequacy Ratio</div>';
       content += '<div class="text-4xl font-bold" style="color:' + carColor + '">' + car + '%</div>';
-      content += '<div class="text-xs mt-2 ' + (parseFloat(car)>=15?'text-green-600':'text-red-600') + '">' + (parseFloat(car)>=15?'✅ Above RBM minimum of 15%':'⚠️ Below RBM minimum of 15%') + '</div>';
+      content += '<div class="text-xs mt-2 ' + (parseFloat(car)>=15?'text-[#059669]':'text-[#dc2626]') + '">' + (parseFloat(car)>=15?'✅ Above RBM minimum of 15%':'⚠️ Below RBM minimum of 15%') + '</div>';
       content += '</div>';
       content += '</div>';
       break;
@@ -420,7 +420,7 @@ function generateRBMSpecificReport(code, loans, products, branches, clients, vou
       // Liquidity buffer table
       content += '<h4 class="text-sm font-semibold mt-4">Cash Flow Projection (30 days)</h4>';
       content += '<table class="w-full text-xs"><tr class="bg-[#f9fafb]"><th class="px-2 py-1 text-left">Item</th><th class="px-2 py-1 text-right">Inflow</th><th class="px-2 py-1 text-right">Outflow</th><th class="px-2 py-1 text-right">Net</th></tr>';
-      content += '<tr class="border-b"><td class="px-2 py-1">Loan Collections</td><td class="px-2 py-1 text-right font-semibold text-[#10b981">MWK 125,000</td><td class="px-2 py-1 text-right">—</td><td class="px-2 py-1 text-right text-[#10b981]">+MWK 125,000</td></tr>';
+      content += '<tr class="border-b"><td class="px-2 py-1">Loan Collections</td><td class="px-2 py-1 text-right font-semibold text-[#0f766e">MWK 125,000</td><td class="px-2 py-1 text-right">—</td><td class="px-2 py-1 text-right text-[#0f766e]">+MWK 125,000</td></tr>';
       content += '<tr class="border-b"><td class="px-2 py-1">New Disbursements</td><td class="px-2 py-1 text-right">—</td><td class="px-2 py-1 text-right font-semibold text-[#111827]">MWK 500,000</td><td class="px-2 py-1 text-right text-[#111827]">-MWK 500,000</td></tr>';
       content += '<tr class="border-b font-bold"><td class="px-2 py-1">Operating Costs</td><td class="px-2 py-1 text-right">—</td><td class="px-2 py-1 text-right font-semibold text-[#111827]">MWK 350,000</td><td class="px-2 py-1 text-right text-[#111827]">-MWK 350,000</td></tr>';
       content += '<tr class="font-bold"><td class="px-2 py-2 border-t border-[#0f766e]">Net Position</td><td class="px-2 py-2 border-t border-[#0f766e] text-right" colspan="2"></td><td class="px-2 py-2 border-t border-[#0f766e] text-right font-bold text-[#111827]">-MWK 725,000</td></tr>';
@@ -450,15 +450,15 @@ function generateRBMSpecificReport(code, loans, products, branches, clients, vou
       content = '<div class="space-y-4">';
       content += '<h4 class="text-sm font-semibold mb-3">Board & Management</h4>';
       content += '<table class="w-full text-xs"><tr class="bg-[#f9fafb]"><th class="px-2 py-1 text-left">Role</th><th class="px-2 py-1 text-left">Name</th><th class="px-2 py-1 text-left">Status</th></tr>';
-      content += '<tr class="border-b"><td class="px-2 py-1 font-semibold">Managing Director</td><td class="px-2 py-1">Mr. Elias Kafinyangwe</td><td class="px-2 py-1 text-[#10b981]">Active</td></tr>';
-      content += '<tr class="border-b"><td class="px-2 py-1 font-semibold">Finance Manager</td><td class="px-2 py-1">Mr. Matias Kafinyangwe</td><td class="px-2 py-1 text-[#10b981]">Active</td></tr>';
-      content += '<tr class="border-b"><td class="px-2 py-1 font-semibold">Internal Audit</td><td class="px-2 py-1">Mrs. Yuki Kafinyangwe</td><td class="px-2 py-1 text-[#10b981]">Active</td></tr>';
+      content += '<tr class="border-b"><td class="px-2 py-1 font-semibold">Managing Director</td><td class="px-2 py-1">Mr. Elias Kafinyangwe</td><td class="px-2 py-1 text-[#0f766e]">Active</td></tr>';
+      content += '<tr class="border-b"><td class="px-2 py-1 font-semibold">Finance Manager</td><td class="px-2 py-1">Mr. Matias Kafinyangwe</td><td class="px-2 py-1 text-[#0f766e]">Active</td></tr>';
+      content += '<tr class="border-b"><td class="px-2 py-1 font-semibold">Internal Audit</td><td class="px-2 py-1">Mrs. Yuki Kafinyangwe</td><td class="px-2 py-1 text-[#0f766e]">Active</td></tr>';
       content += '</table>';
       content += '<h4 class="text-sm font-semibold mt-4 mb-3">Branch Network</h4>';
       content += '<table class="w-full text-xs"><tr class="bg-[#f9fafb]"><th class="px-2 py-1 text-left">Branch</th><th class="px-2 py-1 text-left">Manager</th><th class="px-2 py-1 text-right">Staff</th><th class="px-2 py-1 text-center">Status</th></tr>';
       branches.forEach(function(b) {
         var staff = usersCountByBranch(b.id);
-        content += '<tr class="border-b"><td class="px-2 py-1 font-semibold">' + escapeHtml(b.branchName) + '</td><td class="px-2 py-1">' + escapeHtml(b.managerName) + '</td><td class="px-2 py-1 text-right">' + staff + '</td><td class="px-2 py-1 text-center text-[#10b981]">✓</td></tr>';
+        content += '<tr class="border-b"><td class="px-2 py-1 font-semibold">' + escapeHtml(b.branchName) + '</td><td class="px-2 py-1">' + escapeHtml(b.managerName) + '</td><td class="px-2 py-1 text-right">' + staff + '</td><td class="px-2 py-1 text-center text-[#0f766e]">✓</td></tr>';
       });
       content += '</table>';
       content += '<h4 class="text-sm font-semibold mt-4 mb-3">Active Loan Products</h4>';
@@ -511,22 +511,5 @@ function calculateProvisions(activeLoans) {
   }, 0);
 }
 
-function getOverdueDays(loan) {
-  if (loan.status !== 'Active' && loan.status !== 'Disbursed') return 0;
-  if (!loan.disbursementDate) return 0;
-
-  var dueDate;
-  if (loan.amortizationSchedule && loan.amortizationSchedule.length > 0) {
-    dueDate = new Date(loan.amortizationSchedule[0].dueDate);
-  } else {
-    var disbDate = new Date(loan.disbursementDate);
-    var months = 1;
-    dueDate = new Date(disbDate.setMonth(disbDate.getMonth() + months));
-  }
-
-  var now = new Date();
-  var diff = Math.floor((now - dueDate) / (1000 * 60 * 60 * 24));
-  return Math.max(0, diff);
-}
 
 window.renderReports = renderReports;

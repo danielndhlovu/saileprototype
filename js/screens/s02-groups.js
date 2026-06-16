@@ -40,12 +40,12 @@ function renderGroups(container, options) {
       html += '<h3 class="text-sm font-semibold text-[#0f766e]">' + escapeHtml(g.groupName) + '</h3>';
       html += '<p class="text-xs text-[#6b7280]">' + escapeHtml(g.id) + '</p>';
       html += '</div>';
-      html += '<span class="px-2 py-1 rounded-full text-xs font-medium bg-sky-50 text-sky-700">' + memberCount + ' members</span>';
+      html += '<span class="px-2 py-1 rounded-full text-xs font-medium bg-[#f0f9ff] text-[#0369a1]">' + memberCount + ' members</span>';
       html += '</div>';
       html += '<p class="text-xs text-[#6b7280] mb-3">Center: ' + escapeHtml(g.branchCenter || 'N/A') + '</p>';
       html += '<div class="flex items-center gap-2">';
       if (g.liabilityAgreement) {
-        html += '<span class="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded">Liability Agreement</span>';
+        html += '<span class="text-xs bg-[#f0fdf4] text-[#0f766e] px-2 py-0.5 rounded">Liability Agreement</span>';
       }
       html += '</div>';
       html += '<div class="mt-4 pt-3 border-t border-[#d1d5db] flex gap-2">';
@@ -194,7 +194,7 @@ function renderGroupDetail(container, groupId, options) {
 
   html += '<div class="mb-4">';
   if (group.liabilityAgreement) {
-    html += '<span class="px-2 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">Joint Liability Agreement</span>';
+    html += '<span class="px-2 py-1 rounded-full text-xs font-medium bg-[#f0fdf4] text-[#0f766e]">Joint Liability Agreement</span>';
   }
   html += '</div>';
 

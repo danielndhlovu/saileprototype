@@ -205,7 +205,7 @@ function renderMobileLogin(container) {
       '<div class="w-4 h-4 rounded-full border-2 border-gray-500 pin-dot"></div>' +
       '<div class="w-4 h-4 rounded-full border-2 border-gray-500 pin-dot"></div>' +
     '</div>' +
-    '<div id="pin-error" class="hidden text-red-400 text-sm mb-4"></div>' +
+    '<div id="pin-error" class="hidden text-[#f87171] text-sm mb-4"></div>' +
     '<!-- PIN pad -->' +
     '<div id="pin-pad" class="grid grid-cols-3 gap-3 max-w-[240px]">' +
       '<button class="pin-key w-[72px] h-[72px] rounded-full bg-gray-700 text-white text-xl font-medium hover:bg-gray-600 transition-colors flex items-center justify-center" data-key="1">1</button>' +
@@ -362,9 +362,9 @@ function showLoginMessage(el, msg, type) {
   el.classList.remove('hidden');
   el.textContent = msg;
   if (type === 'error') {
-    el.className = 'text-sm rounded-xl px-3 py-2 bg-red-50 text-red-700';
+    el.className = 'text-sm rounded-xl px-3 py-2 bg-[#fef2f2] text-[#111827]';
   } else {
-    el.className = 'text-sm rounded-xl px-3 py-2 bg-emerald-50 text-emerald-700';
+    el.className = 'text-sm rounded-xl px-3 py-2 bg-[#f0fdf4] text-[#0f766e]';
   }
 }
 

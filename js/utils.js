@@ -234,10 +234,10 @@ function showToast(message, type) {
 
   // Color mapping based on design system
   var colors = {
-    success: { bg: '#10b981', text: '#ffffff' },  // accent/green
-    error: { bg: '#111827', text: '#ffffff' },    // error/red
-    warning: { bg: '#f59e0b', text: '#0f766e' },  // warning/amber
-    info: { bg: '#0d9488', text: '#ffffff' }       // info/blue
+    success: { bg: '#0f766e', text: '#ffffff' },
+    error: { bg: '#111827', text: '#ffffff' },
+    warning: { bg: '#f59e0b', text: '#0f766e' },
+    info: { bg: '#111827', text: '#ffffff' }
   };
 
   var color = colors[type] || colors.info;
@@ -293,20 +293,22 @@ function showToast(message, type) {
  * Generate an amortization schedule for a loan.
  * Implements both flat and declining balance methods per design Algorithm 1.
  * @param {number} principal - Loan principal amount (MWK)
- * @param {number} annualRate - Annual interest rate (percentage, e.g. 25 for 25%)
+ * @param {number} monthlyRate - Monthly interest rate (percentage, e.g. 4.5 for 4.5% per month)
  * @param {string} frequency - "weekly", "biweekly", or "monthly"
  * @param {string} method - "flat" or "declining"
  * @param {string} startDate - ISO date string for loan start
+ * @param {number} durationMonths - Number of months for the loan
  * @returns {Array} Array of installment objects
  */
-function generateAmortization(principal, annualRate, frequency, method, startDate) {
-  var periodsMap = { weekly: 52, biweekly: 26, monthly: 12 };
-  var periods = periodsMap[frequency] || 12;
-  var periodicRate = annualRate / 100 / periods;
+function generateAmortization(principal, monthlyRate, frequency, method, startDate, durationMonths) {
+  durationMonths = durationMonths || 1;
+  var periodsPerMonth = { weekly: 4, biweekly: 2, monthly: 1 };
+  var periods = Math.round(durationMonths * (periodsPerMonth[frequency] || 1));
+  var periodicRate = monthlyRate / 100 / (periodsPerMonth[frequency] || 1);
   var schedule = [];
 
   if (method === 'flat') {
-    var totalInterest = principal * (annualRate / 100);
+    var totalInterest = principal * (monthlyRate / 100) * durationMonths;
     var installmentPrincipal = Math.round(principal / periods);
     var installmentInterest = Math.round(totalInterest / periods);
 
@@ -321,29 +323,29 @@ function generateAmortization(principal, annualRate, frequency, method, startDat
         principal: principalPortion,
         interest: installmentInterest,
         total: principalPortion + installmentInterest,
-        status: 'pending'
+        status: 'Pending'
       });
     }
   } else if (method === 'declining') {
     var remainingPrincipal = principal;
-    var decInstallmentPrincipal = Math.round(principal / periods);
+    var installmentPrincipal = Math.round(principal / periods);
 
     for (var j = 1; j <= periods; j++) {
-      var decInstallmentInterest = Math.round(remainingPrincipal * periodicRate);
-      var decPrincipalPortion = (j === periods)
+      var installmentInterest = Math.round(remainingPrincipal * periodicRate);
+      var principalPortion = (j === periods)
         ? remainingPrincipal
-        : decInstallmentPrincipal;
+        : installmentPrincipal;
 
       schedule.push({
         installmentNo: j,
         dueDate: calculateDueDate(startDate, frequency, j),
-        principal: decPrincipalPortion,
-        interest: decInstallmentInterest,
-        total: decPrincipalPortion + decInstallmentInterest,
-        status: 'pending'
+        principal: principalPortion,
+        interest: installmentInterest,
+        total: principalPortion + installmentInterest,
+        status: 'Pending'
       });
 
-      remainingPrincipal -= decInstallmentPrincipal;
+      remainingPrincipal -= installmentPrincipal;
       if (remainingPrincipal < 0) remainingPrincipal = 0;
     }
   }
@@ -374,7 +376,7 @@ function calculatePAR() {
     // Calculate total outstanding (unpaid principal)
     var loanOutstanding = 0;
     for (var si = 0; si < schedule.length; si++) {
-      if (schedule[si].status !== 'paid') {
+      if (schedule[si].status !== 'Paid') {
         loanOutstanding += schedule[si].principal;
       }
     }
@@ -383,7 +385,7 @@ function calculatePAR() {
     // Find maximum days past due for this loan
     var maxDPD = 0;
     for (var di = 0; di < schedule.length; di++) {
-      if (schedule[di].status !== 'paid') {
+      if (schedule[di].status !== 'Paid') {
         var dueDate = new Date(schedule[di].dueDate);
         if (dueDate < today) {
           var dpd = Math.floor((today - dueDate) / (1000 * 60 * 60 * 24));
@@ -430,7 +432,7 @@ function calculateCollectionEfficiency() {
       var inst = schedule[si];
       if (inst.dueDate <= today) {
         totalDue += inst.total;
-        if (inst.status === 'paid') {
+        if (inst.status === 'Paid') {
           totalCollected += inst.total;
         }
       }
@@ -438,6 +440,28 @@ function calculateCollectionEfficiency() {
   }
 
   return totalDue > 0 ? (totalCollected / totalDue) * 100 : 0;
+}
+
+/**
+ * Calculate the number of days a loan is overdue.
+ * @param {object} loan - Loan object with amortization schedule
+ * @returns {number} Max days overdue across pending installments
+ */
+function getOverdueDays(loan) {
+  if (!loan || !loan.amortizationSchedule) return 0;
+  var today = new Date();
+  var maxDays = 0;
+  for (var i = 0; i < loan.amortizationSchedule.length; i++) {
+    var inst = loan.amortizationSchedule[i];
+    if (inst.status !== 'Paid') {
+      var dueDate = new Date(inst.dueDate);
+      if (dueDate < today) {
+        var diff = Math.floor((today - dueDate) / (1000 * 60 * 60 * 24));
+        if (diff > maxDays) maxDays = diff;
+      }
+    }
+  }
+  return maxDays;
 }
 
 /**
@@ -484,4 +508,5 @@ window.showToast = showToast;
 window.generateAmortization = generateAmortization;
 window.calculatePAR = calculatePAR;
 window.calculateCollectionEfficiency = calculateCollectionEfficiency;
+window.getOverdueDays = getOverdueDays;
 window.calculateTrialBalance = calculateTrialBalance;

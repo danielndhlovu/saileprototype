@@ -19,7 +19,7 @@ function renderFollowup(container, options) {
     var html = '<div class="space-y-6">';
     html += '<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">';
     html += '<div>';
-    html += '<h1 class="text-lg font-semibold text-[#0f766e">Saile Follow-up & Tracking</h1>';
+    html += '<h1 class="text-lg font-semibold text-[#0f766e]">Saile Follow-up & Tracking</h1>';
     html += '<p class="text-sm text-[#6b7280]">' + followups.length + ' overdue accounts</p>';
     html += '</div>';
     if (!readOnly) {
@@ -42,10 +42,10 @@ function renderFollowup(container, options) {
       }
       for (var i = 0; i < sorted.length; i++) {
         var f = sorted[i];
-        var dpdClass = f.daysPastDue > 90 ? 'bg-red-50 text-red-700' :
-                       f.daysPastDue > 30 ? 'bg-amber-50 text-amber-700' : 'bg-sky-50 text-sky-700';
-        var outcomeClass = f.contactOutcome === 'promised_to_pay' ? 'text-emerald-600' :
-                           f.contactOutcome === 'client_relocated' ? 'text-red-600' : 'text-amber-600';
+        var dpdClass = f.daysPastDue > 90 ? 'bg-[#fef2f2] text-[#111827]' :
+                       f.daysPastDue > 30 ? 'bg-[#fffbeb] text-[#92400e]' : 'bg-[#f0f9ff] text-[#0369a1]';
+        var outcomeClass = f.contactOutcome === 'promised_to_pay' ? 'text-[#059669]' :
+                           f.contactOutcome === 'client_relocated' ? 'text-[#dc2626]' : 'text-[#d97706]';
 
         html += '<div class="bg-white rounded-2xl border border-[#d1d5db] p-4">';
         html += '<div class="flex items-start justify-between">';
@@ -58,13 +58,13 @@ function renderFollowup(container, options) {
         html += '</div>';
         html += '<div class="text-right">';
         html += '<span class="px-2 py-1 rounded-full text-xs font-medium ' + dpdClass + '">' + f.daysPastDue + ' DPD</span>';
-        html += '<p class="text-xs text-red-600 mt-1">' + formatCurrency(f.accumulatedPenalty || 0) + '</p>';
+        html += '<p class="text-xs text-[#dc2626] mt-1">' + formatCurrency(f.accumulatedPenalty || 0) + '</p>';
         html += '</div></div>';
 
         // Action buttons
         html += '<div class="mt-3 pt-3 border-t border-[#d1d5db] flex gap-2">';
-        html += '<button class="flex items-center gap-1 px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-lg text-xs font-medium hover:bg-emerald-100 btn-call-client" data-phone="' + escapeHtml(f.clientName) + '">📞 Call</button>';
-        html += '<button class="flex items-center gap-1 px-3 py-1.5 bg-sky-50 text-sky-700 rounded-lg text-xs font-medium hover:bg-sky-100 btn-sms-client">💬 SMS</button>';
+        html += '<button class="flex items-center gap-1 px-3 py-1.5 bg-[#f0fdf4] text-[#0f766e] rounded-lg text-xs font-medium hover:bg-[#dcfce7] btn-call-client" data-phone="' + escapeHtml(f.clientName) + '">📞 Call</button>';
+        html += '<button class="flex items-center gap-1 px-3 py-1.5 bg-[#f0f9ff] text-[#0369a1] rounded-lg text-xs font-medium hover:bg-[#e0f2fe] btn-sms-client">💬 SMS</button>';
         if (!readOnly) {
           html += '<button class="flex items-center gap-1 px-3 py-1.5 bg-[#f4f4f5] text-[#0f766e] rounded-lg text-xs font-medium hover:bg-gray-200 btn-update-followup" data-id="' + f.id + '">✏️ Update</button>';
         }

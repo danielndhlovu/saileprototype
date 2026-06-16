@@ -121,7 +121,7 @@ function renderSettings(container, options) {
       html += '</div>';
       html += '<p class="text-xs text-[#6b7280] mt-1">' + escapeHtml(p.targetClientDescription || '') + '</p>';
       html += '</div>';
-      var badgeColor = p.interestMethod === 'flat' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700';
+      var badgeColor = p.interestMethod === 'flat' ? 'bg-[#fef2f2] text-[#111827]' : 'bg-[#f0f9ff] text-[#0369a1]';
       html += '<span class="px-2 py-1 rounded-full text-xs font-medium ' + badgeColor + '">' + (p.interestMethod === 'flat' ? 'Flat' : 'Reducing Bal.') + '</span>';
       html += '</div>';
       html += '<div class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-2 text-xs text-[#6b7280]">';
@@ -168,7 +168,7 @@ function renderSettings(container, options) {
       }
       html += '</div>';
       html += '<div class="mt-3 flex items-center justify-between text-xs">';
-      var bStatus = b.status === 'Active' ? 'bg-[#10b981] text-white' : 'bg-red-100 text-red-700';
+      var bStatus = b.status === 'Active' ? 'bg-[#0f766e] text-white' : 'bg-[#fef2f2] text-[#111827]';
       html += '<span class="px-2 py-0.5 rounded-full font-medium ' + bStatus + '">' + escapeHtml(b.status) + '</span>';
       if (b.phone) html += '<span class="text-[#6b7280]">' + escapeHtml(b.phone) + '</span>';
       html += '</div>';
@@ -349,7 +349,7 @@ function runMigrationDemo(container) {
       resultsDiv.classList.remove('hidden');
       resultsDiv.innerHTML =
         '<div class="space-y-2"><p class="font-semibold text-[#0f766e]">Migration Summary</p>' +
-        '<div class="grid grid-cols-2 gap-2 text-sm"><div>Records Processed: <strong>50</strong></div><div>Imported: <strong class="text-[#10b981]">47</strong></div><div>Duplicates: <strong class="text-[#F59E0B]">3</strong></div><div>Errors: <strong class="text-[#111827]">0</strong></div></div>' +
+        '<div class="grid grid-cols-2 gap-2 text-sm"><div>Records Processed: <strong>50</strong></div><div>Imported: <strong class="text-[#059669]">47</strong></div><div>Duplicates: <strong class="text-[#f59e0b]">3</strong></div><div>Errors: <strong class="text-[#111827]">0</strong></div></div>' +
         '<p class="text-xs text-[#6b7280] mt-2">Source: Saile_Clients_Demo.xlsx | Duration: < 5 seconds</p></div>';
       logAudit('data_migration', { module: 'migration', changedTo: '47 records imported from Excel demo' });
       showToast('Migration complete: 47 clients imported!', 'success');

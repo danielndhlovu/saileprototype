@@ -77,9 +77,9 @@ function renderDashboard(container, options) {
   if (pendingLoans.length > 0) alerts.push('📋 ' + pendingLoans.length + ' loan(s) pending approval');
 
   if (alerts.length > 0) {
-    html += '<div class="bg-red-50 border border-red-200 rounded-xl p-4 space-y-2">';
+    html += '<div class="bg-[#fef2f2] border border-[#fecaca] rounded-xl p-4 space-y-2">';
     alerts.forEach(function(a) {
-      html += '<p class="text-sm text-red-700 flex items-center gap-2">' + a + '</p>';
+      html += '<p class="text-sm text-[#111827] flex items-center gap-2">' + a + '</p>';
     });
     html += '</div>';
   }
@@ -108,13 +108,13 @@ function renderDashboard(container, options) {
 
   html += '<div class="bg-white rounded-2xl border border-[#d1d5db] p-5">';
   html += '<div class="text-sm text-[#6b7280] mb-1">Total Portfolio Outstanding</div>';
-  html += '<div class="text-2xl font-bold text-[#0f766e">' + formatCurrency(totalPortfolio) + '</div>';
+  html += '<div class="text-2xl font-bold text-[#0f766e]">' + formatCurrency(totalPortfolio) + '</div>';
   html += '<div class="text-xs text-[#6b7280] mt-1">Across ' + activeLoans.length + ' active loans</div>';
   html += '</div>';
 
   html += '<div class="bg-white rounded-2xl border border-[#d1d5db] p-5">';
   html += '<div class="text-sm text-[#6b7280] mb-1">Active Clients</div>';
-  html += '<div class="text-2xl font-bold text-[#0f766e">' + activeClientCount + '</div>';
+  html += '<div class="text-2xl font-bold text-[#0f766e]">' + activeClientCount + '</div>';
   html += '<div class="text-xs text-[#6b7280] mt-1">' + totalClientCount + ' total registered</div>';
   html += '</div>';
 
@@ -126,7 +126,7 @@ function renderDashboard(container, options) {
 
   html += '<div class="bg-white rounded-2xl border border-[#d1d5db] p-5">';
   html += '<div class="text-sm text-[#6b7280] mb-1">PAR 30+ Days</div>';
-  var parColor = parseFloat(par30Pct) > 5 ? '#111827' : parseFloat(par30Pct) > 3 ? '#F59E0B' : '#10b981';
+  var parColor = parseFloat(par30Pct) > 5 ? '#111827' : parseFloat(par30Pct) > 3 ? '#F59E0B' : '#0f766e';
   html += '<div class="text-2xl font-bold" style="color:' + parColor + '">' + par30Pct + '%</div>';
   html += '<div class="text-xs text-[#6b7280] mt-1">' + par1_30 + ' loans overdue</div>';
   html += '</div>';
@@ -140,12 +140,12 @@ function renderDashboard(container, options) {
   // Table view
   html += '<div class="overflow-x-auto"><table class="w-full text-sm">';
   html += '<thead class="bg-[#f9fafb]"><tr>';
-  html += '<th class="text-left px-4 py-2 font-medium text-[#6b7280">Branch</th>';
-  html += '<th class="text-left px-4 py-2 font-medium text-[#6b7280">Type</th>';
-  html += '<th class="text-right px-4 py-2 font-medium text-[#6b7280">Portfolio</th>';
-  html += '<th class="text-right px-4 py-2 font-medium text-[#6b7280">Active Clients</th>';
-  html += '<th class="text-right px-4 py-2 font-medium text-[#6b7280">Active Loans</th>';
-  html += '<th class="text-center px-4 py-2 font-medium text-[#6b7280">Share</th>';
+  html += '<th class="text-left px-4 py-2 font-medium text-[#6b7280]">Branch</th>';
+  html += '<th class="text-left px-4 py-2 font-medium text-[#6b7280]">Type</th>';
+  html += '<th class="text-right px-4 py-2 font-medium text-[#6b7280]">Portfolio</th>';
+  html += '<th class="text-right px-4 py-2 font-medium text-[#6b7280]">Active Clients</th>';
+  html += '<th class="text-right px-4 py-2 font-medium text-[#6b7280]">Active Loans</th>';
+  html += '<th class="text-center px-4 py-2 font-medium text-[#6b7280]">Share</th>';
   html += '</tr></thead><tbody>';
 
   branches.forEach(function(b, idx) {

@@ -41,7 +41,7 @@ function renderRepayment(container, options) {
         var schedule = loan.amortizationSchedule;
         var totalPaid = 0, totalDue = 0, totalOutstanding = 0;
         for (var k = 0; k < schedule.length; k++) {
-          if (schedule[k].status === 'paid') totalPaid += schedule[k].total;
+          if (schedule[k].status === 'Paid') totalPaid += schedule[k].total;
           else totalOutstanding += schedule[k].total;
           totalDue += schedule[k].total;
         }
@@ -53,10 +53,10 @@ function renderRepayment(container, options) {
         html += '<p class="text-xl font-semibold text-[#0f766e]">' + formatCurrency(totalDue) + '</p></div>';
         html += '<div class="bg-white rounded-2xl border border-[#d1d5db] p-4">';
         html += '<p class="text-sm text-[#6b7280]">Paid</p>';
-        html += '<p class="text-xl font-semibold text-emerald-700">' + formatCurrency(totalPaid) + '</p></div>';
+        html += '<p class="text-xl font-semibold text-[#0f766e]">' + formatCurrency(totalPaid) + '</p></div>';
         html += '<div class="bg-white rounded-2xl border border-[#d1d5db] p-4">';
         html += '<p class="text-sm text-[#6b7280]">Outstanding</p>';
-        html += '<p class="text-xl font-semibold text-red-700">' + formatCurrency(totalOutstanding) + '</p></div>';
+        html += '<p class="text-xl font-semibold text-[#111827]">' + formatCurrency(totalOutstanding) + '</p></div>';
         html += '</div>';
 
         // Schedule table
@@ -79,10 +79,10 @@ function renderRepayment(container, options) {
 
         for (var s = 0; s < schedule.length; s++) {
           var inst = schedule[s];
-          var rowBg = inst.status === 'paid' ? 'bg-emerald-50/50' :
-                      inst.status === 'overdue' ? 'bg-red-50/50' : '';
-          var statusBadge = inst.status === 'paid' ? 'bg-emerald-50 text-emerald-700' :
-                            inst.status === 'overdue' ? 'bg-red-50 text-red-700' : 'bg-amber-50 text-amber-700';
+          var rowBg = inst.status === 'Paid' ? 'bg-[#f0fdf4]/50' :
+                      inst.status === 'Overdue' ? 'bg-[#fef2f2]/50' : '';
+          var statusBadge = inst.status === 'Paid' ? 'bg-[#f0fdf4] text-[#0f766e]' :
+                            inst.status === 'Overdue' ? 'bg-[#fef2f2] text-[#111827]' : 'bg-[#fffbeb] text-[#92400e]';
 
           html += '<tr class="border-b border-[#d1d5db] ' + rowBg + '">';
           html += '<td class="px-4 py-2">' + inst.installmentNo + '</td>';
@@ -93,7 +93,7 @@ function renderRepayment(container, options) {
           html += '<td class="px-4 py-2"><span class="px-2 py-0.5 rounded-full text-xs font-medium ' + statusBadge + '">' + inst.status + '</span></td>';
           if (!readOnly) {
             html += '<td class="px-4 py-2">';
-            if (inst.status !== 'paid') {
+            if (inst.status !== 'Paid') {
               html += '<button class="text-[#0f766e] text-xs font-medium hover:underline btn-record-payment" data-loan="' + loan.id + '" data-inst="' + inst.installmentNo + '">Record</button>';
             }
             html += '</td>';

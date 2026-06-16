@@ -12,9 +12,9 @@ function renderSync(container, options) {
 
   function render() {
     var syncQueue = getCollection(StorageKeys.SYNC_QUEUE);
-    var pendingCount = syncQueue.filter(function(s) { return s.status === 'pending'; }).length;
-    var conflictCount = syncQueue.filter(function(s) { return s.status === 'conflict'; }).length;
-    var syncedCount = syncQueue.filter(function(s) { return s.status === 'synced'; }).length;
+    var pendingCount = syncQueue.filter(function(s) { return s.status === 'Pending'; }).length;
+    var conflictCount = syncQueue.filter(function(s) { return s.status === 'Conflict'; }).length;
+    var syncedCount = syncQueue.filter(function(s) { return s.status === 'Synced'; }).length;
     var isOnline = navigator.onLine;
 
     var html = '<div class="space-y-6">';
@@ -26,8 +26,8 @@ function renderSync(container, options) {
     // Status indicator
     html += '<div class="bg-white rounded-2xl border border-[#d1d5db] p-6">';
     html += '<div class="flex items-center gap-4 mb-4">';
-    html += '<div class="w-12 h-12 rounded-full ' + (isOnline ? 'bg-emerald-50' : 'bg-red-50') + ' flex items-center justify-center">';
-    html += '<div class="w-4 h-4 rounded-full ' + (isOnline ? 'bg-emerald-500' : 'bg-red-500') + '"></div>';
+    html += '<div class="w-12 h-12 rounded-full ' + (isOnline ? 'bg-[#f0fdf4]' : 'bg-[#fef2f2]') + ' flex items-center justify-center">';
+    html += '<div class="w-4 h-4 rounded-full ' + (isOnline ? 'bg-[#0f766e]' : 'bg-[#dc2626]') + '"></div>';
     html += '</div>';
     html += '<div>';
     html += '<h3 class="text-sm font-semibold text-[#0f766e]">' + (isOnline ? 'Online' : 'Offline') + '</h3>';
@@ -36,15 +36,15 @@ function renderSync(container, options) {
 
     // Sync stats
     html += '<div class="grid grid-cols-3 gap-4">';
-    html += '<div class="text-center p-3 bg-amber-50 rounded-lg">';
-    html += '<p class="text-2xl font-bold text-amber-700">' + pendingCount + '</p>';
-    html += '<p class="text-xs text-amber-600">Pending</p></div>';
-    html += '<div class="text-center p-3 bg-emerald-50 rounded-lg">';
-    html += '<p class="text-2xl font-bold text-emerald-700">' + syncedCount + '</p>';
-    html += '<p class="text-xs text-emerald-600">Synced</p></div>';
-    html += '<div class="text-center p-3 bg-red-50 rounded-lg">';
-    html += '<p class="text-2xl font-bold text-red-700">' + conflictCount + '</p>';
-    html += '<p class="text-xs text-red-600">Conflicts</p></div>';
+    html += '<div class="text-center p-3 bg-[#fffbeb] rounded-lg">';
+    html += '<p class="text-2xl font-bold text-[#92400e]">' + pendingCount + '</p>';
+    html += '<p class="text-xs text-[#d97706]">Pending</p></div>';
+    html += '<div class="text-center p-3 bg-[#f0fdf4] rounded-lg">';
+    html += '<p class="text-2xl font-bold text-[#0f766e]">' + syncedCount + '</p>';
+    html += '<p class="text-xs text-[#059669]">Synced</p></div>';
+    html += '<div class="text-center p-3 bg-[#fef2f2] rounded-lg">';
+    html += '<p class="text-2xl font-bold text-[#111827]">' + conflictCount + '</p>';
+    html += '<p class="text-xs text-[#dc2626]">Conflicts</p></div>';
     html += '</div></div>';
 
     // Actions
@@ -60,10 +60,10 @@ function renderSync(container, options) {
 
     // Offline indicator
     if (!isOnline) {
-      html += '<div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-center gap-3">';
-      html += '<span class="text-amber-600 text-lg">⚠️</span>';
-      html += '<div><p class="text-sm font-medium text-amber-700">Operating in Offline Mode</p>';
-      html += '<p class="text-xs text-amber-600">All changes are saved locally and will sync when connectivity returns.</p></div>';
+      html += '<div class="bg-[#fffbeb] border border-[#fde68a] rounded-2xl p-4 flex items-center gap-3">';
+      html += '<span class="text-[#d97706] text-lg">⚠️</span>';
+      html += '<div><p class="text-sm font-medium text-[#92400e]">Operating in Offline Mode</p>';
+      html += '<p class="text-xs text-[#d97706]">All changes are saved locally and will sync when connectivity returns.</p></div>';
       html += '</div>';
     }
 
@@ -85,8 +85,8 @@ function renderSync(container, options) {
       var displayItems = syncQueue.slice(-20).reverse();
       for (var i = 0; i < displayItems.length; i++) {
         var item = displayItems[i];
-        var statusBadge = item.status === 'synced' ? 'bg-emerald-50 text-emerald-700' :
-                          item.status === 'conflict' ? 'bg-red-50 text-red-700' : 'bg-amber-50 text-amber-700';
+        var statusBadge = item.status === 'Synced' ? 'bg-[#f0fdf4] text-[#0f766e]' :
+                          item.status === 'Conflict' ? 'bg-[#fef2f2] text-[#111827]' : 'bg-[#fffbeb] text-[#92400e]';
         html += '<tr class="border-b border-[#d1d5db]">';
         html += '<td class="px-4 py-2 capitalize">' + escapeHtml(item.action) + '</td>';
         html += '<td class="px-4 py-2 text-[#6b7280]">' + escapeHtml(item.collection || '') + '</td>';
@@ -134,7 +134,7 @@ function renderSync(container, options) {
     if (clearBtn) {
       clearBtn.addEventListener('click', function() {
         var queue = getCollection(StorageKeys.SYNC_QUEUE);
-        var remaining = queue.filter(function(s) { return s.status !== 'synced'; });
+        var remaining = queue.filter(function(s) { return s.status !== 'Synced'; });
         setCollection(StorageKeys.SYNC_QUEUE, remaining);
         showToast('Synced items cleared', 'success');
         render();
@@ -145,8 +145,8 @@ function renderSync(container, options) {
   function simulateSync() {
     var queue = getCollection(StorageKeys.SYNC_QUEUE);
     for (var i = 0; i < queue.length; i++) {
-      if (queue[i].status === 'pending') {
-        queue[i].status = 'synced';
+      if (queue[i].status === 'Pending') {
+        queue[i].status = 'Synced';
       }
     }
     setCollection(StorageKeys.SYNC_QUEUE, queue);
@@ -190,8 +190,8 @@ function renderSync(container, options) {
       btn.addEventListener('click', function() {
         var queue = getCollection(StorageKeys.SYNC_QUEUE);
         for (var i = 0; i < queue.length; i++) {
-          if (queue[i].status === 'conflict') {
-            queue[i].status = 'synced';
+          if (queue[i].status === 'Conflict') {
+            queue[i].status = 'Synced';
           }
         }
         setCollection(StorageKeys.SYNC_QUEUE, queue);

@@ -57,8 +57,8 @@ function renderClients(container, options) {
 
       for (var i = 0; i < filtered.length; i++) {
         var c = filtered[i];
-        var statusClass = c.status === 'Active' ? 'bg-emerald-50 text-emerald-700' :
-                          c.status === 'Blacklisted' ? 'bg-red-50 text-red-700' : 'bg-amber-50 text-amber-700';
+        var statusClass = c.status === 'Active' ? 'bg-[#f0fdf4] text-[#0f766e]' :
+                          c.status === 'Blacklisted' ? 'bg-[#fef2f2] text-[#111827]' : 'bg-[#fffbeb] text-[#92400e]';
         var blacklistAlert = c.status === 'Blacklisted' ? ' ⚠️' : '';
 
         html += '<tr class="border-b border-[#d1d5db] hover:bg-[#f4f4f5]">';
@@ -271,8 +271,8 @@ function renderClientDetail(container, clientId, options) {
   }
   if (!client) { renderClients(container, options); return; }
 
-  var statusClass = client.status === 'Active' ? 'bg-emerald-50 text-emerald-700' :
-                    client.status === 'Blacklisted' ? 'bg-red-50 text-red-700' : 'bg-amber-50 text-amber-700';
+  var statusClass = client.status === 'Active' ? 'bg-[#f0fdf4] text-[#0f766e]' :
+                    client.status === 'Blacklisted' ? 'bg-[#fef2f2] text-[#111827]' : 'bg-[#fffbeb] text-[#92400e]';
 
   var html = '<div class="space-y-6">';
   html += '<div class="flex items-center gap-4">';
@@ -282,9 +282,9 @@ function renderClientDetail(container, clientId, options) {
 
   // Blacklisted alert
   if (client.status === 'Blacklisted') {
-    html += '<div class="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center gap-3">';
-    html += '<span class="text-red-600 text-lg">⚠️</span>';
-    html += '<div><p class="text-sm font-medium text-red-700">Blacklisted Client</p><p class="text-xs text-red-600">This client has been blacklisted and cannot receive new loans.</p></div>';
+    html += '<div class="bg-[#fef2f2] border border-[#fecaca] rounded-lg p-4 flex items-center gap-3">';
+    html += '<span class="text-[#dc2626] text-lg">⚠️</span>';
+    html += '<div><p class="text-sm font-medium text-[#111827]">Blacklisted Client</p><p class="text-xs text-[#dc2626]">This client has been blacklisted and cannot receive new loans.</p></div>';
     html += '</div>';
   }
 

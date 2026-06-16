@@ -40,21 +40,21 @@ function renderUsers(container, options) {
 
       for (var i = 0; i < users.length; i++) {
         var u = users[i];
-        var statusClass = u.status === 'Active' ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700';
+        var statusClass = u.status === 'Active' ? 'bg-[#f0fdf4] text-[#0f766e]' : 'bg-[#fef2f2] text-[#111827]';
         var roleLabel = u.role.replace('_', ' ');
 
         html += '<tr class="border-b border-[#d1d5db] hover:bg-[#f4f4f5]">';
         html += '<td class="px-4 py-3 font-medium text-[#0f766e]">' + escapeHtml(u.fullName) + '</td>';
         html += '<td class="px-4 py-3 text-[#6b7280] hidden sm:table-cell">' + escapeHtml(u.email) + '</td>';
-        html += '<td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs font-medium bg-sky-50 text-sky-700 capitalize">' + escapeHtml(roleLabel) + '</span></td>';
+        html += '<td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs font-medium bg-[#f0f9ff] text-[#0369a1] capitalize">' + escapeHtml(roleLabel) + '</span></td>';
         html += '<td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-medium ' + statusClass + '">' + escapeHtml(u.status) + '</span></td>';
         html += '<td class="px-4 py-3 text-[#6b7280] hidden md:table-cell">' + (u.lastLogin ? formatDateTime(u.lastLogin) : 'Never') + '</td>';
         html += '<td class="px-4 py-3 space-x-1">';
         if (!readOnly) {
           if (u.status === 'Active') {
-            html += '<button class="text-red-600 text-xs font-medium hover:underline btn-suspend-user" data-id="' + u.id + '">Suspend</button>';
+            html += '<button class="text-[#dc2626] text-xs font-medium hover:underline btn-suspend-user" data-id="' + u.id + '">Suspend</button>';
           } else {
-            html += '<button class="text-emerald-600 text-xs font-medium hover:underline btn-activate-user" data-id="' + u.id + '">Activate</button>';
+            html += '<button class="text-[#059669] text-xs font-medium hover:underline btn-activate-user" data-id="' + u.id + '">Activate</button>';
           }
           html += '<button class="text-[#6b7280] text-xs font-medium hover:underline ml-2 btn-reset-pw" data-id="' + u.id + '">Reset PW</button>';
         }

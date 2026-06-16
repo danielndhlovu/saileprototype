@@ -33,8 +33,8 @@ function renderSavings(container, options) {
     // Header
     html += '<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">';
     html += '<div>';
-    html += '<h1 class="text-lg font-semibold text-[#0f766e">Saile Savings Module</h1>';
-    html += '<p class="text-sm text-[#6b7280">' + savingsAccounts.length + ' active savings accounts</p>';
+    html += '<h1 class="text-lg font-semibold text-[#0f766e]">Saile Savings Module</h1>';
+    html += '<p class="text-sm text-[#6b7280]">' + savingsAccounts.length + ' active savings accounts</p>';
     html += '</div>';
     if (!readOnly && (role === 'admin' || role === 'branch_manager' || role === 'accountant')) {
       html += '<button id="btn-open-account" class="bg-[#111827] text-white px-6 py-2.5 rounded-xl hover:bg-[#047857] font-medium text-sm">+ Open Account</button>';
@@ -45,13 +45,13 @@ function renderSavings(container, options) {
     html += '<div class="grid grid-cols-2 md:grid-cols-4 gap-4">';
     html += '<div class="bg-white rounded-2xl border border-[#d1d5db] p-5">';
     html += '<div class="text-sm text-[#6b7280] mb-1">Total Accounts</div>';
-    html += '<div class="text-2xl font-bold text-[#0f766e">' + filtered.length + '</div>';
+    html += '<div class="text-2xl font-bold text-[#0f766e]">' + filtered.length + '</div>';
     html += '<div class="text-xs text-[#6b7280] mt-1">of ' + savingsAccounts.length + ' total</div>';
     html += '</div>';
 
     html += '<div class="bg-white rounded-2xl border border-[#d1d5db] p-5">';
     html += '<div class="text-sm text-[#6b7280] mb-1">Total Balances</div>';
-    html += '<div class="text-2xl font-bold text-emerald-600">' + formatCurrency(totalBalances) + '</div>';
+    html += '<div class="text-2xl font-bold text-[#0f766e]">' + formatCurrency(totalBalances) + '</div>';
     html += '<div class="text-xs text-[#6b7280] mt-1">MWK across all accounts</div>';
     html += '</div>';
 
@@ -88,7 +88,7 @@ function renderSavings(container, options) {
     } else {
       html += '<div class="overflow-x-auto"><table class="w-full text-sm">';
       html += '<thead class="bg-[#f4f4f5] border-b border-[#d1d5db]"><tr>';
-      html += '<th class="text-left px-4 py-3 font-medium text-[#6b7280)">Account #</th>';
+      html += '<th class="text-left px-4 py-3 font-medium text-[#6b7280]">Account #</th>';
       html += '<th class="text-left px-4 py-3 font-medium text-[#6b7280]">Holder</th>';
       html += '<th class="text-left px-4 py-3 font-medium text-[#6b7280]">Branch</th>';
       html += '<th class="text-left px-4 py-3 font-medium text-[#6b7280]">Product</th>';
@@ -111,13 +111,13 @@ function renderSavings(container, options) {
         html += '<td class="px-4 py-3 text-[#6b7280]">' + escapeHtml(product ? product.name : a.productId) + '</td>';
         html += '<td class="px-4 py-3 text-right font-semibold text-[#0f766e]">' + formatCurrency(a.balance || 0) + '</td>';
 
-        var statusColor = a.status === 'ACTIVE' ? 'bg-emerald-50 text-emerald-700' :
-                          a.status === 'INACTIVE' ? 'bg-red-50 text-red-700' : 'bg-gray-100 text-gray-600';
+        var statusColor = a.status === 'Active' ? 'bg-[#f0fdf4] text-[#0f766e]' :
+                          a.status === 'Inactive' ? 'bg-[#fef2f2] text-[#111827]' : 'bg-gray-100 text-gray-600';
         html += '<td class="px-4 py-3 text-center"><span class="px-2 py-0.5 rounded-full text-xs font-medium ' + statusColor + '">' + escapeHtml(a.status) + '</span></td>';
         html += '<td class="px-4 py-3 text-[#6b7280] text-center">' + lastTxn + '</td>';
 
         html += '<td class="px-4 py-3 text-center space-x-1">';
-        if (!readOnly && a.status === 'ACTIVE') {
+        if (!readOnly && a.status === 'Active') {
           html += '<button class="text-[#0f766e] text-xs font-medium hover:underline btn-savings-deposit" data-id="' + a.id + '">Deposit</button>';
           html += '<button class="text-[#111827] text-xs font-medium hover:underline ml-2 btn-savings-withdraw" data-id="' + a.id + '">Withdraw</button>';
         }
@@ -132,6 +132,17 @@ function renderSavings(container, options) {
 
     container.innerHTML = html;
     attachSavingsEvents();
+  }
+
+  function getBranchName(branchId) {
+    var branches = getCollection(StorageKeys.BRANCHES);
+    var branch = branches.find(function(b) { return b.id === branchId; });
+    return branch ? branch.branchCode : '—';
+  }
+
+  function getProductById(productId) {
+    var products = getCollection(StorageKeys.SAVINGS_PRODUCTS);
+    return products.find(function(p) { return p.id === productId; });
   }
 
   function attachSavingsEvents() {
@@ -358,7 +369,7 @@ function renderSavings(container, options) {
         interestRate: product ? product.interestRate : 0,
         openedDate: today,
         lastTransactionDate: today,
-        status: 'ACTIVE',
+        status: 'Active',
         openedBy: session ? session.name : 'System'
       };
 

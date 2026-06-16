@@ -201,7 +201,7 @@
 }
 
 .kpi-card .kpi-change.up {
-  color: #10b981;
+  color: #0f766e;
 }
 
 .kpi-card .kpi-change.down {
@@ -234,7 +234,7 @@ table {
 /* Alert - Success */
 .alert-success {
   background: #d1fae5;
-  border-color: #10b981;
+  border-color: #0f766e;
   color: #065f46;
 }
 
