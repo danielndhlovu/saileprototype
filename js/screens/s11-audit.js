@@ -38,10 +38,10 @@ function renderAudit(container, options) {
     var html = '<div class="space-y-6">';
     html += '<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">';
     html += '<div>';
-    html += '<h1 class="text-lg font-semibold text-[#0f766e]">Saile Audit Trail</h1>';
-    html += '<p class="text-sm text-[#6b7280]">' + filtered.length + ' entries' + (filtered.length !== auditLog.length ? ' (filtered from ' + auditLog.length + ')' : '') + '</p>';
+    html += '<h1 class="text-lg font-semibold text-[#1E3A8A]">Saile Audit Trail</h1>';
+    html += '<p class="text-sm text-[#6B7280]">' + filtered.length + ' entries' + (filtered.length !== auditLog.length ? ' (filtered from ' + auditLog.length + ')' : '') + '</p>';
     html += '</div>';
-    html += '<button id="btn-export-audit" class="bg-white border border-[#d1d5db] text-[#0f766e] px-4 py-2 rounded-xl hover:bg-[#f4f4f5] text-sm font-medium">Export CSV</button>';
+    html += '<button id="btn-export-audit" class="bg-white border border-[#d1d5db] text-[#1E3A8A] px-4 py-2 rounded-xl hover:bg-[#f4f4f5] text-sm font-medium">Export CSV</button>';
     html += '</div>';
 
     // Filters
@@ -64,27 +64,27 @@ function renderAudit(container, options) {
     // Audit table
     html += '<div class="bg-white rounded-2xl border border-[#d1d5db] overflow-hidden">';
     if (pageItems.length === 0) {
-      html += '<div class="p-8 text-center text-[#6b7280]"><p class="text-sm">No audit entries found.</p></div>';
+      html += '<div class="p-8 text-center text-[#6B7280]"><p class="text-sm">No audit entries found.</p></div>';
     } else {
       html += '<div class="overflow-x-auto"><table class="w-full text-sm">';
       html += '<thead class="bg-[#f4f4f5] border-b border-[#d1d5db]"><tr>';
-      html += '<th class="text-left px-4 py-3 font-medium text-[#6b7280]">Timestamp</th>';
-      html += '<th class="text-left px-4 py-3 font-medium text-[#6b7280]">User</th>';
-      html += '<th class="text-left px-4 py-3 font-medium text-[#6b7280]">Role</th>';
-      html += '<th class="text-left px-4 py-3 font-medium text-[#6b7280]">Action</th>';
-      html += '<th class="text-left px-4 py-3 font-medium text-[#6b7280] hidden md:table-cell">Module</th>';
-      html += '<th class="text-left px-4 py-3 font-medium text-[#6b7280] hidden lg:table-cell">Details</th>';
+      html += '<th class="text-left px-4 py-3 font-medium text-[#6B7280]">Timestamp</th>';
+      html += '<th class="text-left px-4 py-3 font-medium text-[#6B7280]">User</th>';
+      html += '<th class="text-left px-4 py-3 font-medium text-[#6B7280]">Role</th>';
+      html += '<th class="text-left px-4 py-3 font-medium text-[#6B7280]">Action</th>';
+      html += '<th class="text-left px-4 py-3 font-medium text-[#6B7280] hidden md:table-cell">Module</th>';
+      html += '<th class="text-left px-4 py-3 font-medium text-[#6B7280] hidden lg:table-cell">Details</th>';
       html += '</tr></thead><tbody>';
 
       for (var i = 0; i < pageItems.length; i++) {
         var entry = pageItems[i];
         html += '<tr class="border-b border-[#d1d5db] hover:bg-[#f4f4f5]">';
-        html += '<td class="px-4 py-3 text-[#6b7280] whitespace-nowrap">' + formatDateTime(entry.timestamp) + '</td>';
-        html += '<td class="px-4 py-3 font-medium text-[#0f766e]">' + escapeHtml(entry.user) + '</td>';
-        html += '<td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs font-medium bg-[#f0f9ff] text-[#0369a1]">' + escapeHtml(entry.role) + '</span></td>';
+        html += '<td class="px-4 py-3 text-[#6B7280] whitespace-nowrap">' + formatDateTime(entry.timestamp) + '</td>';
+        html += '<td class="px-4 py-3 font-medium text-[#1E3A8A]">' + escapeHtml(entry.user) + '</td>';
+        html += '<td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs font-medium bg-sky-50 text-sky-700">' + escapeHtml(entry.role) + '</span></td>';
         html += '<td class="px-4 py-3">' + escapeHtml(entry.action) + '</td>';
-        html += '<td class="px-4 py-3 text-[#6b7280] hidden md:table-cell">' + escapeHtml(entry.module || '-') + '</td>';
-        html += '<td class="px-4 py-3 text-[#6b7280] hidden lg:table-cell text-xs max-w-[200px] truncate">';
+        html += '<td class="px-4 py-3 text-[#6B7280] hidden md:table-cell">' + escapeHtml(entry.module || '-') + '</td>';
+        html += '<td class="px-4 py-3 text-[#6B7280] hidden lg:table-cell text-xs max-w-[200px] truncate">';
         if (entry.changedTo) {
           html += escapeHtml(typeof entry.changedTo === 'object' ? JSON.stringify(entry.changedTo) : String(entry.changedTo));
         } else {
@@ -98,7 +98,7 @@ function renderAudit(container, options) {
     // Pagination
     if (totalPages > 1) {
       html += '<div class="flex items-center justify-between px-4 py-3 border-t border-[#d1d5db]">';
-      html += '<p class="text-xs text-[#6b7280]">Page ' + (currentPage + 1) + ' of ' + totalPages + '</p>';
+      html += '<p class="text-xs text-[#6B7280]">Page ' + (currentPage + 1) + ' of ' + totalPages + '</p>';
       html += '<div class="flex gap-2">';
       html += '<button class="audit-page-btn px-3 py-1 rounded border border-[#d1d5db] text-sm ' + (currentPage === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#f4f4f5]') + '" data-page="prev"' + (currentPage === 0 ? ' disabled' : '') + '>Previous</button>';
       html += '<button class="audit-page-btn px-3 py-1 rounded border border-[#d1d5db] text-sm ' + (currentPage >= totalPages - 1 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#f4f4f5]') + '" data-page="next"' + (currentPage >= totalPages - 1 ? ' disabled' : '') + '>Next</button>';

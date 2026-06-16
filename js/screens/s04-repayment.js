@@ -15,13 +15,13 @@ function renderRepayment(container, options) {
   function render() {
     var html = '<div class="space-y-6">';
     html += '<div>';
-    html += '<h1 class="text-lg font-semibold text-[#0f766e]">Saile Repayment Management</h1>';
-    html += '<p class="text-sm text-[#6b7280]">' + loans.length + ' active loans</p>';
+    html += '<h1 class="text-lg font-semibold text-[#1E3A8A]">Saile Repayment Management</h1>';
+    html += '<p class="text-sm text-[#6B7280]">' + loans.length + ' active loans</p>';
     html += '</div>';
 
     // Loan selector
     html += '<div class="bg-white rounded-2xl border border-[#d1d5db] p-4">';
-    html += '<label class="block text-sm font-medium text-[#0f766e] mb-1.5">Select Loan</label>';
+    html += '<label class="block text-sm font-medium text-[#1E3A8A] mb-1.5">Select Loan</label>';
     html += '<select id="repayment-loan-select" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl text-sm">';
     html += '<option value="">Choose a loan to view schedule...</option>';
     for (var i = 0; i < loans.length; i++) {
@@ -49,31 +49,31 @@ function renderRepayment(container, options) {
         // Balance summary
         html += '<div class="grid grid-cols-1 md:grid-cols-3 gap-4">';
         html += '<div class="bg-white rounded-2xl border border-[#d1d5db] p-4">';
-        html += '<p class="text-sm text-[#6b7280]">Total Loan</p>';
-        html += '<p class="text-xl font-semibold text-[#0f766e]">' + formatCurrency(totalDue) + '</p></div>';
+        html += '<p class="text-sm text-[#6B7280]">Total Loan</p>';
+        html += '<p class="text-xl font-semibold text-[#1E3A8A]">' + formatCurrency(totalDue) + '</p></div>';
         html += '<div class="bg-white rounded-2xl border border-[#d1d5db] p-4">';
-        html += '<p class="text-sm text-[#6b7280]">Paid</p>';
-        html += '<p class="text-xl font-semibold text-[#0f766e]">' + formatCurrency(totalPaid) + '</p></div>';
+        html += '<p class="text-sm text-[#6B7280]">Paid</p>';
+        html += '<p class="text-xl font-semibold text-[#1E3A8A]">' + formatCurrency(totalPaid) + '</p></div>';
         html += '<div class="bg-white rounded-2xl border border-[#d1d5db] p-4">';
-        html += '<p class="text-sm text-[#6b7280]">Outstanding</p>';
-        html += '<p class="text-xl font-semibold text-[#111827]">' + formatCurrency(totalOutstanding) + '</p></div>';
+        html += '<p class="text-sm text-[#6B7280]">Outstanding</p>';
+        html += '<p class="text-xl font-semibold text-[#1F2937]">' + formatCurrency(totalOutstanding) + '</p></div>';
         html += '</div>';
 
         // Schedule table
         html += '<div class="bg-white rounded-2xl border border-[#d1d5db] overflow-hidden">';
         html += '<div class="p-4 border-b border-[#d1d5db] flex items-center justify-between">';
-        html += '<h3 class="text-sm font-semibold text-[#0f766e]">Repayment Schedule</h3>';
+        html += '<h3 class="text-sm font-semibold text-[#1E3A8A]">Repayment Schedule</h3>';
         html += '</div>';
         html += '<div class="overflow-x-auto"><table class="w-full text-sm">';
         html += '<thead class="bg-[#f4f4f5]"><tr>';
-        html += '<th class="text-left px-4 py-2 text-[#6b7280] font-medium">#</th>';
-        html += '<th class="text-left px-4 py-2 text-[#6b7280] font-medium">Due Date</th>';
-        html += '<th class="text-right px-4 py-2 text-[#6b7280] font-medium">Principal</th>';
-        html += '<th class="text-right px-4 py-2 text-[#6b7280] font-medium">Interest</th>';
-        html += '<th class="text-right px-4 py-2 text-[#6b7280] font-medium">Total</th>';
-        html += '<th class="text-left px-4 py-2 text-[#6b7280] font-medium">Status</th>';
+        html += '<th class="text-left px-4 py-2 text-[#6B7280] font-medium">#</th>';
+        html += '<th class="text-left px-4 py-2 text-[#6B7280] font-medium">Due Date</th>';
+        html += '<th class="text-right px-4 py-2 text-[#6B7280] font-medium">Principal</th>';
+        html += '<th class="text-right px-4 py-2 text-[#6B7280] font-medium">Interest</th>';
+        html += '<th class="text-right px-4 py-2 text-[#6B7280] font-medium">Total</th>';
+        html += '<th class="text-left px-4 py-2 text-[#6B7280] font-medium">Status</th>';
         if (!readOnly) {
-          html += '<th class="text-left px-4 py-2 text-[#6b7280] font-medium">Action</th>';
+          html += '<th class="text-left px-4 py-2 text-[#6B7280] font-medium">Action</th>';
         }
         html += '</tr></thead><tbody>';
 
@@ -81,8 +81,8 @@ function renderRepayment(container, options) {
           var inst = schedule[s];
           var rowBg = inst.status === 'Paid' ? 'bg-[#f0fdf4]/50' :
                       inst.status === 'Overdue' ? 'bg-[#fef2f2]/50' : '';
-          var statusBadge = inst.status === 'Paid' ? 'bg-[#f0fdf4] text-[#0f766e]' :
-                            inst.status === 'Overdue' ? 'bg-[#fef2f2] text-[#111827]' : 'bg-[#fffbeb] text-[#92400e]';
+          var statusBadge = inst.status === 'Paid' ? 'bg-[#f0fdf4] text-[#1E3A8A]' :
+                            inst.status === 'Overdue' ? 'bg-[#fef2f2] text-[#1F2937]' : 'bg-[#fffbeb] text-[#92400e]';
 
           html += '<tr class="border-b border-[#d1d5db] ' + rowBg + '">';
           html += '<td class="px-4 py-2">' + inst.installmentNo + '</td>';
@@ -94,7 +94,7 @@ function renderRepayment(container, options) {
           if (!readOnly) {
             html += '<td class="px-4 py-2">';
             if (inst.status !== 'Paid') {
-              html += '<button class="text-[#0f766e] text-xs font-medium hover:underline btn-record-payment" data-loan="' + loan.id + '" data-inst="' + inst.installmentNo + '">Record</button>';
+              html += '<button class="text-[#1E3A8A] text-xs font-medium hover:underline btn-record-payment" data-loan="' + loan.id + '" data-inst="' + inst.installmentNo + '">Record</button>';
             }
             html += '</td>';
           }

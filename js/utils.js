@@ -234,10 +234,10 @@ function showToast(message, type) {
 
   // Color mapping based on design system
   var colors = {
-    success: { bg: '#0f766e', text: '#ffffff' },
-    error: { bg: '#111827', text: '#ffffff' },
-    warning: { bg: '#f59e0b', text: '#0f766e' },
-    info: { bg: '#111827', text: '#ffffff' }
+    success: { bg: '#059669', text: '#ffffff' },  // accent/green
+    error: { bg: '#1F2937', text: '#ffffff' },    // error/red
+    warning: { bg: '#f59e0b', text: '#1E3A8A' },  // warning/amber
+    info: { bg: '#1E3A8A', text: '#ffffff' }       // info/blue
   };
 
   var color = colors[type] || colors.info;

@@ -64,13 +64,13 @@ function renderDesktopLogin(container) {
 
   container.innerHTML = '<div class="min-h-screen flex">' +
     '<!-- Left brand panel -->' +
-    '<div class="hidden lg:flex lg:w-1/2 bg-[#0f766e] flex-col justify-center items-center p-12">' +
+    '<div class="hidden lg:flex lg:w-1/2 bg-[#1E3A8A] flex-col justify-center items-center p-12">' +
       '<div class="max-w-md text-center">' +
-        '<h1 class="text-4xl font-bold text-white mb-4">Saile</h1>' +
+        '<h1 class="text-[#1E3A8A]xl font-bold text-white mb-4">Saile</h1>' +
         '<p class="text-xl text-gray-300 mb-6">Empowering Financial Inclusion</p>' +
         '<p class="text-gray-400 text-sm leading-relaxed">A comprehensive microfinance management platform designed for field operations, loan lifecycle management, and financial reporting.</p>' +
         '<div class="mt-8 flex items-center gap-3 justify-center">' +
-          '<div class="w-2 h-2 rounded-full bg-[#0f766e]"></div>' +
+          '<div class="w-2 h-2 rounded-full bg-[#1E3A8A]"></div>' +
           '<span class="text-gray-400 text-xs">256-bit encrypted local storage</span>' +
         '</div>' +
       '</div>' +
@@ -79,32 +79,32 @@ function renderDesktopLogin(container) {
     '<div class="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">' +
       '<div class="w-full max-w-md">' +
         '<div class="lg:hidden text-center mb-8">' +
-          '<h1 class="text-2xl font-bold text-[#0f766e]">Saile</h1>' +
-          '<p class="text-[#6b7280] text-sm">Financial Services Platform</p>' +
+          '<h1 class="text-2xl font-bold text-[#1E3A8A]">Saile</h1>' +
+          '<p class="text-[#6B7280] text-sm">Financial Services Platform</p>' +
         '</div>' +
-        '<h2 class="text-2xl font-semibold text-[#0f766e] mb-2">Sign In</h2>' +
-        '<p class="text-[#6b7280] text-sm mb-6">Select your role and enter credentials</p>' +
+        '<h2 class="text-2xl font-semibold text-[#1E3A8A] mb-2">Sign In</h2>' +
+        '<p class="text-[#6B7280] text-sm mb-6">Select your role and enter credentials</p>' +
         '<!-- Role pills -->' +
         '<div class="flex flex-wrap gap-2 mb-6" id="role-pills">' +
-          '<button data-role="admin" class="role-pill px-4 py-2 rounded-xl text-sm font-medium border transition-colors bg-[#111827] text-white border-[#111827]">Admin</button>' +
-          '<button data-role="branch_manager" class="role-pill px-4 py-2 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:bg-gray-50">Branch Manager</button>' +
-          '<button data-role="accountant" class="role-pill px-4 py-2 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:bg-gray-50">Accountant</button>' +
-          '<button data-role="auditor" class="role-pill px-4 py-2 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:bg-gray-50">Auditor</button>' +
+          '<button data-role="admin" class="role-pill px-4 py-2 rounded-xl text-sm font-medium border transition-colors bg-[#1F2937] text-white border-[#1F2937]">Admin</button>' +
+          '<button data-role="branch_manager" class="role-pill px-4 py-2 rounded-xl text-sm font-medium border transition-colors bg-white text-[#1E3A8A] border-[#d1d5db] hover:bg-gray-50">Branch Manager</button>' +
+          '<button data-role="accountant" class="role-pill px-4 py-2 rounded-xl text-sm font-medium border transition-colors bg-white text-[#1E3A8A] border-[#d1d5db] hover:bg-gray-50">Accountant</button>' +
+          '<button data-role="auditor" class="role-pill px-4 py-2 rounded-xl text-sm font-medium border transition-colors bg-white text-[#1E3A8A] border-[#d1d5db] hover:bg-gray-50">Auditor</button>' +
         '</div>' +
         '<!-- Form -->' +
         '<form id="login-form" class="space-y-4">' +
           '<div>' +
-            '<label class="block text-sm font-medium text-[#0f766e] mb-1.5">Email</label>' +
-            '<input type="email" id="login-email" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#0f766e] focus:border-[#0f766e] text-sm" placeholder="admin@saile.mw" required>' +
+            '<label class="block text-sm font-medium text-[#1E3A8A] mb-1.5">Email</label>' +
+            '<input type="email" id="login-email" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A] text-sm" placeholder="admin@saile.mw" required>' +
           '</div>' +
           '<div>' +
-            '<label class="block text-sm font-medium text-[#0f766e] mb-1.5">Password</label>' +
-            '<input type="password" id="login-password" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#0f766e] focus:border-[#0f766e] text-sm" placeholder="Enter password" required>' +
+            '<label class="block text-sm font-medium text-[#1E3A8A] mb-1.5">Password</label>' +
+            '<input type="password" id="login-password" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A] text-sm" placeholder="Enter password" required>' +
           '</div>' +
           '<div id="login-message" class="hidden text-sm rounded-xl px-3 py-2"></div>' +
-          '<button type="submit" class="w-full bg-[#111827] text-white px-6 py-2.5 rounded-xl hover:bg-gray-800 font-medium text-sm transition-colors">Sign In</button>' +
+          '<button type="submit" class="w-full bg-[#1F2937] text-white px-6 py-2.5 rounded-xl hover:bg-[#1F2937] font-medium text-sm transition-colors">Sign In</button>' +
         '</form>' +
-        '<p class="text-xs text-[#6b7280] mt-4 text-center">Demo: admin@saile.mw / password123</p>' +
+        '<p class="text-xs text-[#6B7280] mt-4 text-center">Demo: admin@saile.mw / password123</p>' +
       '</div>' +
     '</div>' +
   '</div>';
@@ -115,9 +115,9 @@ function renderDesktopLogin(container) {
     pill.addEventListener('click', function() {
       selectedRole = this.getAttribute('data-role');
       pills.forEach(function(p) {
-        p.className = 'role-pill px-4 py-2 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:bg-gray-50';
+        p.className = 'role-pill px-4 py-2 rounded-xl text-sm font-medium border transition-colors bg-white text-[#1E3A8A] border-[#d1d5db] hover:bg-gray-50';
       });
-      this.className = 'role-pill px-4 py-2 rounded-xl text-sm font-medium border transition-colors bg-[#111827] text-white border-[#111827]';
+      this.className = 'role-pill px-4 py-2 rounded-xl text-sm font-medium border transition-colors bg-[#1F2937] text-white border-[#1F2937]';
     });
   });
 
@@ -193,7 +193,7 @@ function handleDesktopLogin(email, password, role) {
 function renderMobileLogin(container) {
   var enteredPin = '';
 
-  container.innerHTML = '<div class="min-h-screen bg-[#111827] flex flex-col items-center justify-center p-6">' +
+  container.innerHTML = '<div class="min-h-screen bg-[#1F2937] flex flex-col items-center justify-center p-6">' +
     '<div class="text-center mb-8">' +
       '<h1 class="text-3xl font-bold text-white mb-2">Saile</h1>' +
       '<p class="text-gray-400 text-sm">Enter your PIN to continue</p>' +
@@ -205,7 +205,7 @@ function renderMobileLogin(container) {
       '<div class="w-4 h-4 rounded-full border-2 border-gray-500 pin-dot"></div>' +
       '<div class="w-4 h-4 rounded-full border-2 border-gray-500 pin-dot"></div>' +
     '</div>' +
-    '<div id="pin-error" class="hidden text-[#f87171] text-sm mb-4"></div>' +
+    '<div id="pin-error" class="hidden text-red-400 text-sm mb-4"></div>' +
     '<!-- PIN pad -->' +
     '<div id="pin-pad" class="grid grid-cols-3 gap-3 max-w-[240px]">' +
       '<button class="pin-key w-[72px] h-[72px] rounded-full bg-gray-700 text-white text-xl font-medium hover:bg-gray-600 transition-colors flex items-center justify-center" data-key="1">1</button>' +
@@ -219,7 +219,7 @@ function renderMobileLogin(container) {
       '<button class="pin-key w-[72px] h-[72px] rounded-full bg-gray-700 text-white text-xl font-medium hover:bg-gray-600 transition-colors flex items-center justify-center" data-key="9">9</button>' +
       '<button class="pin-key w-[72px] h-[72px] rounded-full bg-gray-800 text-white text-xl font-medium hover:bg-gray-600 transition-colors flex items-center justify-center" data-key="back">&larr;</button>' +
       '<button class="pin-key w-[72px] h-[72px] rounded-full bg-gray-700 text-white text-xl font-medium hover:bg-gray-600 transition-colors flex items-center justify-center" data-key="0">0</button>' +
-      '<button class="pin-key w-[72px] h-[72px] rounded-full bg-[#0f766e] text-white text-xl font-medium hover:bg-teal-800 transition-colors flex items-center justify-center" data-key="submit">&check;</button>' +
+      '<button class="pin-key w-[72px] h-[72px] rounded-full bg-[#1E3A8A] text-white text-xl font-medium hover:bg-teal-800 transition-colors flex items-center justify-center" data-key="submit">&check;</button>' +
     '</div>' +
     '<!-- Biometric card -->' +
     '<div class="mt-8 bg-gray-800 rounded-xl p-4 w-full max-w-[240px] text-center">' +
@@ -260,7 +260,7 @@ function updatePinDots(filled) {
   var dots = document.querySelectorAll('.pin-dot');
   dots.forEach(function(dot, i) {
     if (i < filled) {
-      dot.className = 'w-4 h-4 rounded-full bg-[#0f766e] pin-dot';
+      dot.className = 'w-4 h-4 rounded-full bg-[#1E3A8A] pin-dot';
     } else {
       dot.className = 'w-4 h-4 rounded-full border-2 border-gray-500 pin-dot';
     }
@@ -362,9 +362,9 @@ function showLoginMessage(el, msg, type) {
   el.classList.remove('hidden');
   el.textContent = msg;
   if (type === 'error') {
-    el.className = 'text-sm rounded-xl px-3 py-2 bg-[#fef2f2] text-[#111827]';
+    el.className = 'text-sm rounded-xl px-3 py-2 bg-[#FEF2F2] text-[#991B1B]';
   } else {
-    el.className = 'text-sm rounded-xl px-3 py-2 bg-[#f0fdf4] text-[#0f766e]';
+    el.className = 'text-sm rounded-xl px-3 py-2 bg-[#1E3A8A]merald-50 text-[#1E3A8A]merald-700';
   }
 }
 

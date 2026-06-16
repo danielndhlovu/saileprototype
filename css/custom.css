@@ -155,11 +155,11 @@
    12. Theme Colors (Generic Slate/Teal palette)
    ============================================ */
 :root {
-  --focus-ring: #0f766e;
+  --focus-ring: #1E3A8A;
   --focus-ring-dark: #134e4a;
-  --text-primary: #111827;
+  --text-primary: #1F2937;
   --text-secondary: #374151;
-  --text-muted: #6b7280;
+  --text-muted: #6B7280;
   --border-color: #d1d5db;
   --bg-hover: #f4f4f5;
   --bg-card: #ffffff;
@@ -168,11 +168,11 @@
   --gray-200: #d1d5db;
   --gray-300: #d1d5db;
   --gray-400: #9ca3af;
-  --gray-500: #6b7280;
+  --gray-500: #6B7280;
   --gray-600: #374151;
   --gray-700: #374151;
   --gray-800: #1f2937;
-  --gray-900: #111827;
+  --gray-900: #1F2937;
 }
 
 /* Login Page */
@@ -201,7 +201,7 @@
 }
 
 .kpi-card .kpi-change.up {
-  color: #0f766e;
+  color: #10b981;
 }
 
 .kpi-card .kpi-change.down {
@@ -234,7 +234,7 @@ table {
 /* Alert - Success */
 .alert-success {
   background: #d1fae5;
-  border-color: #0f766e;
+  border-color: #10b981;
   color: #065f46;
 }
 

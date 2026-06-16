@@ -29,11 +29,11 @@ function renderCollections(container, options) {
     var html = '<div class="space-y-6">';
     html += '<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">';
     html += '<div>';
-    html += '<h1 class="text-lg font-semibold text-[#0f766e]">Saile Collections</h1>';
-    html += '<p class="text-sm text-[#6b7280]">' + collections.length + ' records today</p>';
+    html += '<h1 class="text-lg font-semibold text-[#1E3A8A]">Saile Collections</h1>';
+    html += '<p class="text-sm text-[#6B7280]">' + collections.length + ' records today</p>';
     html += '</div>';
     if (!readOnly) {
-      html += '<button id="btn-new-collection" class="bg-[#111827] text-white px-6 py-2.5 rounded-xl hover:bg-[#047857] font-medium text-sm">+ Record Payment</button>';
+      html += '<button id="btn-new-collection" class="bg-[#1F2937] text-white px-6 py-2.5 rounded-xl hover:bg-[#152C5B] font-medium text-sm">+ Record Payment</button>';
     }
     html += '</div>';
 
@@ -43,16 +43,16 @@ function renderCollections(container, options) {
     html += renderProgressDial(progressPct);
     html += '</div>';
     html += '<div>';
-    html += '<h3 class="text-sm font-semibold text-[#0f766e] mb-1">Collection Progress</h3>';
-    html += '<p class="text-2xl font-bold text-[#0f766e]">' + progressPct + '%</p>';
-    html += '<p class="text-xs text-[#6b7280]">' + formatCurrency(totalCollected) + ' of ' + formatCurrency(totalDue) + ' collected</p>';
+    html += '<h3 class="text-sm font-semibold text-[#1E3A8A] mb-1">Collection Progress</h3>';
+    html += '<p class="text-2xl font-bold text-[#1E3A8A]">' + progressPct + '%</p>';
+    html += '<p class="text-xs text-[#6B7280]">' + formatCurrency(totalCollected) + ' of ' + formatCurrency(totalDue) + ' collected</p>';
     html += '</div></div>';
 
     // Filter tabs
     html += '<div class="flex gap-2">';
-    var tabs = [['all','All'],['pending','Pending Sync'],['synced','Synced']];
+    var tabs = [['all','All'],['pending','Pending Sync'],['synced','Synced'];
     for (var t = 0; t < tabs.length; t++) {
-      var active = filterTab === tabs[t][0] ? 'bg-[#111827] text-white' : 'bg-white text-[#0f766e] border border-[#d1d5db] hover:bg-[#f4f4f5]';
+      var active = filterTab === tabs[t][0] ? 'bg-[#1F2937] text-white' : 'bg-white text-[#1E3A8A] border border-[#d1d5db] hover:bg-[#f4f4f5]';
       html += '<button class="collection-tab px-4 py-2 rounded-xl text-sm font-medium ' + active + '" data-tab="' + tabs[t][0] + '">' + tabs[t][1] + '</button>';
     }
     html += '</div>';
@@ -61,24 +61,24 @@ function renderCollections(container, options) {
     html += '<div class="space-y-3">';
     if (filtered.length === 0) {
       html += '<div class="bg-white rounded-2xl border border-[#d1d5db] p-8 text-center">';
-      html += '<p class="text-sm text-[#6b7280]">No collections found.</p></div>';
+      html += '<p class="text-sm text-[#6B7280]">No collections found.</p></div>';
     }
     for (var j = 0; j < filtered.length; j++) {
       var col = filtered[j];
-      var syncBadge = col.synced ? 'bg-[#f0fdf4] text-[#0f766e]' : 'bg-[#fffbeb] text-[#92400e]';
+      var syncBadge = col.synced ? 'bg-[#f0fdf4] text-[#1E3A8A]' : 'bg-[#fffbeb] text-[#92400e]';
       var syncText = col.synced ? 'Synced' : 'Pending';
 
       html += '<div class="bg-white rounded-2xl border border-[#d1d5db] p-4">';
       html += '<div class="flex items-center justify-between">';
       html += '<div>';
-      html += '<h4 class="text-sm font-medium text-[#0f766e]">' + escapeHtml(col.clientName) + '</h4>';
-      html += '<p class="text-xs text-[#6b7280]">Ref: ' + escapeHtml(col.transactionRef) + '</p>';
+      html += '<h4 class="text-sm font-medium text-[#1E3A8A]">' + escapeHtml(col.clientName) + '</h4>';
+      html += '<p class="text-xs text-[#6B7280]">Ref: ' + escapeHtml(col.transactionRef) + '</p>';
       html += '</div>';
       html += '<div class="text-right">';
-      html += '<p class="text-sm font-semibold text-[#0f766e]">' + formatCurrency(col.collectedAmount) + '</p>';
+      html += '<p class="text-sm font-semibold text-[#1E3A8A]">' + formatCurrency(col.collectedAmount) + '</p>';
       html += '<span class="px-2 py-0.5 rounded-full text-xs font-medium ' + syncBadge + '">' + syncText + '</span>';
       html += '</div></div>';
-      html += '<div class="mt-2 flex items-center gap-4 text-xs text-[#6b7280]">';
+      html += '<div class="mt-2 flex items-center gap-4 text-xs text-[#6B7280]">';
       html += '<span>' + escapeHtml(col.paymentMode) + '</span>';
       html += '<span>' + formatDateTime(col.collectedAt) + '</span>';
       if (col.penaltyApplied > 0) {
@@ -119,7 +119,7 @@ function renderProgressDial(pct) {
 
   return '<svg class="progress-ring" width="100" height="100">' +
     '<circle cx="50" cy="50" r="' + radius + '" stroke="#d1d5db" stroke-width="8" fill="none"/>' +
-    '<circle class="progress-ring__circle" cx="50" cy="50" r="' + radius + '" stroke="#0f766e" stroke-width="8" fill="none" ' +
+    '<circle class="progress-ring__circle" cx="50" cy="50" r="' + radius + '" stroke="#1E3A8A" stroke-width="8" fill="none" ' +
     'stroke-dasharray="' + circumference + '" stroke-dashoffset="' + offset + '" stroke-linecap="round"/>' +
     '</svg>';
 }
@@ -133,13 +133,13 @@ function renderCollectionForm(container, options) {
 
   var html = '<div class="space-y-6">';
   html += '<div class="flex items-center gap-4">';
-  html += '<button id="btn-back-collections" class="bg-white border border-[#d1d5db] text-[#0f766e] px-4 py-2 rounded-xl hover:bg-[#f4f4f5] text-sm">&larr; Back</button>';
-  html += '<h1 class="text-lg font-semibold text-[#0f766e]">Record Collection</h1>';
+  html += '<button id="btn-back-collections" class="bg-white border border-[#d1d5db] text-[#1E3A8A] px-4 py-2 rounded-xl hover:bg-[#f4f4f5] text-sm">&larr; Back</button>';
+  html += '<h1 class="text-lg font-semibold text-[#1E3A8A]">Record Collection</h1>';
   html += '</div>';
 
   html += '<form id="collection-form" class="bg-white rounded-2xl border border-[#d1d5db] p-6 space-y-4">';
 
-  html += '<div><label class="block text-sm font-medium text-[#0f766e] mb-1.5">Loan *</label>';
+  html += '<div><label class="block text-sm font-medium text-[#1E3A8A] mb-1.5">Loan *</label>';
   html += '<select name="loanId" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl text-sm" required>';
   html += '<option value="">Select loan...</option>';
   for (var i = 0; i < loans.length; i++) {
@@ -148,24 +148,24 @@ function renderCollectionForm(container, options) {
   html += '</select></div>';
 
   html += '<div class="grid grid-cols-1 md:grid-cols-2 gap-4">';
-  html += '<div><label class="block text-sm font-medium text-[#0f766e] mb-1.5">Due Amount (MWK)</label>';
-  html += '<input type="number" name="dueAmount" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#0f766e] focus:border-[#0f766e] text-sm" required></div>';
-  html += '<div><label class="block text-sm font-medium text-[#0f766e] mb-1.5">Collected Amount (MWK) *</label>';
-  html += '<input type="number" name="collectedAmount" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#0f766e] focus:border-[#0f766e] text-sm" required></div>';
+  html += '<div><label class="block text-sm font-medium text-[#1E3A8A] mb-1.5">Due Amount (MWK)</label>';
+  html += '<input type="number" name="dueAmount" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A] text-sm" required></div>';
+  html += '<div><label class="block text-sm font-medium text-[#1E3A8A] mb-1.5">Collected Amount (MWK) *</label>';
+  html += '<input type="number" name="collectedAmount" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A] text-sm" required></div>';
   html += '</div>';
 
   html += '<div class="grid grid-cols-1 md:grid-cols-2 gap-4">';
-  html += '<div><label class="block text-sm font-medium text-[#0f766e] mb-1.5">Payment Mode</label>';
+  html += '<div><label class="block text-sm font-medium text-[#1E3A8A] mb-1.5">Payment Mode</label>';
   html += '<select name="paymentMode" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl text-sm">';
   html += '<option value="cash">Cash</option><option value="mobile_money">Mobile Money</option>';
   html += '</select></div>';
-  html += '<div><label class="block text-sm font-medium text-[#0f766e] mb-1.5">Penalty Applied (MWK)</label>';
-  html += '<input type="number" name="penalty" value="0" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#0f766e] focus:border-[#0f766e] text-sm"></div>';
+  html += '<div><label class="block text-sm font-medium text-[#1E3A8A] mb-1.5">Penalty Applied (MWK)</label>';
+  html += '<input type="number" name="penalty" value="0" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A] text-sm"></div>';
   html += '</div>';
 
   html += '<div class="flex gap-3">';
-  html += '<button type="submit" class="bg-[#111827] text-white px-6 py-2.5 rounded-xl hover:bg-gray-800 font-medium text-sm">Record & Generate Receipt</button>';
-  html += '<button type="button" id="btn-cancel-collection" class="bg-white border border-[#d1d5db] text-[#0f766e] px-6 py-2.5 rounded-xl hover:bg-[#f4f4f5] font-medium text-sm">Cancel</button>';
+  html += '<button type="submit" class="bg-[#1F2937] text-white px-6 py-2.5 rounded-xl hover:bg-[#1F2937] font-medium text-sm">Record & Generate Receipt</button>';
+  html += '<button type="button" id="btn-cancel-collection" class="bg-white border border-[#d1d5db] text-[#1E3A8A] px-6 py-2.5 rounded-xl hover:bg-[#f4f4f5] font-medium text-sm">Cancel</button>';
   html += '</div></form></div>';
 
   container.innerHTML = html;
@@ -219,18 +219,18 @@ function showReceiptModal(collection) {
       '<div class="w-12 h-12 bg-[#f0fdf4] rounded-full flex items-center justify-center mx-auto mb-3">' +
         '<svg class="w-6 h-6 text-[#059669]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>' +
       '</div>' +
-      '<h3 class="text-lg font-semibold text-[#0f766e]">Payment Receipt</h3>' +
+      '<h3 class="text-lg font-semibold text-[#1E3A8A]">Payment Receipt</h3>' +
     '</div>' +
     '<div class="space-y-2 text-sm border-t border-b border-[#d1d5db] py-3 my-3">' +
-      '<div class="flex justify-between"><span class="text-[#6b7280]">Reference</span><span class="font-medium">' + escapeHtml(collection.transactionRef) + '</span></div>' +
-      '<div class="flex justify-between"><span class="text-[#6b7280]">Client</span><span class="font-medium">' + escapeHtml(collection.clientName) + '</span></div>' +
-      '<div class="flex justify-between"><span class="text-[#6b7280]">Amount</span><span class="font-medium">' + formatCurrency(collection.collectedAmount) + '</span></div>' +
-      '<div class="flex justify-between"><span class="text-[#6b7280]">Mode</span><span class="font-medium">' + escapeHtml(collection.paymentMode) + '</span></div>' +
-      '<div class="flex justify-between"><span class="text-[#6b7280]">Date</span><span class="font-medium">' + formatDateTime(collection.collectedAt) + '</span></div>' +
+      '<div class="flex justify-between"><span class="text-[#6B7280]">Reference</span><span class="font-medium">' + escapeHtml(collection.transactionRef) + '</span></div>' +
+      '<div class="flex justify-between"><span class="text-[#6B7280]">Client</span><span class="font-medium">' + escapeHtml(collection.clientName) + '</span></div>' +
+      '<div class="flex justify-between"><span class="text-[#6B7280]">Amount</span><span class="font-medium">' + formatCurrency(collection.collectedAmount) + '</span></div>' +
+      '<div class="flex justify-between"><span class="text-[#6B7280]">Mode</span><span class="font-medium">' + escapeHtml(collection.paymentMode) + '</span></div>' +
+      '<div class="flex justify-between"><span class="text-[#6B7280]">Date</span><span class="font-medium">' + formatDateTime(collection.collectedAt) + '</span></div>' +
     '</div>' +
     '<div class="flex gap-2">' +
-      '<button class="flex-1 bg-[#111827] text-white py-2 px-4 rounded-xl text-sm font-medium" id="receipt-close">Done</button>' +
-      '<button class="flex-1 bg-white border border-[#d1d5db] text-[#0f766e] py-2 px-4 rounded-xl text-sm font-medium" id="receipt-share">Share</button>' +
+      '<button class="flex-1 bg-[#1F2937] text-white py-2 px-4 rounded-xl text-sm font-medium" id="receipt-close">Done</button>' +
+      '<button class="flex-1 bg-white border border-[#d1d5db] text-[#1E3A8A] py-2 px-4 rounded-xl text-sm font-medium" id="receipt-share">Share</button>' +
     '</div>' +
   '</div>';
 

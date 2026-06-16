@@ -57,44 +57,44 @@ function renderTopBar(session, branchName) {
     '<!-- Left: Logo + action buttons -->' +
     '<div class="flex items-center gap-2">' +
       '<div class="w-9 h-9 rounded-lg bg-[#f4f4f5] border border-[#d1d5db] flex items-center justify-center">' +
-        '<svg class="w-5 h-5 text-[#0f766e]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L3 7v10l9 5 9-5V7l-9-5zm0 2.18l6.5 3.64v7.36L12 18.82l-6.5-3.64V7.82L12 4.18z"/></svg>' +
+        '<svg class="w-5 h-5 text-[#1E3A8A]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L3 7v10l9 5 9-5V7l-9-5zm0 2.18l6.5 3.64v7.36L12 18.82l-6.5-3.64V7.82L12 4.18z"/></svg>' +
       '</div>' +
-      '<button id="topbar-search-btn" class="bg-[#f4f4f5] border border-[#d1d5db] rounded-lg px-3 py-1.5 text-sm text-[#6b7280] hover:bg-[#d1d5db] transition-colors hidden md:flex items-center gap-1.5">' +
+      '<button id="topbar-search-btn" class="bg-[#f4f4f5] border border-[#d1d5db] rounded-lg px-3 py-1.5 text-sm text-[#6B7280] hover:bg-[#d1d5db] transition-colors hidden md:flex items-center gap-1.5">' +
         '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>' +
         '<span>Search</span>' +
       '</button>' +
-      '<button class="bg-[#f4f4f5] border border-[#d1d5db] rounded-lg px-2.5 py-1.5 text-[#6b7280] hover:bg-[#d1d5db] transition-colors hidden md:block">' +
+      '<button class="bg-[#f4f4f5] border border-[#d1d5db] rounded-lg px-2.5 py-1.5 text-[#6B7280] hover:bg-[#d1d5db] transition-colors hidden md:block">' +
         '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>' +
       '</button>' +
-      '<button class="bg-[#f4f4f5] border border-[#d1d5db] rounded-lg px-2.5 py-1.5 text-[#6b7280] hover:bg-[#d1d5db] transition-colors relative hidden md:block">' +
+      '<button class="bg-[#f4f4f5] border border-[#d1d5db] rounded-lg px-2.5 py-1.5 text-[#6B7280] hover:bg-[#d1d5db] transition-colors relative hidden md:block">' +
         '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>' +
-        '<span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-[#d94f4f] rounded-full border-2 border-white"></span>' +
+        '<span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-[#DC2626] rounded-full border-2 border-white"></span>' +
       '</button>' +
-      '<button class="bg-[#f4f4f5] border border-[#d1d5db] rounded-lg px-2.5 py-1.5 text-[#6b7280] hover:bg-[#d1d5db] transition-colors hidden md:block">' +
+      '<button class="bg-[#f4f4f5] border border-[#d1d5db] rounded-lg px-2.5 py-1.5 text-[#6B7280] hover:bg-[#d1d5db] transition-colors hidden md:block">' +
         '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"/></svg>' +
       '</button>' +
     '</div>' +
     '<!-- Mobile menu toggle -->' +
     '<button id="nav-collapse-btn" class="p-2 rounded-lg hover:bg-[#f4f4f5] transition-colors lg:hidden" aria-label="Toggle navigation">' +
-      '<svg class="w-5 h-5 text-[#0f766e]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>' +
+      '<svg class="w-5 h-5 text-[#1E3A8A]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>' +
     '</button>' +
     '<div class="flex-1"></div>' +
     '<!-- Right: Language, date, clock, create -->' +
     '<div class="hidden md:flex items-center gap-3">' +
-      '<button class="bg-[#f4f4f5] border border-[#d1d5db] rounded-lg px-3 py-1.5 text-sm text-[#6b7280] hover:bg-[#d1d5db] transition-colors">En &#9662;</button>' +
-      '<span id="nav-clock" class="text-xs text-[#6b7280] font-mono">--:--</span>' +
-      '<span class="text-xs text-[#6b7280]">' + escapeHtml(dateStr) + '</span>' +
-      '<button id="topbar-create-btn" class="bg-[#111827] text-white rounded-xl px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors flex items-center gap-1">' +
+      '<button class="bg-[#f4f4f5] border border-[#d1d5db] rounded-lg px-3 py-1.5 text-sm text-[#6B7280] hover:bg-[#d1d5db] transition-colors">En &#9662;</button>' +
+      '<span id="nav-clock" class="text-xs text-[#6B7280] font-mono">--:--</span>' +
+      '<span class="text-xs text-[#6B7280]">' + escapeHtml(dateStr) + '</span>' +
+      '<button id="topbar-create-btn" class="bg-[#1F2937] text-white rounded-xl px-4 py-2 text-sm font-medium hover:bg-[#1F2937] transition-colors flex items-center gap-1">' +
         'Create <span class="ml-1">&rarr;</span>' +
       '</button>' +
     '</div>' +
     '<!-- Mobile: profile + logout -->' +
     '<div class="flex md:hidden items-center gap-2">' +
-      '<div class="w-8 h-8 rounded-full bg-[#111827] flex items-center justify-center text-white text-xs font-medium">' +
+      '<div class="w-8 h-8 rounded-full bg-[#1F2937] flex items-center justify-center text-white text-xs font-medium">' +
         (session ? escapeHtml(session.name.charAt(0).toUpperCase()) : '?') +
       '</div>' +
       '<button id="logout-btn-mobile" class="p-2 rounded-lg hover:bg-[#f4f4f5] transition-colors" title="Logout">' +
-        '<svg class="w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>' +
+        '<svg class="w-4 h-4 text-[#6B7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>' +
       '</button>' +
     '</div>';
 
@@ -149,7 +149,7 @@ function showCreateDropdown(anchor) {
 
   actions.forEach(action => {
     const item = document.createElement('button');
-    item.className = 'w-full text-left px-4 py-2 text-sm text-[#0f766e] hover:bg-[#f4f4f5] transition-colors';
+    item.className = 'w-full text-left px-4 py-2 text-sm text-[#1E3A8A] hover:bg-[#f4f4f5] transition-colors';
     item.textContent = action.label;
     item.onclick = () => {
       window.location.hash = action.route;
@@ -178,12 +178,12 @@ function showSearchOverlay() {
   overlay.innerHTML = `
     <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden">
       <div class="p-4 border-b border-[#d1d5db] flex items-center gap-3">
-        <svg class="w-5 h-5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-        <input type="text" id="global-search-input" class="flex-1 outline-none text-lg text-[#0f766e]" placeholder="Search clients, loans, accounts..." autofocus>
-        <kbd class="text-xs text-[#6b7280] bg-[#f4f4f5] px-1.5 py-0.5 rounded border border-[#d1d5db]">ESC</kbd>
+        <svg class="w-5 h-5 text-[#6B7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input type="text" id="global-search-input" class="flex-1 outline-none text-lg text-[#1E3A8A]" placeholder="Search clients, loans, accounts..." autofocus>
+        <kbd class="text-xs text-[#6B7280] bg-[#f4f4f5] px-1.5 py-0.5 rounded border border-[#d1d5db]">ESC</kbd>
       </div>
       <div id="search-results" class="max-h-[60vh] overflow-y-auto p-2">
-        <p class="text-center py-8 text-[#6b7280] text-sm">Start typing to search across Saile platform...</p>
+        <p class="text-center py-8 text-[#6B7280] text-sm">Start typing to search across Saile platform...</p>
       </div>
     </div>
   `;
@@ -204,7 +204,7 @@ function showSearchOverlay() {
   input.addEventListener('input', debounce(() => {
     const q = input.value.trim().toLowerCase();
     if (!q) {
-      results.innerHTML = '<p class="text-center py-8 text-[#6b7280] text-sm">Start typing to search...</p>';
+      results.innerHTML = '<p class="text-center py-8 text-[#6B7280] text-sm">Start typing to search...</p>';
       return;
     }
 
@@ -213,26 +213,26 @@ function showSearchOverlay() {
 
     let html = '';
     if (clients.length) {
-      html += '<h4 class="text-xs font-bold text-[#6b7280] uppercase px-3 py-2">Clients</h4>';
+      html += '<h4 class="text-xs font-bold text-[#6B7280] uppercase px-3 py-2">Clients</h4>';
       clients.forEach(c => {
         html += `<button class="w-full text-left p-3 rounded-xl hover:bg-[#f4f4f5] group transition-colors" onclick="window.location.hash='#/clients'; document.querySelector('.fixed.inset-0').remove()">
-          <p class="font-medium text-[#0f766e]">${escapeHtml(c.fullName)}</p>
-          <p class="text-xs text-[#6b7280]">${escapeHtml(c.nationalId)}</p>
+          <p class="font-medium text-[#1E3A8A]">${escapeHtml(c.fullName)}</p>
+          <p class="text-xs text-[#6B7280]">${escapeHtml(c.nationalId)}</p>
         </button>`;
       });
     }
     if (loans.length) {
-      html += '<h4 class="text-xs font-bold text-[#6b7280] uppercase px-3 py-2 mt-2">Loans</h4>';
+      html += '<h4 class="text-xs font-bold text-[#6B7280] uppercase px-3 py-2 mt-2">Loans</h4>';
       loans.forEach(l => {
         html += `<button class="w-full text-left p-3 rounded-xl hover:bg-[#f4f4f5] group transition-colors" onclick="window.location.hash='#/loans'; document.querySelector('.fixed.inset-0').remove()">
-          <p class="font-medium text-[#0f766e]">${escapeHtml(l.clientName)}</p>
-          <p class="text-xs text-[#6b7280]">${escapeHtml(l.productName)} — ${formatCurrency(l.requestedAmount)}</p>
+          <p class="font-medium text-[#1E3A8A]">${escapeHtml(l.clientName)}</p>
+          <p class="text-xs text-[#6B7280]">${escapeHtml(l.productName)} — ${formatCurrency(l.requestedAmount)}</p>
         </button>`;
       });
     }
 
     if (!html) {
-      html = '<p class="text-center py-8 text-[#6b7280] text-sm">No results found for "' + escapeHtml(q) + '"</p>';
+      html = '<p class="text-center py-8 text-[#6B7280] text-sm">No results found for "' + escapeHtml(q) + '"</p>';
     }
     results.innerHTML = html;
   }, 300));
@@ -255,9 +255,9 @@ function renderLeftRail(navItems, role, isCollapsed) {
   // Brand
   html += '<div class="px-5 py-4 border-b border-[#d1d5db]">';
   if (!isCollapsed) {
-    html += '<span class="text-xl font-bold text-[#0f766e]">Saile</span>';
+    html += '<span class="text-xl font-bold text-[#1E3A8A]">Saile</span>';
   } else {
-    html += '<span class="text-xl font-bold text-[#0f766e]">S</span>';
+    html += '<span class="text-xl font-bold text-[#1E3A8A]">S</span>';
   }
   html += '</div>';
 
@@ -267,7 +267,7 @@ function renderLeftRail(navItems, role, isCollapsed) {
   for (var i = 0; i < navItems.length; i++) {
     var item = navItems[i];
     var isActive = currentHash === item.route;
-    var activeClass = isActive ? 'bg-[#111827] text-white' : 'text-[#6b7280] hover:bg-[#f4f4f5]';
+    var activeClass = isActive ? 'bg-[#1F2937] text-white' : 'text-[#6B7280] hover:bg-[#f4f4f5]';
     var iconHtml = NAV_ICONS[item.icon] || '';
 
     html += '<a href="' + item.route + '" data-nav-route="' + item.route + '" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ' + activeClass + '">';
@@ -284,20 +284,20 @@ function renderLeftRail(navItems, role, isCollapsed) {
   html += '<div class="px-3 py-3 border-t border-[#d1d5db]">';
   if (!isCollapsed && session) {
     html += '<div class="flex items-center gap-3 px-2 py-2">';
-    html += '<div class="w-9 h-9 rounded-full bg-[#111827] flex items-center justify-center text-white text-sm font-medium flex-shrink-0">' +
+    html += '<div class="w-9 h-9 rounded-full bg-[#1F2937] flex items-center justify-center text-white text-sm font-medium flex-shrink-0">' +
       escapeHtml(session.name.charAt(0).toUpperCase()) + '</div>';
     html += '<div class="flex-1 min-w-0">';
-    html += '<p class="text-sm font-medium text-[#0f766e] truncate">' + escapeHtml(session.name) + '</p>';
-    html += '<p class="text-xs text-[#6b7280] truncate">' + escapeHtml(session.email || '') + '</p>';
+    html += '<p class="text-sm font-medium text-[#1E3A8A] truncate">' + escapeHtml(session.name) + '</p>';
+    html += '<p class="text-xs text-[#6B7280] truncate">' + escapeHtml(session.email || '') + '</p>';
     html += '</div>';
     html += '<button id="logout-btn" class="p-1.5 rounded-lg hover:bg-[#f4f4f5] transition-colors flex-shrink-0" title="Logout">' +
-      '<svg class="w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>' +
+      '<svg class="w-4 h-4 text-[#6B7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>' +
     '</button>';
     html += '</div>';
 
     // Role switcher
     html += '<div class="mt-2">';
-    html += '<select id="role-switcher" class="w-full text-xs border border-[#d1d5db] rounded-xl px-3 py-1.5 bg-[#f4f4f5] text-[#0f766e]">';
+    html += '<select id="role-switcher" class="w-full text-xs border border-[#d1d5db] rounded-xl px-3 py-1.5 bg-[#f4f4f5] text-[#1E3A8A]">';
     var roles = ['admin', 'branch_manager', 'field_officer', 'accountant', 'auditor'];
     for (var r = 0; r < roles.length; r++) {
       var sel = roles[r] === role ? ' selected' : '';
@@ -307,7 +307,7 @@ function renderLeftRail(navItems, role, isCollapsed) {
     html += '</div>';
   } else if (isCollapsed && session) {
     html += '<div class="flex justify-center">';
-    html += '<div class="w-9 h-9 rounded-full bg-[#111827] flex items-center justify-center text-white text-sm font-medium">' +
+    html += '<div class="w-9 h-9 rounded-full bg-[#1F2937] flex items-center justify-center text-white text-sm font-medium">' +
       escapeHtml(session.name.charAt(0).toUpperCase()) + '</div>';
     html += '</div>';
   }
@@ -359,63 +359,63 @@ function renderRightPanel(session) {
   // Notifications card (collapsible)
   html += '<div id="notif-card" class="bg-white rounded-2xl border border-[#d1d5db] p-4 mb-4">';
   html += '<div class="flex items-center justify-between mb-3">';
-  html += '<h3 class="text-sm font-semibold text-[#0f766e]">Notifications</h3>';
-  html += '<button id="btn-hide-notif" class="p-1 rounded-lg hover:bg-[#f4f4f5] transition-colors text-[#6b7280]" title="Hide notifications">';
+  html += '<h3 class="text-sm font-semibold text-[#1E3A8A]">Notifications</h3>';
+  html += '<button id="btn-hide-notif" class="p-1 rounded-lg hover:bg-[#f4f4f5] transition-colors text-[#6B7280]" title="Hide notifications">';
   html += '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>';
   html += '</button>';
   html += '</div>';
   html += '<div id="notif-content" class="space-y-2">';
 
   if (recentLogs.length === 0) {
-    html += '<p class="text-xs text-[#6b7280]">No recent notifications.</p>';
+    html += '<p class="text-xs text-[#6B7280]">No recent notifications.</p>';
   } else {
     for (var i = 0; i < recentLogs.length; i++) {
       var log = recentLogs[i];
       var actionLabel = (log.action || 'unknown').replace(/_/g, ' ');
       html += '<div class="bg-[#f4f4f5] rounded-xl p-3">';
       html += '<div class="flex items-start gap-2">';
-      html += '<div class="w-6 h-6 rounded-full bg-[#111827]/10 flex items-center justify-center flex-shrink-0 mt-0.5">';
-      html += '<svg class="w-3 h-3 text-[#0f766e]" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4"/></svg>';
+      html += '<div class="w-6 h-6 rounded-full bg-[#1F2937]/10 flex items-center justify-center flex-shrink-0 mt-0.5">';
+      html += '<svg class="w-3 h-3 text-[#1E3A8A]" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4"/></svg>';
       html += '</div>';
       html += '<div class="flex-1 min-w-0">';
-      html += '<p class="text-xs font-medium text-[#0f766e] capitalize truncate">' + escapeHtml(actionLabel) + '</p>';
-      html += '<p class="text-xs text-[#6b7280]">' + escapeHtml(log.user || '') + '</p>';
+      html += '<p class="text-xs font-medium text-[#1E3A8A] capitalize truncate">' + escapeHtml(actionLabel) + '</p>';
+      html += '<p class="text-xs text-[#6B7280]">' + escapeHtml(log.user || '') + '</p>';
       html += '</div></div></div>';
     }
   }
 
   html += '</div>';
-  html += '<button class="w-full mt-3 bg-[#111827] text-white rounded-xl px-4 py-2 text-xs font-medium hover:bg-gray-800 transition-colors">See all notifications &rarr;</button>';
+  html += '<button class="w-full mt-3 bg-[#1F2937] text-white rounded-xl px-4 py-2 text-xs font-medium hover:bg-[#1F2937] transition-colors">See all notifications &rarr;</button>';
   html += '</div>';
 
   // Quick Info card (collapsible)
   html += '<div id="info-card" class="bg-white rounded-2xl border border-[#d1d5db] p-4 mb-4">';
   html += '<div class="flex items-center justify-between mb-3">';
-  html += '<h3 class="text-sm font-semibold text-[#0f766e]">Quick Info</h3>';
-  html += '<button id="btn-hide-info" class="p-1 rounded-lg hover:bg-[#f4f4f5] transition-colors text-[#6b7280]" title="Hide quick info">';
+  html += '<h3 class="text-sm font-semibold text-[#1E3A8A]">Quick Info</h3>';
+  html += '<button id="btn-hide-info" class="p-1 rounded-lg hover:bg-[#f4f4f5] transition-colors text-[#6B7280]" title="Hide quick info">';
   html += '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>';
   html += '</button>';
   html += '</div>';
   html += '<div id="info-content" class="space-y-2">';
   html += '<div class="bg-[#f4f4f5] rounded-xl p-3">';
-  html += '<p class="text-xs font-medium text-[#0f766e]">Logged in as</p>';
-  html += '<p class="text-xs text-[#6b7280]">' + (session ? escapeHtml(session.name) + ' (' + escapeHtml(session.role.replace(/_/g, ' ')) + ')' : 'Unknown') + '</p>';
+  html += '<p class="text-xs font-medium text-[#1E3A8A]">Logged in as</p>';
+  html += '<p class="text-xs text-[#6B7280]">' + (session ? escapeHtml(session.name) + ' (' + escapeHtml(session.role.replace(/_/g, ' ')) + ')' : 'Unknown') + '</p>';
   html += '</div>';
   html += '<div class="bg-[#f4f4f5] rounded-xl p-3">';
-  html += '<p class="text-xs font-medium text-[#0f766e]">Sync Status</p>';
-  html += '<p class="text-xs text-[#0f766e]">&bull; Online</p>';
+  html += '<p class="text-xs font-medium text-[#1E3A8A]">Sync Status</p>';
+  html += '<p class="text-xs text-[#1E3A8A]">&bull; Online</p>';
   html += '</div>';
   html += '</div>';
-  html += '<button class="w-full mt-3 bg-[#f4f4f5] border border-[#d1d5db] text-[#0f766e] rounded-xl px-4 py-2 text-xs font-medium hover:bg-[#d1d5db] transition-colors">Notes</button>';
+  html += '<button class="w-full mt-3 bg-[#f4f4f5] border border-[#d1d5db] text-[#1E3A8A] rounded-xl px-4 py-2 text-xs font-medium hover:bg-[#d1d5db] transition-colors">Notes</button>';
   html += '</div>';
 
   // Show buttons (visible when cards are hidden)
   html += '<div id="panel-show-btns" class="hidden space-y-2">';
-  html += '<button id="btn-show-notif" class="w-full bg-white border border-[#d1d5db] rounded-xl px-4 py-2.5 text-xs font-medium text-[#0f766e] hover:bg-[#f4f4f5] transition-colors flex items-center gap-2">';
-  html += '<svg class="w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>';
+  html += '<button id="btn-show-notif" class="w-full bg-white border border-[#d1d5db] rounded-xl px-4 py-2.5 text-xs font-medium text-[#1E3A8A] hover:bg-[#f4f4f5] transition-colors flex items-center gap-2">';
+  html += '<svg class="w-4 h-4 text-[#6B7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>';
   html += 'Show Notifications</button>';
-  html += '<button id="btn-show-info" class="w-full bg-white border border-[#d1d5db] rounded-xl px-4 py-2.5 text-xs font-medium text-[#0f766e] hover:bg-[#f4f4f5] transition-colors flex items-center gap-2">';
-  html += '<svg class="w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+  html += '<button id="btn-show-info" class="w-full bg-white border border-[#d1d5db] rounded-xl px-4 py-2.5 text-xs font-medium text-[#1E3A8A] hover:bg-[#f4f4f5] transition-colors flex items-center gap-2">';
+  html += '<svg class="w-4 h-4 text-[#6B7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
   html += 'Show Quick Info</button>';
   html += '</div>';
 
@@ -478,7 +478,7 @@ function renderMobileTabs(navItems) {
   for (var i = 0; i < mobileItems.length; i++) {
     var item = mobileItems[i];
     var isActive = currentHash === item.route;
-    var activeClass = isActive ? 'text-[#0f766e]' : 'text-[#6b7280]';
+    var activeClass = isActive ? 'text-[#1E3A8A]' : 'text-[#6B7280]';
     var iconHtml = NAV_ICONS[item.icon] || '';
 
     html += '<a href="' + item.route + '" class="flex flex-col items-center justify-center gap-1 min-w-[48px] min-h-[48px] ' + activeClass + '">';
