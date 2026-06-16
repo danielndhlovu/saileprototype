@@ -22,7 +22,9 @@ const StorageKeys = {
   BRANCHES: 'saile_branches',
   PENALTY_RULES: 'saile_penalty_rules',
   NAV_COLLAPSED: 'saile_nav_collapsed',
-  LANGUAGE: 'saile_language'
+  LANGUAGE: 'saile_language',
+  BRANCH_TARGETS: 'saile_branch_targets',
+  PAR_SNAPSHOTS: 'saile_par_snapshots'
 };
 
 /**

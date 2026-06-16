@@ -33,46 +33,46 @@ function renderSavings(container, options) {
     // Header
     html += '<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">';
     html += '<div>';
-    html += '<h1 class="text-lg font-semibold text-[#0f766e]">Saile Savings Module</h1>';
-    html += '<p class="text-sm text-[#6b7280]">' + savingsAccounts.length + ' active savings accounts</p>';
+    html += '<h1 class="text-lg font-semibold text-[#1E3A8A]">Saile Savings Module</h1>';
+    html += '<p class="text-sm text-[#6B7280]">' + savingsAccounts.length + ' active savings accounts</p>';
     html += '</div>';
     if (!readOnly && (role === 'admin' || role === 'branch_manager' || role === 'accountant')) {
-      html += '<button id="btn-open-account" class="bg-[#111827] text-white px-6 py-2.5 rounded-xl hover:bg-[#047857] font-medium text-sm">+ Open Account</button>';
+      html += '<button id="btn-open-account" class="bg-[#1F2937] text-white px-6 py-2.5 rounded-xl hover:bg-[#152C5B] font-medium text-sm">+ Open Account</button>';
     }
     html += '</div>';
 
     // Summary cards
     html += '<div class="grid grid-cols-2 md:grid-cols-4 gap-4">';
     html += '<div class="bg-white rounded-2xl border border-[#d1d5db] p-5">';
-    html += '<div class="text-sm text-[#6b7280] mb-1">Total Accounts</div>';
-    html += '<div class="text-2xl font-bold text-[#0f766e]">' + filtered.length + '</div>';
-    html += '<div class="text-xs text-[#6b7280] mt-1">of ' + savingsAccounts.length + ' total</div>';
+    html += '<div class="text-sm text-[#6B7280] mb-1">Total Accounts</div>';
+    html += '<div class="text-2xl font-bold text-[#1E3A8A]">' + filtered.length + '</div>';
+    html += '<div class="text-xs text-[#6B7280] mt-1">of ' + savingsAccounts.length + ' total</div>';
     html += '</div>';
 
     html += '<div class="bg-white rounded-2xl border border-[#d1d5db] p-5">';
-    html += '<div class="text-sm text-[#6b7280] mb-1">Total Balances</div>';
-    html += '<div class="text-2xl font-bold text-[#0f766e]">' + formatCurrency(totalBalances) + '</div>';
-    html += '<div class="text-xs text-[#6b7280] mt-1">MWK across all accounts</div>';
+    html += '<div class="text-sm text-[#6B7280] mb-1">Total Balances</div>';
+    html += '<div class="text-2xl font-bold text-[#1E3A8A]">' + formatCurrency(totalBalances) + '</div>';
+    html += '<div class="text-xs text-[#6B7280] mt-1">MWK across all accounts</div>';
     html += '</div>';
 
     html += '<div class="bg-white rounded-2xl border border-[#d1d5db] p-5">';
-    html += '<div class="text-sm text-[#6b7280] mb-1">Savings Products</div>';
-    html += '<div class="text-2xl font-bold text-[#111827]">' + savingsProducts.length + '</div>';
-    html += '<div class="text-xs text-[#6b7280] mt-1">available product types</div>';
+    html += '<div class="text-sm text-[#6B7280] mb-1">Savings Products</div>';
+    html += '<div class="text-2xl font-bold text-[#1F2937]">' + savingsProducts.length + '</div>';
+    html += '<div class="text-xs text-[#6B7280] mt-1">available product types</div>';
     html += '</div>';
 
     var avgBalance = filtered.length > 0 ? Math.round(totalBalances / filtered.length) : 0;
     html += '<div class="bg-white rounded-2xl border border-[#d1d5db] p-5">';
-    html += '<div class="text-sm text-[#6b7280] mb-1">Avg Balance</div>';
-    html += '<div class="text-2xl font-bold text-[#F59E0B]">' + formatCurrency(avgBalance) + '</div>';
-    html += '<div class="text-xs text-[#6b7280] mt-1">per account</div>';
+    html += '<div class="text-sm text-[#6B7280] mb-1">Avg Balance</div>';
+    html += '<div class="text-2xl font-bold text-[#D97706]">' + formatCurrency(avgBalance) + '</div>';
+    html += '<div class="text-xs text-[#6B7280] mt-1">per account</div>';
     html += '</div>';
     html += '</div>';
 
     // Search and filter
     html += '<div class="bg-white rounded-2xl border border-[#d1d5db] p-4">';
     html += '<div class="flex flex-col sm:flex-row gap-3">';
-    html += '<input type="text" id="savings-search" class="flex-1 px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#0f766e] focus:border-[#0f766e] text-sm" placeholder="Search by holder name or account number..." value="' + escapeHtml(searchQuery) + '">';
+    html += '<input type="text" id="savings-search" class="flex-1 px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A] text-sm" placeholder="Search by holder name or account number..." value="' + escapeHtml(searchQuery) + '">';
     html += '<select id="savings-product-filter" class="px-3 py-2.5 border border-[#d1d5db] rounded-xl text-sm">';
     html += '<option value="">All Products</option>';
     for (var p = 0; p < savingsProducts.length; p++) {
@@ -84,18 +84,18 @@ function renderSavings(container, options) {
     // Accounts table
     html += '<div class="bg-white rounded-2xl border border-[#d1d5db] overflow-hidden">';
     if (filtered.length === 0) {
-      html += '<div class="p-8 text-center text-[#6b7280]"><p class="text-sm">No savings accounts found.</p></div>';
+      html += '<div class="p-8 text-center text-[#6B7280]"><p class="text-sm">No savings accounts found.</p></div>';
     } else {
       html += '<div class="overflow-x-auto"><table class="w-full text-sm">';
       html += '<thead class="bg-[#f4f4f5] border-b border-[#d1d5db]"><tr>';
-      html += '<th class="text-left px-4 py-3 font-medium text-[#6b7280]">Account #</th>';
-      html += '<th class="text-left px-4 py-3 font-medium text-[#6b7280]">Holder</th>';
-      html += '<th class="text-left px-4 py-3 font-medium text-[#6b7280]">Branch</th>';
-      html += '<th class="text-left px-4 py-3 font-medium text-[#6b7280]">Product</th>';
-      html += '<th class="text-right px-4 py-3 font-medium text-[#6b7280]">Balance</th>';
-      html += '<th class="text-center px-4 py-3 font-medium text-[#6b7280]">Status</th>';
-      html += '<th class="text-center px-4 py-3 font-medium text-[#6b7280]">Last Txn</th>';
-      html += '<th class="text-center px-4 py-3 font-medium text-[#6b7280]">Actions</th>';
+      html += '<th class="text-left px-4 py-3 font-medium text-[#6B7280]">Account #</th>';
+      html += '<th class="text-left px-4 py-3 font-medium text-[#6B7280]">Holder</th>';
+      html += '<th class="text-left px-4 py-3 font-medium text-[#6B7280]">Branch</th>';
+      html += '<th class="text-left px-4 py-3 font-medium text-[#6B7280]">Product</th>';
+      html += '<th class="text-right px-4 py-3 font-medium text-[#6B7280]">Balance</th>';
+      html += '<th class="text-center px-4 py-3 font-medium text-[#6B7280]">Status</th>';
+      html += '<th class="text-center px-4 py-3 font-medium text-[#6B7280]">Last Txn</th>';
+      html += '<th class="text-center px-4 py-3 font-medium text-[#6B7280]">Actions</th>';
       html += '</tr></thead><tbody>';
 
       for (var i = 0; i < filtered.length; i++) {
@@ -105,24 +105,24 @@ function renderSavings(container, options) {
         var lastTxn = a.lastTransactionDate ? formatDate(a.lastTransactionDate) : '—';
 
         html += '<tr class="border-b border-[#d1d5db] hover:bg-[#f4f4f5]">';
-        html += '<td class="px-4 py-3 font-medium text-[#0f766e]">' + escapeHtml(a.accountNumber) + '</td>';
-        html += '<td class="px-4 py-3 text-[#0f766e]">' + escapeHtml(a.accountHolder) + '</td>';
-        html += '<td class="px-4 py-3 text-[#6b7280]">' + escapeHtml(branch) + '</td>';
-        html += '<td class="px-4 py-3 text-[#6b7280]">' + escapeHtml(product ? product.name : a.productId) + '</td>';
-        html += '<td class="px-4 py-3 text-right font-semibold text-[#0f766e]">' + formatCurrency(a.balance || 0) + '</td>';
+        html += '<td class="px-4 py-3 font-medium text-[#1E3A8A]">' + escapeHtml(a.accountNumber) + '</td>';
+        html += '<td class="px-4 py-3 text-[#1E3A8A]">' + escapeHtml(a.accountHolder) + '</td>';
+        html += '<td class="px-4 py-3 text-[#6B7280]">' + escapeHtml(branch) + '</td>';
+        html += '<td class="px-4 py-3 text-[#6B7280]">' + escapeHtml(product ? product.name : a.productId) + '</td>';
+        html += '<td class="px-4 py-3 text-right font-semibold text-[#1E3A8A]">' + formatCurrency(a.balance || 0) + '</td>';
 
-        var statusColor = a.status === 'Active' ? 'bg-[#f0fdf4] text-[#0f766e]' :
-                          a.status === 'Inactive' ? 'bg-[#fef2f2] text-[#111827]' : 'bg-gray-100 text-gray-600';
+        var statusColor = a.status === 'Active' ? 'bg-[#f0fdf4] text-[#1E3A8A]' :
+                          a.status === 'Inactive' ? 'bg-[#FEF2F2] text-[#991B1B]' : 'bg-gray-100 text-gray-600';
         html += '<td class="px-4 py-3 text-center"><span class="px-2 py-0.5 rounded-full text-xs font-medium ' + statusColor + '">' + escapeHtml(a.status) + '</span></td>';
-        html += '<td class="px-4 py-3 text-[#6b7280] text-center">' + lastTxn + '</td>';
+        html += '<td class="px-4 py-3 text-[#6B7280] text-center">' + lastTxn + '</td>';
 
         html += '<td class="px-4 py-3 text-center space-x-1">';
         if (!readOnly && a.status === 'Active') {
-          html += '<button class="text-[#0f766e] text-xs font-medium hover:underline btn-savings-deposit" data-id="' + a.id + '">Deposit</button>';
-          html += '<button class="text-[#111827] text-xs font-medium hover:underline ml-2 btn-savings-withdraw" data-id="' + a.id + '">Withdraw</button>';
+          html += '<button class="text-[#1E3A8A] text-xs font-medium hover:underline btn-savings-deposit" data-id="' + a.id + '">Deposit</button>';
+          html += '<button class="text-[#1F2937] text-xs font-medium hover:underline ml-2 btn-savings-withdraw" data-id="' + a.id + '">Withdraw</button>';
         }
         if (!readOnly) {
-          html += '<button class="text-[#6b7280] text-xs font-medium hover:underline ml-2 btn-savings-close" data-id="' + a.id + '">Close</button>';
+          html += '<button class="text-[#6B7280] text-xs font-medium hover:underline ml-2 btn-savings-close" data-id="' + a.id + '">Close</button>';
         }
         html += '</td></tr>';
       }
@@ -280,15 +280,15 @@ function renderSavings(container, options) {
 
     var html = '<div class="space-y-6">';
     html += '<div class="flex items-center gap-4">';
-    html += '<button id="btn-back-savings" class="bg-white border border-[#d1d5db] text-[#0f766e] px-4 py-2 rounded-xl hover:bg-[#f4f4f5] text-sm">&larr; Back</button>';
-    html += '<h1 class="text-lg font-semibold text-[#0f766e]">Open New Savings Account</h1>';
+    html += '<button id="btn-back-savings" class="bg-white border border-[#d1d5db] text-[#1E3A8A] px-4 py-2 rounded-xl hover:bg-[#f4f4f5] text-sm">&larr; Back</button>';
+    html += '<h1 class="text-lg font-semibold text-[#1E3A8A]">Open New Savings Account</h1>';
     html += '</div>';
 
     html += '<form id="savings-form" class="bg-white rounded-2xl border border-[#d1d5db] p-6 space-y-4">';
 
     // Client selection
     html += '<div class="grid grid-cols-1 md:grid-cols-2 gap-4">';
-    html += '<div><label class="block text-sm font-medium text-[#0f766e] mb-1.5">Client *</label>';
+    html += '<div><label class="block text-sm font-medium text-[#1E3A8A] mb-1.5">Client *</label>';
     html += '<select id="savings-client" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl text-sm" required>';
     html += '<option value="">Select client...</option>';
     for (var c = 0; c < clients.length; c++) {
@@ -299,7 +299,7 @@ function renderSavings(container, options) {
     html += '</select></div>';
 
     // Product selection
-    html += '<div><label class="block text-sm font-medium text-[#0f766e] mb-1.5">Savings Product *</label>';
+    html += '<div><label class="block text-sm font-medium text-[#1E3A8A] mb-1.5">Savings Product *</label>';
     html += '<select id="savings-product" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl text-sm" required>';
     html += '<option value="">Select product...</option>';
     for (var sp = 0; sp < savingsProducts.length; sp++) {
@@ -310,7 +310,7 @@ function renderSavings(container, options) {
 
     // Branch
     html += '<div class="grid grid-cols-1 md:grid-cols-2 gap-4">';
-    html += '<div><label class="block text-sm font-medium text-[#0f766e] mb-1.5">Branch *</label>';
+    html += '<div><label class="block text-sm font-medium text-[#1E3A8A] mb-1.5">Branch *</label>';
     html += '<select id="savings-branch" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl text-sm" required>';
     html += '<option value="">Select branch...</option>';
     for (var br = 0; br < branches.length; br++) {
@@ -319,14 +319,14 @@ function renderSavings(container, options) {
     html += '</select></div>';
 
     // Initial deposit
-    html += '<div><label class="block text-sm font-medium text-[#0f766e] mb-1.5">Initial Deposit (MWK) *</label>';
-    html += '<input type="number" id="savings-amount" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#0f766e] focus:border-[#0f766e] text-sm" min="1000" required placeholder="Minimum MWK 1,000"></div>';
+    html += '<div><label class="block text-sm font-medium text-[#1E3A8A] mb-1.5">Initial Deposit (MWK) *</label>';
+    html += '<input type="number" id="savings-amount" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A] text-sm" min="1000" required placeholder="Minimum MWK 1,000"></div>';
     html += '</div>';
 
     // Submit
     html += '<div class="flex gap-3">';
-    html += '<button type="submit" class="bg-[#111827] text-white px-6 py-2.5 rounded-xl hover:bg-[#047857] font-medium text-sm">Open Account</button>';
-    html += '<button type="button" id="btn-cancel-savings" class="bg-white border border-[#d1d5db] text-[#0f766e] px-6 py-2.5 rounded-xl hover:bg-[#f4f4f5] font-medium text-sm">Cancel</button>';
+    html += '<button type="submit" class="bg-[#1F2937] text-white px-6 py-2.5 rounded-xl hover:bg-[#152C5B] font-medium text-sm">Open Account</button>';
+    html += '<button type="button" id="btn-cancel-savings" class="bg-white border border-[#d1d5db] text-[#1E3A8A] px-6 py-2.5 rounded-xl hover:bg-[#f4f4f5] font-medium text-sm">Cancel</button>';
     html += '</div></form></div>';
 
     container.innerHTML = html;

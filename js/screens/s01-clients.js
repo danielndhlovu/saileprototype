@@ -21,18 +21,18 @@ function renderClients(container, options) {
     // Header
     html += '<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">';
     html += '<div>';
-    html += '<h1 class="text-lg font-semibold text-[#0f766e]">Saile Client Management</h1>';
-    html += '<p class="text-sm text-[#6b7280]">' + clients.length + ' total clients</p>';
+    html += '<h1 class="text-lg font-semibold text-[#1E3A8A]">Saile Client Management</h1>';
+    html += '<p class="text-sm text-[#6B7280]">' + clients.length + ' total clients</p>';
     html += '</div>';
     if (!readOnly) {
-      html += '<button id="btn-add-client" class="bg-[#111827] text-white px-6 py-2.5 rounded-xl hover:bg-gray-800 font-medium text-sm">+ New Client</button>';
+      html += '<button id="btn-add-client" class="bg-[#1F2937] text-white px-6 py-2.5 rounded-xl hover:bg-[#1F2937] font-medium text-sm">+ New Client</button>';
     }
     html += '</div>';
 
     // Search and filter
     html += '<div class="bg-white rounded-2xl border border-[#d1d5db] p-4">';
     html += '<div class="flex flex-col sm:flex-row gap-3">';
-    html += '<input type="text" id="client-search" class="flex-1 px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#0f766e] focus:border-[#0f766e] text-sm" placeholder="Search by name, ID, or phone..." value="' + escapeHtml(searchQuery) + '">';
+    html += '<input type="text" id="client-search" class="flex-1 px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A] text-sm" placeholder="Search by name, ID, or phone..." value="' + escapeHtml(searchQuery) + '">';
     html += '<select id="client-status-filter" class="px-3 py-2.5 border border-[#d1d5db] rounded-xl text-sm">';
     html += '<option value="">All Statuses</option>';
     html += '<option value="Active"' + (statusFilter === 'Active' ? ' selected' : '') + '>Active</option>';
@@ -44,32 +44,32 @@ function renderClients(container, options) {
     // Client list
     html += '<div class="bg-white rounded-2xl border border-[#d1d5db] overflow-hidden">';
     if (filtered.length === 0) {
-      html += '<div class="p-8 text-center text-[#6b7280]"><p class="text-sm">No clients found.</p></div>';
+      html += '<div class="p-8 text-center text-[#6B7280]"><p class="text-sm">No clients found.</p></div>';
     } else {
       html += '<div class="overflow-x-auto"><table class="w-full text-sm">';
       html += '<thead class="bg-[#f4f4f5] border-b border-[#d1d5db]"><tr>';
-      html += '<th class="text-left px-4 py-3 font-medium text-[#6b7280]">Name</th>';
-      html += '<th class="text-left px-4 py-3 font-medium text-[#6b7280] hidden sm:table-cell">National ID</th>';
-      html += '<th class="text-left px-4 py-3 font-medium text-[#6b7280] hidden md:table-cell">Phone</th>';
-      html += '<th class="text-left px-4 py-3 font-medium text-[#6b7280]">Status</th>';
-      html += '<th class="text-left px-4 py-3 font-medium text-[#6b7280]">Actions</th>';
+      html += '<th class="text-left px-4 py-3 font-medium text-[#6B7280]">Name</th>';
+      html += '<th class="text-left px-4 py-3 font-medium text-[#6B7280] hidden sm:table-cell">National ID</th>';
+      html += '<th class="text-left px-4 py-3 font-medium text-[#6B7280] hidden md:table-cell">Phone</th>';
+      html += '<th class="text-left px-4 py-3 font-medium text-[#6B7280]">Status</th>';
+      html += '<th class="text-left px-4 py-3 font-medium text-[#6B7280]">Actions</th>';
       html += '</tr></thead><tbody>';
 
       for (var i = 0; i < filtered.length; i++) {
         var c = filtered[i];
-        var statusClass = c.status === 'Active' ? 'bg-[#f0fdf4] text-[#0f766e]' :
-                          c.status === 'Blacklisted' ? 'bg-[#fef2f2] text-[#111827]' : 'bg-[#fffbeb] text-[#92400e]';
+        var statusClass = c.status === 'Active' ? 'bg-[#f0fdf4] text-[#1E3A8A]' :
+                          c.status === 'Blacklisted' ? 'bg-[#FEF2F2] text-[#991B1B]' : 'bg-amber-50 text-amber-700';
         var blacklistAlert = c.status === 'Blacklisted' ? ' ⚠️' : '';
 
         html += '<tr class="border-b border-[#d1d5db] hover:bg-[#f4f4f5]">';
-        html += '<td class="px-4 py-3 font-medium text-[#0f766e]">' + escapeHtml(c.fullName) + blacklistAlert + '</td>';
-        html += '<td class="px-4 py-3 text-[#6b7280] hidden sm:table-cell">' + escapeHtml(c.nationalId) + '</td>';
-        html += '<td class="px-4 py-3 text-[#6b7280] hidden md:table-cell">' + escapeHtml(c.phoneNumber) + '</td>';
+        html += '<td class="px-4 py-3 font-medium text-[#1E3A8A]">' + escapeHtml(c.fullName) + blacklistAlert + '</td>';
+        html += '<td class="px-4 py-3 text-[#6B7280] hidden sm:table-cell">' + escapeHtml(c.nationalId) + '</td>';
+        html += '<td class="px-4 py-3 text-[#6B7280] hidden md:table-cell">' + escapeHtml(c.phoneNumber) + '</td>';
         html += '<td class="px-4 py-3"><span class="px-2 py-1 rounded-full text-xs font-medium ' + statusClass + '">' + escapeHtml(c.status) + '</span></td>';
         html += '<td class="px-4 py-3">';
-        html += '<button class="text-[#0f766e] text-xs font-medium hover:underline btn-view-client" data-id="' + c.id + '">View</button>';
+        html += '<button class="text-[#1E3A8A] text-xs font-medium hover:underline btn-view-client" data-id="' + c.id + '">View</button>';
         if (!readOnly) {
-          html += ' <button class="text-[#6b7280] text-xs font-medium hover:underline ml-2 btn-edit-client" data-id="' + c.id + '">Edit</button>';
+          html += ' <button class="text-[#6B7280] text-xs font-medium hover:underline ml-2 btn-edit-client" data-id="' + c.id + '">Edit</button>';
         }
         html += '</td></tr>';
       }
@@ -158,26 +158,26 @@ function renderClientForm(container, clientId, options) {
 
   var html = '<div class="space-y-6">';
   html += '<div class="flex items-center gap-4">';
-  html += '<button id="btn-back-clients" class="bg-white border border-[#d1d5db] text-[#0f766e] px-4 py-2 rounded-xl hover:bg-[#f4f4f5] text-sm">&larr; Back</button>';
-  html += '<h1 class="text-lg font-semibold text-[#0f766e]">' + title + '</h1>';
+  html += '<button id="btn-back-clients" class="bg-white border border-[#d1d5db] text-[#1E3A8A] px-4 py-2 rounded-xl hover:bg-[#f4f4f5] text-sm">&larr; Back</button>';
+  html += '<h1 class="text-lg font-semibold text-[#1E3A8A]">' + title + '</h1>';
   html += '</div>';
 
   html += '<form id="client-form" class="bg-white rounded-2xl border border-[#d1d5db] p-6 space-y-6">';
 
   // Personal Information
-  html += '<div><h3 class="text-sm font-semibold text-[#0f766e] mb-4 uppercase tracking-wide">Personal Information</h3>';
+  html += '<div><h3 class="text-sm font-semibold text-[#1E3A8A] mb-4 uppercase tracking-wide">Personal Information</h3>';
   html += '<div class="grid grid-cols-1 md:grid-cols-2 gap-4">';
-  html += '<div><label class="block text-sm font-medium text-[#0f766e] mb-1.5">Full Name *</label>';
-  html += '<input type="text" name="fullName" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#0f766e] focus:border-[#0f766e] text-sm" value="' + escapeHtml(client ? client.fullName : '') + '" required></div>';
-  html += '<div><label class="block text-sm font-medium text-[#0f766e] mb-1.5">National ID *</label>';
-  html += '<input type="text" name="nationalId" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#0f766e] focus:border-[#0f766e] text-sm" value="' + escapeHtml(client ? client.nationalId : '') + '" required></div>';
-  html += '<div><label class="block text-sm font-medium text-[#0f766e] mb-1.5">Phone Number *</label>';
-  html += '<input type="tel" name="phoneNumber" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#0f766e] focus:border-[#0f766e] text-sm" value="' + escapeHtml(client ? client.phoneNumber : '') + '" required></div>';
-  html += '<div><label class="block text-sm font-medium text-[#0f766e] mb-1.5">Date of Birth</label>';
-  html += '<input type="date" name="dateOfBirth" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#0f766e] focus:border-[#0f766e] text-sm" value="' + escapeHtml(client ? client.dateOfBirth : '') + '"></div>';
-  html += '<div><label class="block text-sm font-medium text-[#0f766e] mb-1.5">Residential Zone</label>';
-  html += '<input type="text" name="residentialZone" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#0f766e] focus:border-[#0f766e] text-sm" value="' + escapeHtml(client ? client.residentialZone : '') + '"></div>';
-  html += '<div><label class="block text-sm font-medium text-[#0f766e] mb-1.5">Status</label>';
+  html += '<div><label class="block text-sm font-medium text-[#1E3A8A] mb-1.5">Full Name *</label>';
+  html += '<input type="text" name="fullName" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A] text-sm" value="' + escapeHtml(client ? client.fullName : '') + '" required></div>';
+  html += '<div><label class="block text-sm font-medium text-[#1E3A8A] mb-1.5">National ID *</label>';
+  html += '<input type="text" name="nationalId" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A] text-sm" value="' + escapeHtml(client ? client.nationalId : '') + '" required></div>';
+  html += '<div><label class="block text-sm font-medium text-[#1E3A8A] mb-1.5">Phone Number *</label>';
+  html += '<input type="tel" name="phoneNumber" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A] text-sm" value="' + escapeHtml(client ? client.phoneNumber : '') + '" required></div>';
+  html += '<div><label class="block text-sm font-medium text-[#1E3A8A] mb-1.5">Date of Birth</label>';
+  html += '<input type="date" name="dateOfBirth" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A] text-sm" value="' + escapeHtml(client ? client.dateOfBirth : '') + '"></div>';
+  html += '<div><label class="block text-sm font-medium text-[#1E3A8A] mb-1.5">Residential Zone</label>';
+  html += '<input type="text" name="residentialZone" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A] text-sm" value="' + escapeHtml(client ? client.residentialZone : '') + '"></div>';
+  html += '<div><label class="block text-sm font-medium text-[#1E3A8A] mb-1.5">Status</label>';
   html += '<select name="status" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl text-sm">';
   var statuses = ['Active', 'Inactive', 'Blacklisted'];
   for (var s = 0; s < statuses.length; s++) {
@@ -188,34 +188,34 @@ function renderClientForm(container, clientId, options) {
   html += '</div></div>';
 
   // Guarantor
-  html += '<div><h3 class="text-sm font-semibold text-[#0f766e] mb-4 uppercase tracking-wide">Guarantor Information</h3>';
+  html += '<div><h3 class="text-sm font-semibold text-[#1E3A8A] mb-4 uppercase tracking-wide">Guarantor Information</h3>';
   html += '<div class="grid grid-cols-1 md:grid-cols-2 gap-4">';
   var g = (client && client.guarantor) || {};
-  html += '<div><label class="block text-sm font-medium text-[#0f766e] mb-1.5">Guarantor Name</label>';
-  html += '<input type="text" name="guarantorName" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#0f766e] focus:border-[#0f766e] text-sm" value="' + escapeHtml(g.name || '') + '"></div>';
-  html += '<div><label class="block text-sm font-medium text-[#0f766e] mb-1.5">Relationship</label>';
-  html += '<input type="text" name="guarantorRelationship" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#0f766e] focus:border-[#0f766e] text-sm" value="' + escapeHtml(g.relationship || '') + '"></div>';
-  html += '<div><label class="block text-sm font-medium text-[#0f766e] mb-1.5">Guarantor Phone</label>';
-  html += '<input type="tel" name="guarantorPhone" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#0f766e] focus:border-[#0f766e] text-sm" value="' + escapeHtml(g.phoneNumber || '') + '"></div>';
-  html += '<div><label class="block text-sm font-medium text-[#0f766e] mb-1.5">Guarantor National ID</label>';
-  html += '<input type="text" name="guarantorNationalId" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#0f766e] focus:border-[#0f766e] text-sm" value="' + escapeHtml(g.nationalId || '') + '"></div>';
+  html += '<div><label class="block text-sm font-medium text-[#1E3A8A] mb-1.5">Guarantor Name</label>';
+  html += '<input type="text" name="guarantorName" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A] text-sm" value="' + escapeHtml(g.name || '') + '"></div>';
+  html += '<div><label class="block text-sm font-medium text-[#1E3A8A] mb-1.5">Relationship</label>';
+  html += '<input type="text" name="guarantorRelationship" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A] text-sm" value="' + escapeHtml(g.relationship || '') + '"></div>';
+  html += '<div><label class="block text-sm font-medium text-[#1E3A8A] mb-1.5">Guarantor Phone</label>';
+  html += '<input type="tel" name="guarantorPhone" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A] text-sm" value="' + escapeHtml(g.phoneNumber || '') + '"></div>';
+  html += '<div><label class="block text-sm font-medium text-[#1E3A8A] mb-1.5">Guarantor National ID</label>';
+  html += '<input type="text" name="guarantorNationalId" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A] text-sm" value="' + escapeHtml(g.nationalId || '') + '"></div>';
   html += '</div></div>';
 
   // Documents
-  html += '<div><h3 class="text-sm font-semibold text-[#0f766e] mb-4 uppercase tracking-wide">Documents</h3>';
+  html += '<div><h3 class="text-sm font-semibold text-[#1E3A8A] mb-4 uppercase tracking-wide">Documents</h3>';
   html += '<div class="border-2 border-dashed border-[#d1d5db] rounded-lg p-6 text-center">';
-  html += '<p class="text-sm text-[#6b7280]">Document upload simulated in prototype</p>';
-  html += '<p class="text-xs text-[#6b7280] mt-1">National ID, Passport, Proof of Residence</p>';
+  html += '<p class="text-sm text-[#6B7280]">Document upload simulated in prototype</p>';
+  html += '<p class="text-xs text-[#6B7280] mt-1">National ID, Passport, Proof of Residence</p>';
   html += '</div></div>';
 
   // Notes
-  html += '<div><label class="block text-sm font-medium text-[#0f766e] mb-1.5">Notes</label>';
-  html += '<textarea name="notes" rows="3" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#0f766e] focus:border-[#0f766e] text-sm">' + escapeHtml(client ? client.notes || '' : '') + '</textarea></div>';
+  html += '<div><label class="block text-sm font-medium text-[#1E3A8A] mb-1.5">Notes</label>';
+  html += '<textarea name="notes" rows="3" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A] text-sm">' + escapeHtml(client ? client.notes || '' : '') + '</textarea></div>';
 
   // Submit
   html += '<div class="flex gap-3">';
-  html += '<button type="submit" class="bg-[#111827] text-white px-6 py-2.5 rounded-xl hover:bg-gray-800 font-medium text-sm">' + (isEdit ? 'Update Client' : 'Register Client') + '</button>';
-  html += '<button type="button" id="btn-cancel-client" class="bg-white border border-[#d1d5db] text-[#0f766e] px-6 py-2.5 rounded-xl hover:bg-[#f4f4f5] font-medium text-sm">Cancel</button>';
+  html += '<button type="submit" class="bg-[#1F2937] text-white px-6 py-2.5 rounded-xl hover:bg-[#1F2937] font-medium text-sm">' + (isEdit ? 'Update Client' : 'Register Client') + '</button>';
+  html += '<button type="button" id="btn-cancel-client" class="bg-white border border-[#d1d5db] text-[#1E3A8A] px-6 py-2.5 rounded-xl hover:bg-[#f4f4f5] font-medium text-sm">Cancel</button>';
   html += '</div>';
 
   html += '</form></div>';
@@ -271,52 +271,52 @@ function renderClientDetail(container, clientId, options) {
   }
   if (!client) { renderClients(container, options); return; }
 
-  var statusClass = client.status === 'Active' ? 'bg-[#f0fdf4] text-[#0f766e]' :
-                    client.status === 'Blacklisted' ? 'bg-[#fef2f2] text-[#111827]' : 'bg-[#fffbeb] text-[#92400e]';
+  var statusClass = client.status === 'Active' ? 'bg-[#f0fdf4] text-[#1E3A8A]' :
+                    client.status === 'Blacklisted' ? 'bg-[#FEF2F2] text-[#991B1B]' : 'bg-amber-50 text-amber-700';
 
   var html = '<div class="space-y-6">';
   html += '<div class="flex items-center gap-4">';
-  html += '<button id="btn-back-clients" class="bg-white border border-[#d1d5db] text-[#0f766e] px-4 py-2 rounded-xl hover:bg-[#f4f4f5] text-sm">&larr; Back</button>';
-  html += '<h1 class="text-lg font-semibold text-[#0f766e]">Saile Client Details</h1>';
+  html += '<button id="btn-back-clients" class="bg-white border border-[#d1d5db] text-[#1E3A8A] px-4 py-2 rounded-xl hover:bg-[#f4f4f5] text-sm">&larr; Back</button>';
+  html += '<h1 class="text-lg font-semibold text-[#1E3A8A]">Saile Client Details</h1>';
   html += '</div>';
 
   // Blacklisted alert
   if (client.status === 'Blacklisted') {
-    html += '<div class="bg-[#fef2f2] border border-[#fecaca] rounded-lg p-4 flex items-center gap-3">';
-    html += '<span class="text-[#dc2626] text-lg">⚠️</span>';
-    html += '<div><p class="text-sm font-medium text-[#111827]">Blacklisted Client</p><p class="text-xs text-[#dc2626]">This client has been blacklisted and cannot receive new loans.</p></div>';
+    html += '<div class="bg-[#FEF2F2] border border-red-200 rounded-lg p-4 flex items-center gap-3">';
+    html += '<span class="text-[#DC2626] text-lg">⚠️</span>';
+    html += '<div><p class="text-sm font-medium text-[#991B1B]">Blacklisted Client</p><p class="text-xs text-[#DC2626]">This client has been blacklisted and cannot receive new loans.</p></div>';
     html += '</div>';
   }
 
   html += '<div class="bg-white rounded-2xl border border-[#d1d5db] p-6">';
   html += '<div class="flex items-start justify-between mb-4">';
-  html += '<div><h2 class="text-xl font-semibold text-[#0f766e]">' + escapeHtml(client.fullName) + '</h2>';
-  html += '<p class="text-sm text-[#6b7280]">ID: ' + escapeHtml(client.nationalId) + '</p></div>';
+  html += '<div><h2 class="text-xl font-semibold text-[#1E3A8A]">' + escapeHtml(client.fullName) + '</h2>';
+  html += '<p class="text-sm text-[#6B7280]">ID: ' + escapeHtml(client.nationalId) + '</p></div>';
   html += '<span class="px-3 py-1 rounded-full text-xs font-medium ' + statusClass + '">' + escapeHtml(client.status) + '</span>';
   html += '</div>';
 
   html += '<div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">';
-  html += '<div><span class="text-[#6b7280]">Phone:</span> <span class="text-[#0f766e] font-medium">' + escapeHtml(client.phoneNumber) + '</span></div>';
-  html += '<div><span class="text-[#6b7280]">Date of Birth:</span> <span class="text-[#0f766e] font-medium">' + formatDate(client.dateOfBirth) + '</span></div>';
-  html += '<div><span class="text-[#6b7280]">Zone:</span> <span class="text-[#0f766e] font-medium">' + escapeHtml(client.residentialZone) + '</span></div>';
-  html += '<div><span class="text-[#6b7280]">Registered:</span> <span class="text-[#0f766e] font-medium">' + formatDate(client.createdAt) + '</span></div>';
+  html += '<div><span class="text-[#6B7280]">Phone:</span> <span class="text-[#1E3A8A] font-medium">' + escapeHtml(client.phoneNumber) + '</span></div>';
+  html += '<div><span class="text-[#6B7280]">Date of Birth:</span> <span class="text-[#1E3A8A] font-medium">' + formatDate(client.dateOfBirth) + '</span></div>';
+  html += '<div><span class="text-[#6B7280]">Zone:</span> <span class="text-[#1E3A8A] font-medium">' + escapeHtml(client.residentialZone) + '</span></div>';
+  html += '<div><span class="text-[#6B7280]">Registered:</span> <span class="text-[#1E3A8A] font-medium">' + formatDate(client.createdAt) + '</span></div>';
   html += '</div>';
 
   // Guarantor
   if (client.guarantor && client.guarantor.name) {
     html += '<div class="mt-6 pt-4 border-t border-[#d1d5db]">';
-    html += '<h3 class="text-sm font-semibold text-[#0f766e] mb-3">Guarantor</h3>';
+    html += '<h3 class="text-sm font-semibold text-[#1E3A8A] mb-3">Guarantor</h3>';
     html += '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">';
-    html += '<div><span class="text-[#6b7280]">Name:</span> ' + escapeHtml(client.guarantor.name) + '</div>';
-    html += '<div><span class="text-[#6b7280]">Relationship:</span> ' + escapeHtml(client.guarantor.relationship) + '</div>';
-    html += '<div><span class="text-[#6b7280]">Phone:</span> ' + escapeHtml(client.guarantor.phoneNumber) + '</div>';
+    html += '<div><span class="text-[#6B7280]">Name:</span> ' + escapeHtml(client.guarantor.name) + '</div>';
+    html += '<div><span class="text-[#6B7280]">Relationship:</span> ' + escapeHtml(client.guarantor.relationship) + '</div>';
+    html += '<div><span class="text-[#6B7280]">Phone:</span> ' + escapeHtml(client.guarantor.phoneNumber) + '</div>';
     html += '</div></div>';
   }
 
   if (client.notes) {
     html += '<div class="mt-4 pt-4 border-t border-[#d1d5db]">';
-    html += '<h3 class="text-sm font-semibold text-[#0f766e] mb-2">Notes</h3>';
-    html += '<p class="text-sm text-[#6b7280]">' + escapeHtml(client.notes) + '</p>';
+    html += '<h3 class="text-sm font-semibold text-[#1E3A8A] mb-2">Notes</h3>';
+    html += '<p class="text-sm text-[#6B7280]">' + escapeHtml(client.notes) + '</p>';
     html += '</div>';
   }
 

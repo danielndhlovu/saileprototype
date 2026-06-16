@@ -20,7 +20,8 @@ var ROUTES = {
   '#/settings': { module: 'settings', renderFn: 'renderSettings' },
   '#/audit': { module: 'audit', renderFn: 'renderAudit' },
   '#/sync': { module: 'sync', renderFn: 'renderSync' },
-  '#/migration': { module: 'migration', renderFn: 'renderMigration' }
+  '#/migration': { module: 'migration', renderFn: 'renderMigration'  },
+  '#/intelligence': { module: 'intelligence', renderFn: 'renderIntelligence' },
 };
 
 // --- Router ---
@@ -135,8 +136,8 @@ function showStorageErrorModal() {
   overlay.innerHTML =
     '<div style="background:#fff;border-radius:12px;padding:32px;max-width:400px;width:90%;text-align:center;">' +
       '<div style="font-size:48px;margin-bottom:16px;">⚠️</div>' +
-      '<h2 style="font-size:18px;font-weight:600;color:#0f766e;margin-bottom:8px;">Storage Unavailable</h2>' +
-      '<p style="font-size:14px;color:#6b7280;line-height:1.5;">This application requires localStorage to function. Please enable cookies and site data in your browser settings.</p>' +
+      '<h2 style="font-size:18px;font-weight:600;color:#1E3A8A;margin-bottom:8px;">Storage Unavailable</h2>' +
+      '<p style="font-size:14px;color:#6B7280;line-height:1.5;">This application requires localStorage to function. Please enable cookies and site data in your browser settings.</p>' +
     '</div>';
   document.body.appendChild(overlay);
 }
@@ -160,7 +161,7 @@ function updateOfflineState(isOnline) {
   }
   var syncDot = document.getElementById('sync-indicator');
   if (syncDot) {
-    syncDot.style.backgroundColor = isOnline ? '#0f766e' : '#111827';
+    syncDot.style.backgroundColor = isOnline ? '#059669' : '#1F2937';
     syncDot.title = isOnline ? 'Online' : 'Offline';
   }
 }
@@ -178,11 +179,11 @@ function showAccessDeniedModal() {
   overlay.innerHTML =
     '<div style="background:#fff;border-radius:12px;padding:32px;max-width:400px;width:90%;text-align:center;">' +
       '<div style="width:48px;height:48px;margin:0 auto 16px;background:#fef2f2;border-radius:50%;display:flex;align-items:center;justify-content:center;">' +
-        '<svg width="24" height="24" fill="none" stroke="#111827" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>' +
+        '<svg width="24" height="24" fill="none" stroke="#1F2937" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>' +
       '</div>' +
-      '<h2 style="font-size:18px;font-weight:600;color:#0f766e;margin-bottom:8px;">Access Denied</h2>' +
-      '<p style="font-size:14px;color:#6b7280;margin-bottom:24px;">You don\'t have permission to access this module.</p>' +
-      '<button id="access-denied-back-btn" style="background:#0f766e;color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;">Go Back</button>' +
+      '<h2 style="font-size:18px;font-weight:600;color:#1E3A8A;margin-bottom:8px;">Access Denied</h2>' +
+      '<p style="font-size:14px;color:#6B7280;margin-bottom:24px;">You don\'t have permission to access this module.</p>' +
+      '<button id="access-denied-back-btn" style="background:#1E3A8A;color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;">Go Back</button>' +
     '</div>';
 
   document.body.appendChild(overlay);
@@ -208,7 +209,7 @@ function renderEmptyState(container, message) {
       '<svg width="64" height="64" fill="none" stroke="#9ca3af" stroke-width="1.5" viewBox="0 0 24 24" style="margin-bottom:16px;">' +
         '<path stroke-linecap="round" stroke-linejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>' +
       '</svg>' +
-      '<p style="font-size:16px;color:#6b7280;max-width:320px;">' + escapeHtml(message) + '</p>' +
+      '<p style="font-size:16px;color:#6B7280;max-width:320px;">' + escapeHtml(message) + '</p>' +
     '</div>';
 }
 
@@ -218,14 +219,14 @@ function showAppToast(message, type) {
   type = type || 'success';
 
   var colors = {
-    success: '#0f766e',
-    error: '#111827',
-    warning: '#F59E0B'
+    success: '#1E3A8A',
+    error: '#1F2937',
+    warning: '#D97706'
   };
   var textColors = {
     success: '#ffffff',
     error: '#ffffff',
-    warning: '#0f766e'
+    warning: '#1E3A8A'
   };
 
   var bgColor = colors[type] || colors.success;
@@ -1619,6 +1620,7 @@ function seedData() {
     { id: generateId(), recipientPhone: '+265993456789', recipientName: 'Mary Chirwa', templateCode: 'TMPL_DUE_REMIND', messageContent: 'Reminder: Your loan payment of MWK 106,850 is due on 2026-06-10. Please pay at any Saile branch or via Airtel Money/TNM Mpamba.', triggerEvent: 'payment_due_3days', status: 'Delivered', sentAt: '2026-06-07T09:00:00.000Z', deliveredAt: '2026-06-07T09:00:12.000Z', error: null, branchId: branches[3].id, createdAt: now }
   ];
   setCollection(StorageKeys.SMS_LOGS, smsLogs);
+  seedIntelligenceData();
 
   // ========================================
   // 15. PAR SNAPSHOTS
@@ -1723,3 +1725,39 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
+// --- Intelligence Seed Data ---
+function seedIntelligenceData() {
+  var now = new Date().toISOString();
+
+  // Branch Targets
+  var branches = getCollection(StorageKeys.BRANCHES);
+  var targets = branches.map(b => ({
+    id: generateId(),
+    branchId: b.id,
+    year: 2026,
+    quarter: 2,
+    target_portfolio: 25000000,
+    target_clients: 250,
+    target_disbursements: 10000000,
+    target_par: 4.0,
+    createdAt: now
+  }));
+  setCollection('saile_branch_targets', targets);
+
+  // PAR Snapshots (Simulated last 6 months)
+  var snapshots = [];
+  for (var i = 0; i < 6; i++) {
+    var d = new Date();
+    d.setMonth(d.getMonth() - i);
+    snapshots.push({
+      id: generateId(),
+      snapshot_date: d.toISOString().split('T')[0],
+      par_1_30_amount: 3000000 + (Math.random() * 500000),
+      total_portfolio: 75000000 + (Math.random() * 5000000),
+      createdAt: now
+    });
+  }
+  setCollection('saile_par_snapshots', snapshots);
+}
+
+// Call intelligence seed at the end of seedData

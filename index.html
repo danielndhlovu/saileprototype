@@ -17,18 +17,21 @@
       theme: {
         extend: {
           colors: {
-            surface: '#e5e5e5',
+            surface: '#F5F6FA',
             card: '#ffffff',
-            primary: '#0f766e',
-            secondary: '#6b7280',
-            accent: '#0f766e',
-            info: '#0ea5e9',
-            error: '#d94f4f',
-            warning: '#f59e0b',
+            primary: '#1E3A8A',
+            secondary: '#DC2626',
+            success: '#059669',
+            warning: '#D97706',
+            danger: '#DC2626',
+            info: '#2563EB',
+            accent: '#D97706',
             border: '#d1d5db',
-            dark: '#111827',
+            dark: '#1F2937',
+            'text-primary': '#1F2937',
+            'text-secondary': '#6B7280',
             'input-bg': '#f4f4f5',
-            'nav-active-bg': '#f0fdf4'
+            'nav-active-bg': '#E0E7FF'
           },
           fontFamily: {
             sans: ['Inter', 'system-ui', 'sans-serif']
@@ -91,7 +94,7 @@
       <p class="text-secondary text-sm mb-4">Your session is about to expire due to inactivity. Would you like to continue?</p>
       <div class="flex gap-3">
         <button id="timeout-extend" class="flex-1 bg-[#111827] text-white py-2.5 px-4 rounded-xl text-sm font-medium hover:bg-[#047857] transition-colors">Extend Session</button>
-        <button id="timeout-logout" class="flex-1 bg-white border border-[#d1d5db] text-[#0f766e] py-2.5 px-4 rounded-xl text-sm font-medium hover:bg-[#f4f4f5] transition-colors">Log Out</button>
+        <button id="timeout-logout" class="flex-1 bg-white border border-[#d1d5db] text-[#1E3A8A] py-2.5 px-4 rounded-xl text-sm font-medium hover:bg-[#f4f4f5] transition-colors">Log Out</button>
       </div>
     </div>
   </div>
@@ -130,6 +133,7 @@
   <script src="js/screens/s10-settings.js"></script>
   <script src="js/screens/s11-audit.js"></script>
   <script src="js/screens/s12-sync.js"></script>
+  <script src="js/screens/intelligence.js"></script>
   <script src="js/app.js"></script>
 
 </body>

@@ -21,11 +21,11 @@ function renderLoans(container, options) {
     // Header
     html += '<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">';
     html += '<div>';
-    html += '<h1 class="text-lg font-semibold text-[#0f766e]">Saile Loan Management</h1>';
-    html += '<p class="text-sm text-[#6b7280]">' + loans.length + ' total applications across ' + products.length + ' products</p>';
+    html += '<h1 class="text-lg font-semibold text-[#1E3A8A]">Saile Loan Management</h1>';
+    html += '<p class="text-sm text-[#6B7280]">' + loans.length + ' total applications across ' + products.length + ' products</p>';
     html += '</div>';
     if (!readOnly && role !== 'accountant') {
-      html += '<button id="btn-new-loan" class="bg-[#111827] text-white px-6 py-2.5 rounded-xl hover:bg-[#047857] font-medium text-sm">+ New Application</button>';
+      html += '<button id="btn-new-loan" class="bg-[#1F2937] text-white px-6 py-2.5 rounded-xl hover:bg-[#152C5B] font-medium text-sm">+ New Application</button>';
     }
     html += '</div>';
 
@@ -34,7 +34,7 @@ function renderLoans(container, options) {
     var statuses = ['', 'Draft', 'Pending', 'Under_Review', 'Approved', 'Disbursed', 'Active', 'Rejected', 'Closed', 'Written_Off'];
     var labels = ['All', 'Draft', 'Pending', 'Under Review', 'Approved', 'Disbursed', 'Active', 'Rejected', 'Closed', 'Written Off'];
     for (var t = 0; t < statuses.length; t++) {
-      var active = statusFilter === statuses[t] ? 'bg-[#0f766e] text-white' : 'bg-white text-[#0f766e] border border-[#d1d5db] hover:bg-[#f4f4f5]';
+      var active = statusFilter === statuses[t] ? 'bg-[#1E3A8A] text-white' : 'bg-white text-[#1E3A8A] border border-[#d1d5db] hover:bg-[#f4f4f5]';
       html += '<button class="loan-status-tab px-4 py-2 rounded-xl text-sm font-medium ' + active + '" data-status="' + statuses[t] + '">' + labels[t] + '</button>';
     }
     html += '</div>';
@@ -42,60 +42,60 @@ function renderLoans(container, options) {
     // Loan queue table
     html += '<div class="bg-white rounded-2xl border border-[#d1d5db] overflow-hidden">';
     if (filtered.length === 0) {
-      html += '<div class="p-8 text-center text-[#6b7280]"><p class="text-sm">No loan applications found.</p></div>';
+      html += '<div class="p-8 text-center text-[#6B7280]"><p class="text-sm">No loan applications found.</p></div>';
     } else {
       html += '<div class="overflow-x-auto"><table class="w-full text-sm">';
       html += '<thead class="bg-[#f9fafb] border-b border-[#d1d5db]"><tr>';
-      html += '<th class="text-left px-4 py-3 font-medium text-[#6b7280]">ID</th>';
-      html += '<th class="text-left px-4 py-3 font-medium text-[#6b7280]">Client</th>';
-      html += '<th class="text-left px-4 py-3 font-medium text-[#6b7280] hidden sm:table-cell">Product</th>';
-      html += '<th class="text-right px-4 py-3 font-medium text-[#6b7280]">Amount</th>';
-      html += '<th class="text-center px-4 py-3 font-medium text-[#6b7280]">Status</th>';
-      html += '<th class="text-center px-4 py-3 font-medium text-[#6b7280]">EIR</th>';
-      html += '<th class="text-center px-4 py-3 font-medium text-[#6b7280]">Branch</th>';
-      html += '<th class="text-center px-4 py-3 font-medium text-[#6b7280]">Actions</th>';
+      html += '<th class="text-left px-4 py-3 font-medium text-[#6B7280]">ID</th>';
+      html += '<th class="text-left px-4 py-3 font-medium text-[#6B7280]">Client</th>';
+      html += '<th class="text-left px-4 py-3 font-medium text-[#6B7280] hidden sm:table-cell">Product</th>';
+      html += '<th class="text-right px-4 py-3 font-medium text-[#6B7280]">Amount</th>';
+      html += '<th class="text-center px-4 py-3 font-medium text-[#6B7280]">Status</th>';
+      html += '<th class="text-center px-4 py-3 font-medium text-[#6B7280]">EIR</th>';
+      html += '<th class="text-center px-4 py-3 font-medium text-[#6B7280]">Branch</th>';
+      html += '<th class="text-center px-4 py-3 font-medium text-[#6B7280]">Actions</th>';
       html += '</tr></thead><tbody>';
 
       for (var i = 0; i < filtered.length; i++) {
         var l = filtered[i];
         var loanNum = i + 1;
         var sClass = 'bg-gray-50 text-[#374151]';
-        if (l.status === 'Active') sClass = 'bg-[#0f766e] text-white';
-        else if (l.status === 'Approved') sClass = 'bg-[#0f766e] text-white';
-        else if (l.status === 'Disbursed') sClass = 'bg-[#0d9488] text-white';
-        else if (l.status === 'Rejected') sClass = 'bg-[#111827] text-white';
-        else if (l.status === 'Pending') sClass = 'bg-[#F59E0B] text-white';
-        else if (l.status === 'Under_Review') sClass = 'bg-[#8b5cf6] text-white';
-        else if (l.status === 'Draft') sClass = 'bg-gray-100 text-[#374151]';
+        if (l.status === 'Active') sClass = 'bg-[#1E3A8A] text-white';
+        else if (l.status === 'Approved') sClass = 'bg-[#059669] text-white';
+        else if (l.status === 'Disbursed') sClass = 'bg-[#1E3A8A] text-white';
+        else if (l.status === 'Rejected') sClass = 'bg-[#1F2937] text-white';
+        else if (l.status === 'Pending') sClass = 'bg-[#D97706] text-white';
+        else if (l.status === 'Under_Review') sClass = 'bg-[#2563EB] text-white';
+        else if (l.status === 'Drafted') sClass = 'bg-gray-100 text-[#374151]';
 
         var branch = l.branchId ? getBranchById(l.branchId) : null;
         var branchName = branch ? branch.branchCode : '—';
         var eir = l.effectiveInterestRate || (l.effectiveInterestRateCalculated ? l.effectiveInterestRateCalculated + '%' : '—');
 
         html += '<tr class="border-b border-[#d1d5db] hover:bg-[#f9fafb]">';
-        html += '<td class="px-4 py-3 text-[#6b7280] font-mono text-xs">' + escapeHtml(getLoanProductCode(l.productCode || l.productId, products)) + '-' + padZero(loanNum, 4) + '</td>';
-        html += '<td class="px-4 py-3 font-medium text-[#0f766e]">' + escapeHtml(l.clientName) + '</td>';
-        html += '<td class="px-4 py-3 text-[#6b7280] hidden sm:table-cell">' + escapeHtml(l.productName) + '</td>';
-        html += '<td class="px-4 py-3 text-right font-semibold text-[#0f766e]">' + formatCurrency(l.requestedAmount) + '</td>';
+        html += '<td class="px-4 py-3 text-[#6B7280] font-mono text-xs">' + escapeHtml(getLoanProductCode(l.productCode || l.productId, products)) + '-' + padZero(loanNum, 4) + '</td>';
+        html += '<td class="px-4 py-3 font-medium text-[#1E3A8A]">' + escapeHtml(l.clientName) + '</td>';
+        html += '<td class="px-4 py-3 text-[#6B7280] hidden sm:table-cell">' + escapeHtml(l.productName) + '</td>';
+        html += '<td class="px-4 py-3 text-right font-semibold text-[#1E3A8A]">' + formatCurrency(l.requestedAmount) + '</td>';
         html += '<td class="px-4 py-3 text-center"><span class="px-2.5 py-1 rounded-full text-xs font-semibold ' + sClass + '">' + escapeHtml(l.status.replace('_', ' ')) + '</span></td>';
-        html += '<td class="px-4 py-3 text-center text-sm text-[#6b7280]">' + eir + '</td>';
-        html += '<td class="px-4 py-3 text-center text-sm text-[#6b7280]">' + escapeHtml(branchName) + '</td>';
+        html += '<td class="px-4 py-3 text-center text-sm text-[#6B7280]">' + eir + '</td>';
+        html += '<td class="px-4 py-3 text-center text-sm text-[#6B7280]">' + escapeHtml(branchName) + '</td>';
         html += '<td class="px-4 py-3 text-center space-x-1">';
-        html += '<button class="text-[#0f766e] text-xs font-medium hover:underline btn-view-loan" data-id="' + l.id + '">View</button>';
+        html += '<button class="text-[#1E3A8A] text-xs font-medium hover:underline btn-view-loan" data-id="' + l.id + '">View</button>';
         if (!readOnly) {
-          if (l.status === 'Pending') {
-            html += '<button class="text-[#0f766e] text-xs font-medium hover:underline btn-review-loan" data-id="' + l.id + '">Review</button>';
+          if (l.status === 'Submitted' || l.status === 'Pending') {
+            html += '<button class="text-[#1E3A8A] text-xs font-medium hover:underline btn-review-loan" data-id="' + l.id + '">Review</button>';
           }
           if (l.status === 'Under_Review') {
-            html += '<button class="text-[#0f766e] text-xs font-medium hover:underline btn-approve-loan" data-id="' + l.id + '">Approve</button>';
-            html += '<button class="text-[#111827] text-xs font-medium hover:underline btn-reject-loan" data-id="' + l.id + '">Reject</button>';
+            html += '<button class="text-[#059669] text-xs font-medium hover:underline btn-approve-loan" data-id="' + l.id + '">Approve</button>';
+            html += '<button class="text-[#1F2937] text-xs font-medium hover:underline btn-reject-loan" data-id="' + l.id + '">Reject</button>';
           }
           if (role === 'admin' || role === 'md' || role === 'finance_manager') {
             if (l.status === 'Approved') {
-              html += '<button class="text-[#0d9488] text-xs font-medium hover:underline btn-disburse-loan" data-id="' + l.id + '">Disburse</button>';
+              html += '<button class="text-[#1E3A8A] text-xs font-medium hover:underline btn-disburse-loan" data-id="' + l.id + '">Disburse</button>';
             }
             if (l.status === 'Active' || l.status === 'Disbursed') {
-              html += '<button class="text-[#F59E0B] text-xs font-medium hover:underline btn-close-loan" data-id="' + l.id + '">Close</button>';
+              html += '<button class="text-[#D97706] text-xs font-medium hover:underline btn-close-loan" data-id="' + l.id + '">Close</button>';
             }
           }
         }
@@ -414,8 +414,8 @@ function renderLoanForm(container, options) {
 
   var html = '<div class="space-y-6">';
   html += '<div class="flex items-center gap-4">';
-  html += '<button id="btn-back-loans" class="bg-white border border-[#d1d5db] text-[#0f766e] px-4 py-2 rounded-xl hover:bg-[#f4f4f5] text-sm">&larr; Back to Loans</button>';
-  html += '<h1 class="text-lg font-semibold text-[#0f766e]">New Loan Application — Saile Financial Services</h1>';
+  html += '<button id="btn-back-loans" class="bg-white border border-[#d1d5db] text-[#1E3A8A] px-4 py-2 rounded-xl hover:bg-[#f4f4f5] text-sm">&larr; Back to Loans</button>';
+  html += '<h1 class="text-lg font-semibold text-[#1E3A8A]">New Loan Application — Saile Financial Services</h1>';
   html += '</div>';
 
   html += '<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">';
@@ -423,11 +423,11 @@ function renderLoanForm(container, options) {
   // Left column - Product Selection
   html += '<div class="lg:col-span-2 space-y-6">';
   html += '<div class="bg-white rounded-2xl border border-[#d1d5db] p-6">';
-  html += '<h3 class="text-sm font-semibold text-[#0f766e] mb-4">1. Client Information</h3>';
+  html += '<h3 class="text-sm font-semibold text-[#1E3A8A] mb-4">1. Client Information</h3>';
 
   html += '<div class="grid grid-cols-1 md:grid-cols-2 gap-4">';
   html += '<div><label class="block text-sm font-medium text-[#374151] mb-1.5">Client *</label>';
-  html += '<select id="loan-client-id" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl text-sm focus:ring-2 focus:ring-[#0f766e] focus:border-[#0f766e]">';
+  html += '<select id="loan-client-id" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl text-sm focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A]">';
   html += '<option value="">Select client...</option>';
   for (var i = 0; i < clients.length; i++) {
     html += '<option value="' + clients[i].id + '">' + escapeHtml(clients[i].fullName) + ' — ' + escapeHtml(clients[i].nationalId) + '</option>';
@@ -435,7 +435,7 @@ function renderLoanForm(container, options) {
   html += '</select></div>';
 
   html += '<div><label class="block text-sm font-medium text-[#374151] mb-1.5">Product *</label>';
-  html += '<select id="loan-product-id" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl text-sm focus:ring-2 focus:ring-[#0f766e] focus:border-[#0f766e]">';
+  html += '<select id="loan-product-id" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl text-sm focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A]">';
   html += '<option value="">Select product...</option>';
   for (var p = 0; p < products.length; p++) {
     var marker = products[p].isSignatureProduct ? ' ⭐' : '';
@@ -446,25 +446,25 @@ function renderLoanForm(container, options) {
 
   html += '<div class="grid grid-cols-1 md:grid-cols-2 gap-4">';
   html += '<div><label class="block text-sm font-medium text-[#374151] mb-1.5">Requested Amount (MWK) *</label>';
-  html += '<input type="number" id="loan-amount" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl text-sm focus:ring-2 focus:ring-[#0f766e] focus:border-[#0f766e]" placeholder="Enter amount" required></div>';
+  html += '<input type="number" id="loan-amount" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl text-sm focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A]" placeholder="Enter amount" required></div>';
   html += '<div><label class="block text-sm font-medium text-[#374151] mb-1.5">Payout Method</label>';
   html += '<select id="loan-payout" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl text-sm">';
   html += '<option value="mobile_money">Mobile Money (Airtel/TNM)</option><option value="bank_transfer">Bank Transfer</option><option value="cash">Cash</option>';
   html += '</select></div></div>';
 
   html += '<div><label class="block text-sm font-medium text-[#374151] mb-1.5">Collateral Description</label>';
-  html += '<input type="text" id="loan-collateral" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl text-sm focus:ring-2 focus:ring-[#0f766e] focus:border-[#0f766e]" placeholder="e.g., Motorcycle, Shop inventory (optional)"></div>';
+  html += '<input type="text" id="loan-collateral" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl text-sm focus:ring-2 focus:ring-[#1E3A8A] focus:border-[#1E3A8A]" placeholder="e.g., Motorcycle, Shop inventory (optional)"></div>';
   html += '</div></div>';
 
   // Right column - Calculator
   html += '<div>';
   html += '<div class="bg-white rounded-2xl border border-[#d1d5db] p-6 sticky top-4">';
-  html += '<h3 class="text-sm font-semibold text-[#0f766e] mb-4">💰 Loan Calculator</h3>';
+  html += '<h3 class="text-sm font-semibold text-[#1E3A8A] mb-4">💰 Loan Calculator</h3>';
   html += '<div id="loan-calculator" class="space-y-3 text-sm">';
-  html += '<p class="text-[#6b7280]">Select a product and enter an amount to see calculations.</p>';
+  html += '<p class="text-[#6B7280]">Select a product and enter an amount to see calculations.</p>';
   html += '</div>';
   html += '<div class="mt-4" id="loan-calc-submit" style="display:none">';
-  html += '<button type="button" id="btn-submit-loan" class="w-full bg-[#111827] text-white px-6 py-2.5 rounded-xl hover:bg-[#047857] font-medium text-sm">Submit Application</button>';
+  html += '<button type="button" id="btn-submit-loan" class="w-full bg-[#1F2937] text-white px-6 py-2.5 rounded-xl hover:bg-[#152C5B] font-medium text-sm">Submit Application</button>';
   html += '</div></div></div>';
   html += '</div>';
 
@@ -502,19 +502,19 @@ function updateCalculator() {
   var submitEl = document.getElementById('loan-calc-submit');
 
   if (!product || amount <= 0) {
-    calcEl.innerHTML = '<p class="text-[#6b7280]">Select a product and enter an amount to see calculations.</p>';
+    calcEl.innerHTML = '<p class="text-[#6B7280]">Select a product and enter an amount to see calculations.</p>';
     submitEl.style.display = 'none';
     return;
   }
 
   // Validate amount range
   if (amount < product.minPrincipal) {
-    calcEl.innerHTML = '<p class="text-[#111827]">Minimum amount: ' + formatCurrency(product.minPrincipal) + '</p>';
+    calcEl.innerHTML = '<p class="text-[#1F2937]">Minimum amount: ' + formatCurrency(product.minPrincipal) + '</p>';
     submitEl.style.display = 'none';
     return;
   }
   if (amount > product.maxPrincipal) {
-    calcEl.innerHTML = '<p class="text-[#111827]">Maximum amount: ' + formatCurrency(product.maxPrincipal) + '</p>';
+    calcEl.innerHTML = '<p class="text-[#1F2937]">Maximum amount: ' + formatCurrency(product.maxPrincipal) + '</p>';
     submitEl.style.display = 'none';
     return;
   }
@@ -539,20 +539,20 @@ function updateCalculator() {
 
   var html = '';
   html += '<div class="space-y-2">';
-  html += '<div class="flex justify-between"><span class="text-[#6b7280]">Principal:</span><span class="font-semibold text-[#0f766e]">' + formatCurrency(amount) + '</span></div>';
-  html += '<div class="flex justify-between"><span class="text-[#6b7280]">Interest (' + rate + '/mo):</span><span class="font-semibold text-[#0f766e]">' + formatCurrency(Math.round(totalInterest)) + '</span></div>';
-  html += '<div class="flex justify-between"><span class="text-[#6b7280]">Compulsory Savings (' + savingsPct + '%):</span><span class="font-semibold text-[#0f766e]">' + formatCurrency(savingsAmt) + '</span></div>';
-  html += '<div class="flex justify-between"><span class="text-[#6b7280]">Processing Fee:</span><span class="font-semibold text-[#0f766e]">' + formatCurrency(processingFee) + '</span></div>';
+  html += '<div class="flex justify-between"><span class="text-[#6B7280]">Principal:</span><span class="font-semibold text-[#1E3A8A]">' + formatCurrency(amount) + '</span></div>';
+  html += '<div class="flex justify-between"><span class="text-[#6B7280]">Interest (' + rate + '/mo):</span><span class="font-semibold text-[#1E3A8A]">' + formatCurrency(Math.round(totalInterest)) + '</span></div>';
+  html += '<div class="flex justify-between"><span class="text-[#6B7280]">Compulsory Savings (' + savingsPct + '%):</span><span class="font-semibold text-[#1E3A8A]">' + formatCurrency(savingsAmt) + '</span></div>';
+  html += '<div class="flex justify-between"><span class="text-[#6B7280]">Processing Fee:</span><span class="font-semibold text-[#1E3A8A]">' + formatCurrency(processingFee) + '</span></div>';
   html += '<hr class="my-2">';
-  html += '<div class="flex justify-between"><span class="font-bold text-[#0f766e]">Total Cost of Credit:</span><span class="font-bold text-[#111827] text-base">' + formatCurrency(Math.round(totalPayment)) + '</span></div>';
-  html += '<div class="flex justify-between"><span class="text-[#6b7280]">Effective Interest Rate (EIR):</span><span class="font-semibold text-[#0f766e]">' + eir.toFixed(1) + '% p.a.</span></div>';
-  html += '<div class="flex justify-between"><span class="text-[#6b7280]">Duration:</span><span class="font-semibold text-[#0f766e]">' + duration + ' month(s)</span></div>';
-  html += '<div class="flex justify-between"><span class="text-[#6b7280]">Monthly Payment:</span><span class="font-semibold text-[#0f766e]">' + formatCurrency(monthlyPayment) + '</span></div>';
-  html += '<div class="flex justify-between"><span class="text-[#6b7280]">Net Disbursement:</span><span class="font-semibold text-[#0f766e]">' + formatCurrency(netDisbursement) + '</span></div>';
+  html += '<div class="flex justify-between"><span class="font-bold text-[#1E3A8A]">Total Cost of Credit:</span><span class="font-bold text-[#1F2937] text-base">' + formatCurrency(Math.round(totalPayment)) + '</span></div>';
+  html += '<div class="flex justify-between"><span class="text-[#6B7280]">Effective Interest Rate (EIR):</span><span class="font-semibold text-[#1E3A8A]">' + eir.toFixed(1) + '% p.a.</span></div>';
+  html += '<div class="flex justify-between"><span class="text-[#6B7280]">Duration:</span><span class="font-semibold text-[#1E3A8A]">' + duration + ' month(s)</span></div>';
+  html += '<div class="flex justify-between"><span class="text-[#6B7280]">Monthly Payment:</span><span class="font-semibold text-[#1E3A8A]">' + formatCurrency(monthlyPayment) + '</span></div>';
+  html += '<div class="flex justify-between"><span class="text-[#6B7280]">Net Disbursement:</span><span class="font-semibold text-[#1E3A8A]">' + formatCurrency(netDisbursement) + '</span></div>';
   html += '</div>';
 
   if (product.isSignatureProduct) {
-    html += '<div class="mt-3 p-2 bg-[#FEF3C7] border border-[#F59E0B] rounded-lg text-xs text-[#92400E]">⭐ Signature Product — ' + (product.processingTimeMinutes || 30) + '-minute processing promise</div>';
+    html += '<div class="mt-3 p-2 bg-[#FEF3C7] border border-[#D97706] rounded-lg text-xs text-[#92400E]">⭐ Signature Product — ' + (product.processingTimeMinutes || 30) + '-minute processing promise</div>';
   }
 
   calcEl.innerHTML = html;
@@ -603,7 +603,7 @@ function submitNewLoan(container, options) {
     productName: product.productName,
     requestedAmount: amount,
     proposedInterestRate: product.defaultInterestRate,
-    status: 'Pending',
+    status: 'Submitted',
     rejectionReason: null,
     collateral: collateralDesc ? [{ description: collateralDesc, marketValue: 0 }] : [],
     disbursementDate: null,
@@ -647,52 +647,52 @@ function renderLoanDetail(container, loanId, options) {
   }
 
   var sClass = 'bg-gray-50 text-[#374151]';
-  if (loan.status === 'Active') sClass = 'bg-[#0f766e] text-white';
-  else if (loan.status === 'Approved') sClass = 'bg-[#0f766e] text-white';
-  else if (loan.status === 'Disbursed') sClass = 'bg-[#0d9488] text-white';
-  else if (loan.status === 'Rejected') sClass = 'bg-[#111827] text-white';
-  else if (loan.status === 'Pending') sClass = 'bg-[#F59E0B] text-white';
-  else if (loan.status === 'Under_Review') sClass = 'bg-[#8b5cf6] text-white';
+  if (loan.status === 'Active') sClass = 'bg-[#1E3A8A] text-white';
+  else if (loan.status === 'Approved') sClass = 'bg-[#059669] text-white';
+  else if (loan.status === 'Disbursed') sClass = 'bg-[#1E3A8A] text-white';
+  else if (loan.status === 'Rejected') sClass = 'bg-[#1F2937] text-white';
+  else if (loan.status === 'Pending') sClass = 'bg-[#D97706] text-white';
+  else if (loan.status === 'Under_Review') sClass = 'bg-[#2563EB] text-white';
 
   var html = '<div class="space-y-6">';
   html += '<div class="flex items-center gap-4">';
-  html += '<button id="btn-back-loans" class="bg-white border border-[#d1d5db] text-[#0f766e] px-4 py-2 rounded-xl hover:bg-[#f4f4f5] text-sm">&larr; Back</button>';
-  html += '<h1 class="text-lg font-semibold text-[#0f766e]">Loan Application Detail</h1>';
+  html += '<button id="btn-back-loans" class="bg-white border border-[#d1d5db] text-[#1E3A8A] px-4 py-2 rounded-xl hover:bg-[#f4f4f5] text-sm">&larr; Back</button>';
+  html += '<h1 class="text-lg font-semibold text-[#1E3A8A]">Loan Application Detail</h1>';
   html += '</div>';
 
   // Product badge
   html += '<div class="bg-white rounded-2xl border border-[#d1d5db] p-6">';
   html += '<div class="flex items-start justify-between mb-4">';
   html += '<div>';
-  html += '<h2 class="text-xl font-semibold text-[#0f766e]">' + escapeHtml(loan.clientName) + '</h2>';
-  html += '<p class="text-sm text-[#6b7280]">' + escapeHtml(loan.productCode || loan.productName) + '</p>';
+  html += '<h2 class="text-xl font-semibold text-[#1E3A8A]">' + escapeHtml(loan.clientName) + '</h2>';
+  html += '<p class="text-sm text-[#6B7280]">' + escapeHtml(loan.productCode || loan.productName) + '</p>';
   html += '</div>';
   html += '<span class="px-3 py-1 rounded-full text-xs font-semibold ' + sClass + '">' + escapeHtml(loan.status.replace('_', ' ')) + '</span>';
   html += '</div>';
 
   // Key metrics
   html += '<div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">';
-  html += '<div><span class="text-[#6b7280] block">Principal</span><span class="font-semibold text-[#0f766e]">' + formatCurrency(loan.requestedAmount) + '</span></div>';
-  html += '<div><span class="text-[#6b7280] block">Interest Rate</span><span class="font-semibold text-[#0f766e]">' + formatPercentage(loan.proposedInterestRate || (product ? product.defaultInterestRate : 0)) + '</span></div>';
-  html += '<div><span class="text-[#6b7280] block">EIR (Annualized)</span><span class="font-semibold text-[#0f766e]">' + (loan.effectiveInterestRateCalculated ? loan.effectiveInterestRateCalculated + '%' : '—') + '</span></div>';
-  html += '<div><span class="text-[#6b7280] block">Applied Date</span><span class="font-semibold text-[#0f766e]">' + formatDate(loan.applicationDate) + '</span></div>';
+  html += '<div><span class="text-[#6B7280] block">Principal</span><span class="font-semibold text-[#1E3A8A]">' + formatCurrency(loan.requestedAmount) + '</span></div>';
+  html += '<div><span class="text-[#6B7280] block">Interest Rate</span><span class="font-semibold text-[#1E3A8A]">' + formatPercentage(loan.proposedInterestRate || (product ? product.defaultInterestRate : 0)) + '</span></div>';
+  html += '<div><span class="text-[#6B7280] block">EIR (Annualized)</span><span class="font-semibold text-[#1E3A8A]">' + (loan.effectiveInterestRateCalculated ? loan.effectiveInterestRateCalculated + '%' : '—') + '</span></div>';
+  html += '<div><span class="text-[#6B7280] block">Applied Date</span><span class="font-semibold text-[#1E3A8A]">' + formatDate(loan.applicationDate) + '</span></div>';
   if (loan.disbursementDate) {
-    html += '<div><span class="text-[#6b7280] block">Disbursed</span><span class="font-semibold text-[#0f766e]">' + formatDate(loan.disbursementDate) + '</span></div>';
+    html += '<div><span class="text-[#6B7280] block">Disbursed</span><span class="font-semibold text-[#1E3A8A]">' + formatDate(loan.disbursementDate) + '</span></div>';
   }
   if (loan.totalCostOfCredit) {
-    html += '<div><span class="text-[#6b7280] block">Total Cost of Credit</span><span class="font-semibold text-[#111827]">' + formatCurrency(loan.totalCostOfCredit) + '</span></div>';
+    html += '<div><span class="text-[#6B7280] block">Total Cost of Credit</span><span class="font-semibold text-[#1F2937]">' + formatCurrency(loan.totalCostOfCredit) + '</span></div>';
   }
   if (loan.compulsorySavingsAmount) {
-    html += '<div><span class="text-[#6b7280] block">Compulsory Savings</span><span class="font-semibold text-[#F59E0B]">' + formatCurrency(loan.compulsorySavingsAmount) + '</span></div>';
+    html += '<div><span class="text-[#6B7280] block">Compulsory Savings</span><span class="font-semibold text-[#D97706]">' + formatCurrency(loan.compulsorySavingsAmount) + '</span></div>';
   }
   html += '</div>';
 
   // Collateral
   if (loan.collateral && loan.collateral.length > 0) {
     html += '<div class="mt-4 pt-4 border-t border-[#d1d5db]">';
-    html += '<h3 class="text-sm font-semibold text-[#0f766e] mb-2">Collateral</h3>';
+    html += '<h3 class="text-sm font-semibold text-[#1E3A8A] mb-2">Collateral</h3>';
     for (var c = 0; c < loan.collateral.length; c++) {
-      html += '<p class="text-sm text-[#6b7280]">' + escapeHtml(loan.collateral[c].description) + ' — ' + formatCurrency(loan.collateral[c].marketValue) + '</p>';
+      html += '<p class="text-sm text-[#6B7280]">' + escapeHtml(loan.collateral[c].description) + ' — ' + formatCurrency(loan.collateral[c].marketValue) + '</p>';
     }
     html += '</div>';
   }
@@ -701,9 +701,9 @@ function renderLoanDetail(container, loanId, options) {
   if (product && product.documentChecklist) {
     var docs = JSON.parse(product.documentChecklist);
     html += '<div class="mt-4 pt-4 border-t border-[#d1d5db]">';
-    html += '<h3 class="text-sm font-semibold text-[#0f766e] mb-2">Required Documents</h3>';
+    html += '<h3 class="text-sm font-semibold text-[#1E3A8A] mb-2">Required Documents</h3>';
     for (var d = 0; d < docs.length; d++) {
-      html += '<p class="text-sm text-[#6b7280]">📄 ' + escapeHtml(docs[d]) + '</p>';
+      html += '<p class="text-sm text-[#6B7280]">📄 ' + escapeHtml(docs[d]) + '</p>';
     }
     html += '</div>';
   }
@@ -713,14 +713,14 @@ function renderLoanDetail(container, loanId, options) {
     try {
       var trail = JSON.parse(loan.auditTrail);
       html += '<div class="mt-4 pt-4 border-t border-[#d1d5db]">';
-      html += '<h3 class="text-sm font-semibold text-[#0f766e] mb-2">Audit Trail</h3>';
+      html += '<h3 class="text-sm font-semibold text-[#1E3A8A] mb-2">Audit Trail</h3>';
       for (var a = 0; a < trail.length; a++) {
         var action = trail[a].action;
-        if (action === 'created') html += '<p class="text-sm text-[#6b7280]">📝 Created: ' + escapeHtml(trail[a].date || 'N/A') + '</p>';
-        else if (action === 'approved') html += '<p class="text-sm text-[#0f766e]">✅ Approved</p>';
-        else if (action === 'rejected') html += '<p class="text-sm text-[#111827]">❌ Rejected: ' + escapeHtml(trail[a].reason || '') + '</p>';
-        else if (action === 'disbursed') html += '<p class="text-sm text-[#0d9488]">💰 Disbursed</p>';
-        else if (action === 'reviewed') html += '<p class="text-sm text-[#8b5cf6]">🔍 Under Review</p>';
+        if (action === 'created') html += '<p class="text-sm text-[#6B7280]">📝 Created: ' + escapeHtml(trail[a].date || 'N/A') + '</p>';
+        else if (action === 'approved') html += '<p class="text-sm text-[#059669]">✅ Approved</p>';
+        else if (action === 'rejected') html += '<p class="text-sm text-[#1F2937]">❌ Rejected: ' + escapeHtml(trail[a].reason || '') + '</p>';
+        else if (action === 'disbursed') html += '<p class="text-sm text-[#1E3A8A]">💰 Disbursed</p>';
+        else if (action === 'reviewed') html += '<p class="text-sm text-[#2563EB]">🔍 Under Review</p>';
       }
       html += '</div>';
     } catch (e) {}
@@ -731,21 +731,21 @@ function renderLoanDetail(container, loanId, options) {
   // Amortization schedule
   if (loan.amortizationSchedule && loan.amortizationSchedule.length > 0) {
     html += '<div class="bg-white rounded-2xl border border-[#d1d5db] overflow-hidden">';
-    html += '<div class="p-4 border-b border-[#d1d5db]"><h3 class="text-sm font-semibold text-[#0f766e]">Repayment Schedule</h3></div>';
+    html += '<div class="p-4 border-b border-[#d1d5db]"><h3 class="text-sm font-semibold text-[#1E3A8A]">Repayment Schedule</h3></div>';
     html += '<div class="overflow-x-auto"><table class="w-full text-sm">';
     html += '<thead class="bg-[#f9fafb]"><tr>';
-    html += '<th class="text-left px-4 py-2 text-[#6b7280] font-medium">#</th>';
-    html += '<th class="text-left px-4 py-2 text-[#6b7280] font-medium">Due Date</th>';
-    html += '<th class="text-right px-4 py-2 text-[#6b7280] font-medium">Principal</th>';
-    html += '<th class="text-right px-4 py-2 text-[#6b7280] font-medium">Interest</th>';
-    html += '<th class="text-right px-4 py-2 text-[#6b7280] font-medium">Balance</th>';
-    html += '<th class="text-center px-4 py-2 text-[#6b7280] font-medium">Status</th>';
+    html += '<th class="text-left px-4 py-2 text-[#6B7280] font-medium">#</th>';
+    html += '<th class="text-left px-4 py-2 text-[#6B7280] font-medium">Due Date</th>';
+    html += '<th class="text-right px-4 py-2 text-[#6B7280] font-medium">Principal</th>';
+    html += '<th class="text-right px-4 py-2 text-[#6B7280] font-medium">Interest</th>';
+    html += '<th class="text-right px-4 py-2 text-[#6B7280] font-medium">Balance</th>';
+    html += '<th class="text-center px-4 py-2 text-[#6B7280] font-medium">Status</th>';
     html += '</tr></thead><tbody>';
 
     for (var s = 0; s < loan.amortizationSchedule.length; s++) {
       var inst = loan.amortizationSchedule[s];
-      var instClass = inst.status === 'Paid' ? 'bg-[#0f766e] text-white' :
-                      inst.status === 'Overdue' ? 'bg-[#111827] text-white' : 'bg-gray-50 text-[#374151]';
+      var instClass = inst.status === 'Paid' ? 'bg-[#059669] text-white' :
+                      inst.status === 'Overdue' ? 'bg-[#1F2937] text-white' : 'bg-gray-50 text-[#374151]';
       var remBal = 0;
       for (var rb = s; rb < loan.amortizationSchedule.length; rb++) {
         remBal += loan.amortizationSchedule[rb].principal;
@@ -764,8 +764,8 @@ function renderLoanDetail(container, loanId, options) {
     // Payment button if Active
     if (loan.status === 'Active' || loan.status === 'Disbursed') {
       html += '<div class="mt-4 flex gap-3">';
-      html += '<button id="btn-record-payment" class="bg-[#0f766e] text-white px-6 py-2.5 rounded-xl hover:bg-[#134e4a] font-medium text-sm">Record Payment</button>';
-      html += '<button id="btn-gen-disclosure" class="bg-[#111827] border border-[#111827] text-[#111827] px-6 py-2.5 rounded-xl hover:bg-[#111827] hover:text-white font-medium text-sm">Download TCC Disclosure</button>';
+      html += '<button id="btn-record-payment" class="bg-[#1E3A8A] text-white px-6 py-2.5 rounded-xl hover:bg-[#134e4a] font-medium text-sm">Record Payment</button>';
+      html += '<button id="btn-gen-disclosure" class="bg-[#1F2937] border border-[#1F2937] text-[#1F2937] px-6 py-2.5 rounded-xl hover:bg-[#1F2937] hover:text-white font-medium text-sm">Download TCC Disclosure</button>';
       html += '</div>';
     }
   }
@@ -799,16 +799,16 @@ function generateDisclosureStatement(loan) {
   }
 
   var html = '<div style="padding:32px;font-family:system-ui;max-width:700px;margin:auto;">';
-  html += '<div style="text-align:center;margin-bottom:24px;border-bottom:2px solid #0f766e;padding-bottom:16px;">';
-  html += '<h1 style="color:#0f766e;font-size:20px;margin:0;">SAILE FINANCIAL SERVICES LIMITED</h1>';
-  html += '<p style="color:#111827;font-size:12px;margin:4px 0 0;">Licensed by RBM — NDMFI 017/22</p>';
+  html += '<div style="text-align:center;margin-bottom:24px;border-bottom:2px solid #1E3A8A;padding-bottom:16px;">';
+  html += '<h1 style="color:#1E3A8A;font-size:20px;margin:0;">SAILE FINANCIAL SERVICES LIMITED</h1>';
+  html += '<p style="color:#1F2937;font-size:12px;margin:4px 0 0;">Licensed by RBM — NDMFI 017/22</p>';
   html += '</div>';
-  html += '<h2 style="color:#0f766e;font-size:16px;text-align:center;margin-bottom:20px;">CLIENT DISCLOSURE STATEMENT</h2>';
+  html += '<h2 style="color:#1E3A8A;font-size:16px;text-align:center;margin-bottom:20px;">CLIENT DISCLOSURE STATEMENT</h2>';
   html += '<table style="width:100%;font-size:13px;border-collapse:collapse;margin-bottom:16px;">';
-  html += '<tr><td style="padding:8px 0;color:#6b7280;width:50%;">Client Name:</td><td style="padding:8px 0;font-weight:600;color:#0f766e;">' + escapeHtml(loan.clientName) + '</td></tr>';
-  html += '<tr><td style="padding:8px 0;color:#6b7280;">Product:</td><td style="padding:8px 0;font-weight:600;">' + escapeHtml(loan.productCode) + ' - ' + escapeHtml(loan.productName) + '</td></tr>';
-  html += '<tr><td style="padding:8px 0;color:#6b7280;">Disbursement Date:</td><td style="padding:8px 0;font-weight:600;">' + formatDate(loan.disbursementDate) + '</td></tr>';
-  html += '<tr style="background:#F5F6FA;"><td style="padding:10px 0;border-top:1px solid #d1d5db;color:#0f766e;font-weight:600;">Principal Amount:</td><td style="padding:10px 0;border-top:1px solid #d1d5db;font-weight:700;color:#0f766e;">MWK ' + formatCurrency(loan.requestedAmount) + '</td></tr>';
+  html += '<tr><td style="padding:8px 0;color:#6B7280;width:50%;">Client Name:</td><td style="padding:8px 0;font-weight:600;color:#1E3A8A;">' + escapeHtml(loan.clientName) + '</td></tr>';
+  html += '<tr><td style="padding:8px 0;color:#6B7280;">Product:</td><td style="padding:8px 0;font-weight:600;">' + escapeHtml(loan.productCode) + ' - ' + escapeHtml(loan.productName) + '</td></tr>';
+  html += '<tr><td style="padding:8px 0;color:#6B7280;">Disbursement Date:</td><td style="padding:8px 0;font-weight:600;">' + formatDate(loan.disbursementDate) + '</td></tr>';
+  html += '<tr style="background:#F5F6FA;"><td style="padding:10px 0;border-top:1px solid #d1d5db;color:#1E3A8A;font-weight:600;">Principal Amount:</td><td style="padding:10px 0;border-top:1px solid #d1d5db;font-weight:700;color:#1E3A8A;">MWK ' + formatCurrency(loan.requestedAmount) + '</td></tr>';
 
   var totalInterest = 0;
   if (loan.amortizationSchedule) {
@@ -816,20 +816,20 @@ function generateDisclosureStatement(loan) {
       totalInterest += loan.amortizationSchedule[i].interest;
     }
   }
-  html += '<tr><td style="padding:8px 0;color:#6b7280;">Total Interest:</td><td style="padding:8px 0;font-weight:600;">MWK ' + formatCurrency(Math.round(totalInterest)) + '</td></tr>';
-  html += '<tr><td style="padding:8px 0;color:#6b7280;">Processing Fee:</td><td style="padding:8px 0;font-weight:600;">MWK ' + formatCurrency(loan.processingFee || 0) + '</td></tr>';
-  html += '<tr><td style="padding:8px 0;color:#6b7280;">Compulsory Savings:</td><td style="padding:8px 0;font-weight:600;color:#0f766e;">MWK ' + formatCurrency(loan.compulsorySavingsAmount || 0) + ' (20%)</td></tr>';
-  html += '<tr style="background:#fef2f2;"><td style="padding:10px 0;border-top:2px solid #d1d5db;color:#0f766e;font-weight:700;">TOTAL COST OF CREDIT:</td><td style="padding:10px 0;border-top:2px solid #d1d5db;font-weight:700;color:#111827;">MWK ' + formatCurrency(loan.totalCostOfCredit || 0) + '</td></tr>';
-  html += '<tr><td style="padding:8px 0;color:#6b7280;">Monthly Repayment:</td><td style="padding:8px 0;font-weight:600;">MWK ' + formatCurrency(Math.round((loan.totalCostOfCredit || 0) / (loan.amortizationSchedule ? loan.amortizationSchedule.length : 1))) + '</td></tr>';
-  html += '<tr style="background:#F5F6FA;"><td style="padding:10px 0;color:#6b7280;font-weight:600;">Effective Interest Rate (EIR):</td><td style="padding:10px 0;font-weight:700;color:#0f766e;">' + (loan.effectiveInterestRateCalculated || '—') + '% p.a.</td></tr>';
+  html += '<tr><td style="padding:8px 0;color:#6B7280;">Total Interest:</td><td style="padding:8px 0;font-weight:600;">MWK ' + formatCurrency(Math.round(totalInterest)) + '</td></tr>';
+  html += '<tr><td style="padding:8px 0;color:#6B7280;">Processing Fee:</td><td style="padding:8px 0;font-weight:600;">MWK ' + formatCurrency(loan.processingFee || 0) + '</td></tr>';
+  html += '<tr><td style="padding:8px 0;color:#6B7280;">Compulsory Savings:</td><td style="padding:8px 0;font-weight:600;color:#1E3A8A;">MWK ' + formatCurrency(loan.compulsorySavingsAmount || 0) + ' (20%)</td></tr>';
+  html += '<tr style="background:#FEF2F2;"><td style="padding:10px 0;border-top:2px solid #d1d5db;color:#1E3A8A;font-weight:700;">TOTAL COST OF CREDIT:</td><td style="padding:10px 0;border-top:2px solid #d1d5db;font-weight:700;color:#1F2937;">MWK ' + formatCurrency(loan.totalCostOfCredit || 0) + '</td></tr>';
+  html += '<tr><td style="padding:8px 0;color:#6B7280;">Monthly Repayment:</td><td style="padding:8px 0;font-weight:600;">MWK ' + formatCurrency(Math.round((loan.totalCostOfCredit || 0) / (loan.amortizationSchedule ? loan.amortizationSchedule.length : 1))) + '</td></tr>';
+  html += '<tr style="background:#F5F6FA;"><td style="padding:10px 0;color:#6B7280;font-weight:600;">Effective Interest Rate (EIR):</td><td style="padding:10px 0;font-weight:700;color:#1E3A8A;">' + (loan.effectiveInterestRateCalculated || '—') + '% p.a.</td></tr>';
   html += '</table>';
 
-  html += '<div style="background:#FEF3C7;border:1px solid #F59E0B;padding:12px;border-radius:8px;font-size:12px;color:#92400E;margin-bottom:16px;">';
+  html += '<div style="background:#FEF3C7;border:1px solid #D97706;padding:12px;border-radius:8px;font-size:12px;color:#92400E;margin-bottom:16px;">';
   html += '<strong>⚠️ Important Notice:</strong> The Effective Interest Rate (EIR) of ' + (loan.effectiveInterestRateCalculated || '—') + '% per annum reflects the true annual cost of this loan, including all fees and the compulsory savings deduction.';
   html += '</div>';
 
   if (loan.amortizationSchedule && loan.amortizationSchedule.length > 0) {
-    html += '<h3 style="color:#0f766e;font-size:14px;margin-bottom:8px;">Repayment Schedule</h3>';
+    html += '<h3 style="color:#1E3A8A;font-size:14px;margin-bottom:8px;">Repayment Schedule</h3>';
     html += '<table style="width:100%;font-size:11px;border-collapse:collapse;">';
     html += '<tr style="background:#F9FAFB;"><th style="padding:6px;text-align:left;border-bottom:1px solid #d1d5db;">#</th><th style="padding:6px;text-align:left;border-bottom:1px solid #d1d5db;">Due Date</th><th style="padding:6px;text-align:right;border-bottom:1px solid #d1d5db;">Principal</th><th style="padding:6px;text-align:right;border-bottom:1px solid #d1d5db;">Interest</th><th style="padding:6px;text-align:right;border-bottom:1px solid #d1d5db;">Balance</th></tr>';
     for (var s = 0; s < loan.amortizationSchedule.length; s++) {
@@ -849,7 +849,7 @@ function generateDisclosureStatement(loan) {
   var win = window.open('', '_blank');
   if (win) {
     win.document.write('<!DOCTYPE html><html><head><title>TCC Disclosure - ' + loan.clientName + '</title></head>');
-    win.document.write('<body><style>body{font-family:system-ui;padding:40px;color:#0f766e;}table{border-collapse:collapse;width:100%;}td,th{padding:6px;text-align:left;border-bottom:1px solid #d1d5db;}</style>');
+    win.document.write('<body><style>body{font-family:system-ui;padding:40px;color:#1E3A8A;}table{border-collapse:collapse;width:100%;}td,th{padding:6px;text-align:left;border-bottom:1px solid #d1d5db;}</style>');
     win.document.write(html + '</body></html>');
     win.document.close();
   }

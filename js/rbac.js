@@ -4,32 +4,49 @@
 
 var ROLE_PERMISSIONS = {
   admin: {
-    modules: ['dashboard','clients','groups','loans','repayment','collections','followup','savings','accounting','reports','users','settings','audit','sync','migration'],
+    label: 'System Administrator',
+    modules: ['dashboard','clients','groups','loans','repayment','collections','followup','savings','accounting','reports','users','settings','audit','sync','migration','intelligence'],
     actions: ['create','read','update','delete','approve','disburse'],
     defaultRoute: '#/dashboard'
   },
+  md: {
+    label: 'Managing Director',
+    modules: ['dashboard','clients','groups','loans','repayment','collections','followup','savings','accounting','reports','users','settings','audit','sync','migration','intelligence'],
+    actions: ['read','approve','export_reports'],
+    readOnly: ['clients','groups','loans','repayment','collections','followup','savings','accounting','reports','users','settings','audit','sync','migration'],
+    defaultRoute: '#/dashboard'
+  },
+  finance_manager: {
+    label: 'Finance Manager',
+    modules: ['dashboard','clients','groups','loans','repayment','collections','followup','savings','accounting','reports','settings','audit','sync','migration','intelligence'],
+    actions: ['read','create_voucher','update_gl','record_payment','disburse','view_financial_reports','export_reports'],
+    defaultRoute: '#/dashboard'
+  },
+  auditor: {
+    label: 'Internal Audit Manager',
+    modules: ['dashboard','reports','audit','clients','loans','savings','accounting','sync'],
+    actions: ['read'],
+    readOnly: ['dashboard','reports','audit','clients','loans','savings','accounting','sync'],
+    defaultRoute: '#/dashboard'
+  },
   branch_manager: {
+    label: 'Branch Manager',
     modules: ['dashboard','clients','groups','loans','repayment','collections','followup','savings','accounting','reports','settings','audit','sync'],
     actions: ['create','read','update','approve','disburse'],
     defaultRoute: '#/dashboard'
   },
-  field_officer: {
-    modules: ['collections','followup','repayment','clients','sync','savings'],
-    actions: ['read','create_collection','create_followup','record_payment'],
-    readOnly: ['clients'],
+  loan_officer: {
+    label: 'Loan Officer',
+    modules: ['clients','groups','loans','repayment','collections','followup','savings','sync'],
+    actions: ['create','read','update','record_payment'],
+    readOnly: [],
+    defaultRoute: '#/clients'
+  },
+  teller: {
+    label: 'Teller/Cashier',
+    modules: ['collections','savings','repayment','sync'],
+    actions: ['read','record_payment','savings_transaction'],
     defaultRoute: '#/collections'
-  },
-  accountant: {
-    modules: ['accounting','repayment','reports','loans','savings'],
-    actions: ['read','create_voucher','record_payment','disburse','view_financial_reports'],
-    limitedAccess: { loans: ['disburse'], reports: ['financial'] },
-    defaultRoute: '#/accounting'
-  },
-  auditor: {
-    modules: ['reports','audit','clients','loans'],
-    actions: ['read'],
-    readOnly: ['reports','audit','clients','loans'],
-    defaultRoute: '#/audit'
   }
 };
 
@@ -101,7 +118,8 @@ var ALL_NAV_ITEMS = [
   {module:'settings', label:'System Configuration', icon:'gear', route:'#/settings'},
   {module:'audit', label:'Audit Trail', icon:'clipboard', route:'#/audit'},
   {module:'sync', label:'Sync', icon:'refresh', route:'#/sync'},
-  {module:'migration', label:'Data Migration', icon:'migration', route:'#/migration'}
+  {module:'migration', label:'Data Migration', icon:'migration', route:'#/migration'},
+  {module:'intelligence', label:'Strategic Intel', icon:'chart', route:'#/intelligence'}
 ];
 
 /**
