@@ -68,7 +68,7 @@ function renderAccounting(container, options) {
 
       for (var i = 0; i < vouchers.length; i++) {
         var v = vouchers[i];
-        var typeClass = v.voucherType === 'debit' ? 'bg-red-50 text-red-700' : 'bg-emerald-50 text-emerald-700';
+        var typeClass = v.voucherType === 'debit' ? 'bg-[#fef2f2] text-[#111827]' : 'bg-[#f0fdf4] text-[#0f766e]';
         html += '<tr class="border-b border-[#d1d5db] hover:bg-[#f4f4f5]">';
         html += '<td class="px-4 py-3">' + formatDate(v.voucherDate) + '</td>';
         html += '<td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs font-medium ' + typeClass + '">' + escapeHtml(v.voucherType) + '</span></td>';
@@ -90,16 +90,16 @@ function renderAccounting(container, options) {
     html += '<h3 class="text-sm font-semibold text-[#0f766e] mb-4">Trial Balance</h3>';
 
     html += '<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">';
-    html += '<div class="p-4 bg-red-50 rounded-lg"><p class="text-xs text-red-600">Total Debits</p><p class="text-xl font-bold text-red-700">' + formatCurrency(tb.totalDebits) + '</p></div>';
-    html += '<div class="p-4 bg-emerald-50 rounded-lg"><p class="text-xs text-emerald-600">Total Credits</p><p class="text-xl font-bold text-emerald-700">' + formatCurrency(tb.totalCredits) + '</p></div>';
-    html += '<div class="p-4 ' + (tb.isBalanced ? 'bg-emerald-50' : 'bg-amber-50') + ' rounded-lg"><p class="text-xs ' + (tb.isBalanced ? 'text-emerald-600' : 'text-amber-600') + '">Difference</p><p class="text-xl font-bold ' + (tb.isBalanced ? 'text-emerald-700' : 'text-amber-700') + '">' + formatCurrency(tb.difference) + '</p></div>';
+    html += '<div class="p-4 bg-[#fef2f2] rounded-lg"><p class="text-xs text-[#dc2626]">Total Debits</p><p class="text-xl font-bold text-[#111827]">' + formatCurrency(tb.totalDebits) + '</p></div>';
+    html += '<div class="p-4 bg-[#f0fdf4] rounded-lg"><p class="text-xs text-[#059669]">Total Credits</p><p class="text-xl font-bold text-[#0f766e]">' + formatCurrency(tb.totalCredits) + '</p></div>';
+    html += '<div class="p-4 ' + (tb.isBalanced ? 'bg-[#f0fdf4]' : 'bg-[#fffbeb]') + ' rounded-lg"><p class="text-xs ' + (tb.isBalanced ? 'text-[#059669]' : 'text-[#d97706]') + '">Difference</p><p class="text-xl font-bold ' + (tb.isBalanced ? 'text-[#0f766e]' : 'text-[#92400e]') + '">' + formatCurrency(tb.difference) + '</p></div>';
     html += '</div>';
 
     html += '<div class="flex items-center gap-2">';
     if (tb.isBalanced) {
-      html += '<span class="px-3 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">✓ Balanced</span>';
+      html += '<span class="px-3 py-1 rounded-full text-xs font-medium bg-[#f0fdf4] text-[#0f766e]">✓ Balanced</span>';
     } else {
-      html += '<span class="px-3 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700">⚠ Unbalanced</span>';
+      html += '<span class="px-3 py-1 rounded-full text-xs font-medium bg-[#fffbeb] text-[#92400e]">⚠ Unbalanced</span>';
     }
     html += '</div></div>';
     return html;
@@ -114,7 +114,7 @@ function renderAccounting(container, options) {
     html += '<h3 class="text-sm font-semibold text-[#0f766e] mb-4">Cash Book</h3>';
 
     html += '<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">';
-    html += '<div class="p-4 bg-sky-50 rounded-lg"><p class="text-xs text-sky-600">Current Cash Balance</p><p class="text-2xl font-bold text-sky-700">' + formatCurrency(balance) + '</p></div>';
+    html += '<div class="p-4 bg-[#f0f9ff] rounded-lg"><p class="text-xs text-[#0284c7]">Current Cash Balance</p><p class="text-2xl font-bold text-[#0369a1]">' + formatCurrency(balance) + '</p></div>';
     html += '<div class="p-4 bg-[#f4f4f5] rounded-lg"><p class="text-xs text-[#6b7280]">Total Transactions</p><p class="text-2xl font-bold text-[#0f766e]">' + (vouchers.length + collections.length) + '</p></div>';
     html += '</div>';
 
@@ -128,7 +128,7 @@ function renderAccounting(container, options) {
       html += '<div class="flex items-center justify-between p-3 rounded-lg bg-[#f4f4f5]">';
       html += '<div><p class="text-sm font-medium text-[#0f766e]">' + escapeHtml(v.description) + '</p>';
       html += '<p class="text-xs text-[#6b7280]">' + formatDate(v.voucherDate) + '</p></div>';
-      html += '<span class="text-sm font-medium ' + (isDebit ? 'text-red-600' : 'text-emerald-600') + '">' + (isDebit ? '-' : '+') + formatCurrency(v.amount) + '</span>';
+      html += '<span class="text-sm font-medium ' + (isDebit ? 'text-[#dc2626]' : 'text-[#059669]') + '">' + (isDebit ? '-' : '+') + formatCurrency(v.amount) + '</span>';
       html += '</div>';
     }
     html += '</div></div>';

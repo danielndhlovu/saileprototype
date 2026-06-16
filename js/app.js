@@ -160,7 +160,7 @@ function updateOfflineState(isOnline) {
   }
   var syncDot = document.getElementById('sync-indicator');
   if (syncDot) {
-    syncDot.style.backgroundColor = isOnline ? '#10b981' : '#111827';
+    syncDot.style.backgroundColor = isOnline ? '#0f766e' : '#111827';
     syncDot.title = isOnline ? 'Online' : 'Offline';
   }
 }
@@ -373,8 +373,8 @@ function seedData() {
     // Mzuzu Employee/Pensioner Branch
     {
       id: generateId(),
-      fullName: 'Mr. Blessings Chirwa',
-      email: 'bchirwa@saile.mw',
+      fullName: 'Mr. Francis Mughandira',
+      email: 'francis@saile.mw',
       passwordHash: hashPassword('password123'),
       pin: hashPin('1240'),
       role: 'branch_manager',
@@ -413,8 +413,8 @@ function seedData() {
     // Mzuzu Business Branch
     {
       id: generateId(),
-      fullName: 'Mrs. Agness Mhango',
-      email: 'amhango@saile.mw',
+      fullName: 'Mr. Jericho Nyirenda',
+      email: 'jericho@saile.mw',
       passwordHash: hashPassword('password123'),
       pin: hashPin('1243'),
       role: 'branch_manager',
@@ -440,8 +440,8 @@ function seedData() {
     // Lilongwe Branch
     {
       id: generateId(),
-      fullName: 'Mr. Patrick Kalua',
-      email: 'pkalua@saile.mw',
+      fullName: 'Mr. Kenneth Malita',
+      email: 'kenneth@saile.mw',
       passwordHash: hashPassword('password123'),
       pin: hashPin('1238'),
       role: 'branch_manager',
@@ -467,8 +467,8 @@ function seedData() {
     // Blantyre Branch
     {
       id: generateId(),
-      fullName: 'Mrs. Esnart Tembo',
-      email: 'etembo@saile.mw',
+      fullName: 'Mr. Ambwene Mwang\'onda',
+      email: 'ambwene@saile.mw',
       passwordHash: hashPassword('password123'),
       pin: hashPin('1245'),
       role: 'branch_manager',
@@ -494,8 +494,8 @@ function seedData() {
     // Karonga Branch
     {
       id: generateId(),
-      fullName: 'Mr. Geoffrey Ngwira',
-      email: 'gngwira@saile.mw',
+      fullName: 'Mr. Moses Maloya',
+      email: 'moses@saile.mw',
       passwordHash: hashPassword('password123'),
       pin: hashPin('1247'),
       role: 'branch_manager',
@@ -521,8 +521,8 @@ function seedData() {
     // Zomba Branch
     {
       id: generateId(),
-      fullName: 'Mrs. Mary Chavula',
-      email: 'mchavula@saile.mw',
+      fullName: 'Mr. Davie Ndhlovu',
+      email: 'davie@saile.mw',
       passwordHash: hashPassword('password123'),
       pin: hashPin('1249'),
       role: 'branch_manager',
@@ -571,7 +571,7 @@ function seedData() {
       branchName: 'Mzuzu - Employees & Pensioners Loans Branch',
       location: 'Mzuzu',
       branchType: 'Employee/Pensioner Loans',
-      managerName: 'Mr. Blessings Chirwa',
+      managerName: 'Mr. Francis Mughandira',
       phone: 'mze@saile.mw',
       managerId: users[4].id,
       status: 'Active',
@@ -585,7 +585,7 @@ function seedData() {
       branchName: 'Mzuzu - Business Loans Branch',
       location: 'Mzuzu',
       branchType: 'Business Loans',
-      managerName: 'Mrs. Agness Mhango',
+      managerName: 'Mr. Jericho Nyirenda',
       phone: 'mzb@saile.mw',
       managerId: users[7].id,
       status: 'Active',
@@ -599,7 +599,7 @@ function seedData() {
       branchName: 'Lilongwe Branch',
       location: 'Lilongwe',
       branchType: 'Mixed Portfolio',
-      managerName: 'Mr. Patrick Kalua',
+      managerName: 'Mr. Kenneth Malita',
       phone: 'llw@saile.mw',
       managerId: users[9].id,
       status: 'Active',
@@ -613,7 +613,7 @@ function seedData() {
       branchName: 'Blantyre Branch',
       location: 'Blantyre',
       branchType: 'Mixed Portfolio',
-      managerName: 'Mrs. Esnart Tembo',
+      managerName: 'Mr. Ambwene Mwang\'onda',
       phone: 'bln@saile.mw',
       managerId: users[11].id,
       status: 'Active',
@@ -627,7 +627,7 @@ function seedData() {
       branchName: 'Karonga Branch',
       location: 'Karonga',
       branchType: 'Mixed Portfolio',
-      managerName: 'Mr. Geoffrey Ngwira',
+      managerName: 'Mr. Moses Maloya',
       phone: 'krg@saile.mw',
       managerId: users[13].id,
       status: 'Active',
@@ -641,7 +641,7 @@ function seedData() {
       branchName: 'Zomba Branch',
       location: 'Zomba',
       branchType: 'Mixed Portfolio',
-      managerName: 'Mrs. Mary Chavula',
+      managerName: 'Mr. Davie Ndhlovu',
       phone: 'zba@saile.mw',
       managerId: users[15].id,
       status: 'Active',
@@ -910,7 +910,7 @@ function seedData() {
       compulsorySavingsPercentage: 20, processingTimeMinutes: 30,
       documentChecklist: JSON.stringify(['National ID', 'Payslip (Mandatory)', 'Employer Confirmation', 'NRC Copy']),
       targetClientDescription: 'Salaried employees with payslips (signature product) - 30 minute processing promise',
-      rbmReportingCategory: 'SHORT_TERM', status: 'ACTIVE', createdAt: now, updatedAt: now
+      rbmReportingCategory: 'SHORT_TERM', status: 'Active', createdAt: now, updatedAt: now
     },
     {
       id: generateId(), productCode: '3ML', productName: '3-Month Loan', productType: 'SHORT_TERM',
@@ -920,7 +920,7 @@ function seedData() {
       compulsorySavingsPercentage: 20, processingTimeMinutes: 120,
       documentChecklist: JSON.stringify(['National ID', 'NRC Copy', 'Employer Confirmation']),
       targetClientDescription: 'Salaried employees - short-term credit',
-      rbmReportingCategory: 'SHORT_TERM', status: 'ACTIVE', createdAt: now, updatedAt: now
+      rbmReportingCategory: 'SHORT_TERM', status: 'Active', createdAt: now, updatedAt: now
     },
     {
       id: generateId(), productCode: 'SML', productName: '6-Month Loan (SML)', productType: 'MEDIUM_TERM',
@@ -930,7 +930,7 @@ function seedData() {
       compulsorySavingsPercentage: 20, processingTimeMinutes: 240,
       documentChecklist: JSON.stringify(['National ID', 'NRC Copy', 'Employer/Business Proof', 'Bank Statements (3 months)']),
       targetClientDescription: 'SML (6-Month Loan) - salaried employees & small business owners',
-      rbmReportingCategory: 'MEDIUM_TERM', status: 'ACTIVE', createdAt: now, updatedAt: now
+      rbmReportingCategory: 'MEDIUM_TERM', status: 'Active', createdAt: now, updatedAt: now
     },
     {
       id: generateId(), productCode: 'SSC', productName: 'Special Scheme', productType: 'MEDIUM_TERM',
@@ -940,7 +940,7 @@ function seedData() {
       compulsorySavingsPercentage: 20, processingTimeMinutes: 360,
       documentChecklist: JSON.stringify(['National ID', 'NRC Copy', 'Employment Letter', 'Payslips (3 months)', 'Tax Clearance']),
       targetClientDescription: 'High-salary employees (senior staff, lecturers, managers)',
-      rbmReportingCategory: 'MEDIUM_TERM', status: 'ACTIVE', createdAt: now, updatedAt: now
+      rbmReportingCategory: 'MEDIUM_TERM', status: 'Active', createdAt: now, updatedAt: now
     },
     {
       id: generateId(), productCode: 'ESC', productName: 'Executive Scheme', productType: 'LONG_TERM',
@@ -950,7 +950,7 @@ function seedData() {
       compulsorySavingsPercentage: 20, processingTimeMinutes: 720,
       documentChecklist: JSON.stringify(['National ID', 'NRC Copy', 'Employment Contract', 'Payslips (6 months)', 'Tax Clearance', 'Bank Statements (6 months)']),
       targetClientDescription: 'Managers, lecturers, senior civil servants - premium product',
-      rbmReportingCategory: 'LONG_TERM', status: 'ACTIVE', createdAt: now, updatedAt: now
+      rbmReportingCategory: 'LONG_TERM', status: 'Active', createdAt: now, updatedAt: now
     },
     {
       id: generateId(), productCode: 'BSL', productName: 'Business Loan', productType: 'SMALL_ENTERPRISE',
@@ -960,7 +960,7 @@ function seedData() {
       compulsorySavingsPercentage: 20, processingTimeMinutes: 480,
       documentChecklist: JSON.stringify(['National ID', 'NRC Copy', 'Business Registration', 'Financial Statements', 'Bank Statements (12 months)', 'Tax Clearance']),
       targetClientDescription: 'Business people, traders, SMEs - working capital & expansion',
-      rbmReportingCategory: 'SMALL_ENTERPRISE', status: 'ACTIVE', createdAt: now, updatedAt: now
+      rbmReportingCategory: 'SMALL_ENTERPRISE', status: 'Active', createdAt: now, updatedAt: now
     },
     {
       id: generateId(), productCode: 'ENT', productName: 'Enterprise Loan', productType: 'MICRO_ENTERPRISE',
@@ -970,7 +970,7 @@ function seedData() {
       compulsorySavingsPercentage: 20, processingTimeMinutes: 1440,
       documentChecklist: JSON.stringify(['National ID', 'NRC Copy', 'Business Registration', 'Audited Financials (3 years)', 'Bank Statements (24 months)', 'Tax Clearance', 'Project Proposal']),
       targetClientDescription: 'Established businesses with track record - largest amounts',
-      rbmReportingCategory: 'MICRO_ENTERPRISE', status: 'ACTIVE', createdAt: now, updatedAt: now
+      rbmReportingCategory: 'MICRO_ENTERPRISE', status: 'Active', createdAt: now, updatedAt: now
     }
   ];
   setCollection(StorageKeys.PRODUCTS, products);
@@ -981,14 +981,14 @@ function seedData() {
   var loans = [];
 
   // Payday Loan - ACTIVE - Grace Banda
-  var pdl1Schedule = genAmort(150000, 7.5, 'monthly', 'flat', '2026-05-15', 1);
+  var pdl1Schedule = generateAmortization(150000, 7.5, 'monthly', 'flat', '2026-05-15', 1);
   loans.push({
     id: generateId(), applicationDate: '2026-05-10', clientId: clients[0].id,
     groupId: groups[0].id, clientName: 'Grace Banda',
     productId: products[0].id, productCode: 'PDL', productName: 'Payday Loan',
     requestedAmount: 150000, approvedAmount: 150000, proposedInterestRate: 7.5,
     effectiveInterestRate: 135.0, totalCostOfCredit: 194250, interestMethod: 'flat',
-    status: 'ACTIVE', rejectionReason: null, collateral: [],
+    status: 'Active', rejectionReason: null, collateral: [],
     disbursementDate: '2026-05-15', payoutMethod: 'mobile_money',
     amortizationSchedule: pdl1Schedule, compulsorySavingsAmount: 30000,
     effectiveInterestRateCalculated: 135.0, disclosureStatementGenerated: true,
@@ -1004,7 +1004,7 @@ function seedData() {
     productId: products[0].id, productCode: 'PDL', productName: 'Payday Loan',
     requestedAmount: 200000, approvedAmount: null, proposedInterestRate: 7.5,
     effectiveInterestRate: null, totalCostOfCredit: null, interestMethod: 'flat',
-    status: 'SUBMITTED', rejectionReason: null, collateral: [{ description: 'Shop inventory', marketValue: 300000 }],
+    status: 'Pending', rejectionReason: null, collateral: [{ description: 'Shop inventory', marketValue: 300000 }],
     disbursementDate: null, payoutMethod: null, amortizationSchedule: [],
     compulsorySavingsAmount: null, effectiveInterestRateCalculated: null,
     disclosureStatementGenerated: false, rbmReportingCategory: 'SHORT_TERM',
@@ -1013,14 +1013,14 @@ function seedData() {
   });
 
   // Payday Loan - ACTIVE - Agnes Kamanga
-  var pdl3Schedule = genAmort(80000, 7.5, 'monthly', 'flat', '2026-04-20', 1);
+  var pdl3Schedule = generateAmortization(80000, 7.5, 'monthly', 'flat', '2026-04-20', 1);
   loans.push({
     id: generateId(), applicationDate: '2026-04-15', clientId: clients[4].id,
     groupId: groups[0].id, clientName: 'Agnes Kamanga',
     productId: products[0].id, productCode: 'PDL', productName: 'Payday Loan',
     requestedAmount: 80000, approvedAmount: 80000, proposedInterestRate: 7.5,
     effectiveInterestRate: 135.0, totalCostOfCredit: 85400, interestMethod: 'flat',
-    status: 'ACTIVE', rejectionReason: null, collateral: [],
+    status: 'Active', rejectionReason: null, collateral: [],
     disbursementDate: '2026-04-20', payoutMethod: 'cash',
     amortizationSchedule: pdl3Schedule, compulsorySavingsAmount: 16000,
     effectiveInterestRateCalculated: 135.0, disclosureStatementGenerated: true,
@@ -1030,14 +1030,14 @@ function seedData() {
   });
 
   // 3-Month Loan - ACTIVE - Mary Chirwa
-  var m3Schedule = genAmort(300000, 4.5, 'monthly', 'declining', '2026-03-10', 3);
+  var m3Schedule = generateAmortization(300000, 4.5, 'monthly', 'declining', '2026-03-10', 3);
   loans.push({
     id: generateId(), applicationDate: '2026-03-01', clientId: clients[2].id,
     groupId: groups[0].id, clientName: 'Mary Chirwa',
     productId: products[1].id, productCode: '3ML', productName: '3-Month Loan',
     requestedAmount: 300000, approvedAmount: 300000, proposedInterestRate: 4.5,
     effectiveInterestRate: 65.3, totalCostOfCredit: 348650, interestMethod: 'declining',
-    status: 'ACTIVE', rejectionReason: null, collateral: [{ description: 'Market stall goods', marketValue: 400000 }],
+    status: 'Active', rejectionReason: null, collateral: [{ description: 'Market stall goods', marketValue: 400000 }],
     disbursementDate: '2026-03-10', payoutMethod: 'mobile_money',
     amortizationSchedule: m3Schedule, compulsorySavingsAmount: 60000,
     effectiveInterestRateCalculated: 65.3, disclosureStatementGenerated: true,
@@ -1053,7 +1053,7 @@ function seedData() {
     productId: products[1].id, productCode: '3ML', productName: '3-Month Loan',
     requestedAmount: 500000, approvedAmount: null, proposedInterestRate: 4.5,
     effectiveInterestRate: null, totalCostOfCredit: null, interestMethod: 'declining',
-    status: 'UNDER_REVIEW', rejectionReason: null, collateral: [{ description: 'Business equipment', marketValue: 700000 }],
+    status: 'Under_Review', rejectionReason: null, collateral: [{ description: 'Business equipment', marketValue: 700000 }],
     disbursementDate: null, payoutMethod: null, amortizationSchedule: [],
     compulsorySavingsAmount: null, effectiveInterestRateCalculated: null,
     disclosureStatementGenerated: false, rbmReportingCategory: 'SHORT_TERM',
@@ -1062,14 +1062,14 @@ function seedData() {
   });
 
   // SML - ACTIVE - Moses Kalimbuka
-  var smlSchedule = genAmort(1500000, 4.0, 'monthly', 'declining', '2026-01-15', 6);
+  var smlSchedule = generateAmortization(1500000, 4.0, 'monthly', 'declining', '2026-01-15', 6);
   loans.push({
     id: generateId(), applicationDate: '2026-01-05', clientId: clients[12].id,
     groupId: groups[2].id, clientName: 'Moses Kalimbuka',
     productId: products[2].id, productCode: 'SML', productName: '6-Month Loan (SML)',
     requestedAmount: 1500000, approvedAmount: 1500000, proposedInterestRate: 4.0,
     effectiveInterestRate: 58.3, totalCostOfCredit: 1867500, interestMethod: 'declining',
-    status: 'ACTIVE', rejectionReason: null, collateral: [{ description: 'General merchandise inventory', marketValue: 2500000 }],
+    status: 'Active', rejectionReason: null, collateral: [{ description: 'General merchandise inventory', marketValue: 2500000 }],
     disbursementDate: '2026-01-15', payoutMethod: 'bank_transfer',
     amortizationSchedule: smlSchedule, compulsorySavingsAmount: 300000,
     effectiveInterestRateCalculated: 58.3, disclosureStatementGenerated: true,
@@ -1079,14 +1079,14 @@ function seedData() {
   });
 
   // SML - ACTIVE - Norman Kapito
-  var sml2Schedule = genAmort(2500000, 4.0, 'monthly', 'declining', '2026-02-01', 6);
+  var sml2Schedule = generateAmortization(2500000, 4.0, 'monthly', 'declining', '2026-02-01', 6);
   loans.push({
     id: generateId(), applicationDate: '2026-01-20', clientId: clients[14].id,
     groupId: groups[2].id, clientName: 'Norman Kapito',
     productId: products[2].id, productCode: 'SML', productName: '6-Month Loan (SML)',
     requestedAmount: 2500000, approvedAmount: 2500000, proposedInterestRate: 4.0,
     effectiveInterestRate: 58.3, totalCostOfCredit: 3112500, interestMethod: 'declining',
-    status: 'ACTIVE', rejectionReason: null, collateral: [{ description: 'Taxi fleet (5 vehicles)', marketValue: 5000000 }],
+    status: 'Active', rejectionReason: null, collateral: [{ description: 'Taxi fleet (5 vehicles)', marketValue: 5000000 }],
     disbursementDate: '2026-02-01', payoutMethod: 'bank_transfer',
     amortizationSchedule: sml2Schedule, compulsorySavingsAmount: 500000,
     effectiveInterestRateCalculated: 58.3, disclosureStatementGenerated: true,
@@ -1096,14 +1096,14 @@ function seedData() {
   });
 
   // Special Scheme - ACTIVE - Golden Moyo
-  var sscSchedule = genAmort(5000000, 3.5, 'monthly', 'declining', '2025-12-01', 10);
+  var sscSchedule = generateAmortization(5000000, 3.5, 'monthly', 'declining', '2025-12-01', 10);
   loans.push({
     id: generateId(), applicationDate: '2025-11-15', clientId: clients[10].id,
     groupId: groups[2].id, clientName: 'Golden Moyo',
     productId: products[3].id, productCode: 'SSC', productName: 'Special Scheme',
     requestedAmount: 5000000, approvedAmount: 5000000, proposedInterestRate: 3.5,
     effectiveInterestRate: 48.2, totalCostOfCredit: 6850000, interestMethod: 'declining',
-    status: 'ACTIVE', rejectionReason: null, collateral: [{ description: 'Electronics shop property', marketValue: 8000000 }],
+    status: 'Active', rejectionReason: null, collateral: [{ description: 'Electronics shop property', marketValue: 8000000 }],
     disbursementDate: '2025-12-01', payoutMethod: 'bank_transfer',
     amortizationSchedule: sscSchedule, compulsorySavingsAmount: 1000000,
     effectiveInterestRateCalculated: 48.2, disclosureStatementGenerated: true,
@@ -1113,14 +1113,14 @@ function seedData() {
   });
 
   // Executive Scheme - ACTIVE - Samuel Nkhoma
-  var escSchedule = genAmort(10000000, 3.2, 'monthly', 'declining', '2025-10-01', 12);
+  var escSchedule = generateAmortization(10000000, 3.2, 'monthly', 'declining', '2025-10-01', 12);
   loans.push({
     id: generateId(), applicationDate: '2025-09-15', clientId: clients[19].id,
     groupId: null, clientName: 'Samuel Nkhoma',
     productId: products[4].id, productCode: 'ESC', productName: 'Executive Scheme',
     requestedAmount: 10000000, approvedAmount: 10000000, proposedInterestRate: 3.2,
     effectiveInterestRate: 44.1, totalCostOfCredit: 13050000, interestMethod: 'declining',
-    status: 'ACTIVE', rejectionReason: null, collateral: [{ description: 'Import/export business assets', marketValue: 15000000 }],
+    status: 'Active', rejectionReason: null, collateral: [{ description: 'Import/export business assets', marketValue: 15000000 }],
     disbursementDate: '2025-10-01', payoutMethod: 'bank_transfer',
     amortizationSchedule: escSchedule, compulsorySavingsAmount: 2000000,
     effectiveInterestRateCalculated: 44.1, disclosureStatementGenerated: true,
@@ -1130,14 +1130,14 @@ function seedData() {
   });
 
   // Business Loan - ACTIVE - Hastings Nkhata
-  var bslSchedule = genAmort(3000000, 3.8, 'monthly', 'declining', '2026-02-01', 12);
+  var bslSchedule = generateAmortization(3000000, 3.8, 'monthly', 'declining', '2026-02-01', 12);
   loans.push({
     id: generateId(), applicationDate: '2026-01-15', clientId: clients[15].id,
     groupId: groups[1].id, clientName: 'Hastings Nkhata',
     productId: products[5].id, productCode: 'BSL', productName: 'Business Loan',
     requestedAmount: 3000000, approvedAmount: 3000000, proposedInterestRate: 3.8,
     effectiveInterestRate: 54.4, totalCostOfCredit: 4150000, interestMethod: 'declining',
-    status: 'ACTIVE', rejectionReason: null, collateral: [{ description: 'Pharmacy inventory and equipment', marketValue: 5000000 }],
+    status: 'Active', rejectionReason: null, collateral: [{ description: 'Pharmacy inventory and equipment', marketValue: 5000000 }],
     disbursementDate: '2026-02-01', payoutMethod: 'mobile_money',
     amortizationSchedule: bslSchedule, compulsorySavingsAmount: 600000,
     effectiveInterestRateCalculated: 54.4, disclosureStatementGenerated: true,
@@ -1153,7 +1153,7 @@ function seedData() {
     productId: products[6].id, productCode: 'ENT', productName: 'Enterprise Loan',
     requestedAmount: 5000000, approvedAmount: null, proposedInterestRate: 3.0,
     effectiveInterestRate: null, totalCostOfCredit: null, interestMethod: 'declining',
-    status: 'DRAFT', rejectionReason: null, collateral: [{ description: 'Fishing boat and equipment', marketValue: 8000000 }],
+    status: 'Draft', rejectionReason: null, collateral: [{ description: 'Fishing boat and equipment', marketValue: 8000000 }],
     disbursementDate: null, payoutMethod: null, amortizationSchedule: [],
     compulsorySavingsAmount: null, effectiveInterestRateCalculated: null,
     disclosureStatementGenerated: false, rbmReportingCategory: 'MICRO_ENTERPRISE',
@@ -1162,14 +1162,14 @@ function seedData() {
   });
 
   // SML - APPROVED - Patuma Salima
-  var sml3Schedule = genAmort(1200000, 4.0, 'monthly', 'declining', '2026-06-15', 6);
+  var sml3Schedule = generateAmortization(1200000, 4.0, 'monthly', 'declining', '2026-06-15', 6);
   loans.push({
     id: generateId(), applicationDate: '2026-05-28', clientId: clients[13].id,
     groupId: groups[2].id, clientName: 'Patuma Salima',
     productId: products[2].id, productCode: 'SML', productName: '6-Month Loan (SML)',
     requestedAmount: 1200000, approvedAmount: 1200000, proposedInterestRate: 4.0,
     effectiveInterestRate: 58.3, totalCostOfCredit: 1480500, interestMethod: 'declining',
-    status: 'APPROVED', rejectionReason: null, collateral: [{ description: 'Salon equipment', marketValue: 1800000 }],
+    status: 'Approved', rejectionReason: null, collateral: [{ description: 'Salon equipment', marketValue: 1800000 }],
     disbursementDate: null, payoutMethod: null, amortizationSchedule: sml3Schedule,
     compulsorySavingsAmount: 240000, effectiveInterestRateCalculated: 58.3,
     disclosureStatementGenerated: true, rbmReportingCategory: 'MEDIUM_TERM',
@@ -1178,14 +1178,14 @@ function seedData() {
   });
 
   // Payday Loan - ACTIVE - Faithful Manda
-  var pdl2Schedule = genAmort(250000, 7.5, 'monthly', 'flat', '2026-04-01', 1);
+  var pdl2Schedule = generateAmortization(250000, 7.5, 'monthly', 'flat', '2026-04-01', 1);
   loans.push({
     id: generateId(), applicationDate: '2026-03-28', clientId: clients[6].id,
     groupId: groups[0].id, clientName: 'Faithful Manda',
     productId: products[0].id, productCode: 'PDL', productName: 'Payday Loan',
     requestedAmount: 250000, approvedAmount: 250000, proposedInterestRate: 7.5,
     effectiveInterestRate: 135.0, totalCostOfCredit: 276250, interestMethod: 'flat',
-    status: 'ACTIVE', rejectionReason: null, collateral: [],
+    status: 'Active', rejectionReason: null, collateral: [],
     disbursementDate: '2026-04-01', payoutMethod: 'mobile_money',
     amortizationSchedule: pdl2Schedule, compulsorySavingsAmount: 50000,
     effectiveInterestRateCalculated: 135.0, disclosureStatementGenerated: true,
@@ -1201,7 +1201,7 @@ function seedData() {
     productId: products[3].id, productCode: 'SSC', productName: 'Special Scheme',
     requestedAmount: 3000000, approvedAmount: null, proposedInterestRate: 3.5,
     effectiveInterestRate: null, totalCostOfCredit: null, interestMethod: 'declining',
-    status: 'DRAFT', rejectionReason: null, collateral: [{ description: 'Fishing nets and boat', marketValue: 4500000 }],
+    status: 'Draft', rejectionReason: null, collateral: [{ description: 'Fishing nets and boat', marketValue: 4500000 }],
     disbursementDate: null, payoutMethod: null, amortizationSchedule: [],
     compulsorySavingsAmount: null, effectiveInterestRateCalculated: null,
     disclosureStatementGenerated: false, rbmReportingCategory: 'MEDIUM_TERM',
@@ -1216,7 +1216,7 @@ function seedData() {
     productId: products[5].id, productCode: 'BSL', productName: 'Business Loan',
     requestedAmount: 2000000, approvedAmount: null, proposedInterestRate: 3.8,
     effectiveInterestRate: null, totalCostOfCredit: null, interestMethod: 'declining',
-    status: 'SUBMITTED', rejectionReason: null, collateral: [{ description: 'Maize produce', marketValue: 3000000 }],
+    status: 'Pending', rejectionReason: null, collateral: [{ description: 'Maize produce', marketValue: 3000000 }],
     disbursementDate: null, payoutMethod: null, amortizationSchedule: [],
     compulsorySavingsAmount: null, effectiveInterestRateCalculated: null,
     disclosureStatementGenerated: false, rbmReportingCategory: 'SMALL_ENTERPRISE',
@@ -1225,14 +1225,14 @@ function seedData() {
   });
 
   // SML - ACTIVE - Mphatso Kalua
-  var sml4Schedule = genAmort(600000, 4.0, 'monthly', 'declining', '2026-03-20', 6);
+  var sml4Schedule = generateAmortization(600000, 4.0, 'monthly', 'declining', '2026-03-20', 6);
   loans.push({
     id: generateId(), applicationDate: '2026-03-10', clientId: clients[8].id,
     groupId: groups[0].id, clientName: 'Mphatso Kalua',
     productId: products[2].id, productCode: 'SML', productName: '6-Month Loan (SML)',
     requestedAmount: 600000, approvedAmount: 600000, proposedInterestRate: 4.0,
     effectiveInterestRate: 58.3, totalCostOfCredit: 730500, interestMethod: 'declining',
-    status: 'ACTIVE', rejectionReason: null, collateral: [{ description: 'Secondhand clothes stock', marketValue: 900000 }],
+    status: 'Active', rejectionReason: null, collateral: [{ description: 'Secondhand clothes stock', marketValue: 900000 }],
     disbursementDate: '2026-03-20', payoutMethod: 'cash',
     amortizationSchedule: sml4Schedule, compulsorySavingsAmount: 120000,
     effectiveInterestRateCalculated: 58.3, disclosureStatementGenerated: true,
@@ -1242,14 +1242,14 @@ function seedData() {
   });
 
   // Enterprise Loan - ACTIVE - Fletcher Gondwe
-  var entSchedule = genAmort(8000000, 3.0, 'monthly', 'declining', '2025-09-01', 18);
+  var entSchedule = generateAmortization(8000000, 3.0, 'monthly', 'declining', '2025-09-01', 18);
   loans.push({
     id: generateId(), applicationDate: '2025-08-15', clientId: clients[17].id,
     groupId: groups[1].id, clientName: 'Fletcher Gondwe',
     productId: products[6].id, productCode: 'ENT', productName: 'Enterprise Loan',
     requestedAmount: 8000000, approvedAmount: 8000000, proposedInterestRate: 3.0,
     effectiveInterestRate: 42.6, totalCostOfCredit: 10880000, interestMethod: 'declining',
-    status: 'ACTIVE', rejectionReason: null, collateral: [{ description: 'Tea plantation (50 acres)', marketValue: 12000000 }],
+    status: 'Active', rejectionReason: null, collateral: [{ description: 'Tea plantation (50 acres)', marketValue: 12000000 }],
     disbursementDate: '2025-09-01', payoutMethod: 'bank_transfer',
     amortizationSchedule: entSchedule, compulsorySavingsAmount: 1600000,
     effectiveInterestRateCalculated: 42.6, disclosureStatementGenerated: true,
@@ -1259,14 +1259,14 @@ function seedData() {
   });
 
   // 3-Month Loan - ACTIVE - Peaceful Kachali
-  var m32Schedule = genAmort(200000, 4.5, 'monthly', 'declining', '2026-04-01', 3);
+  var m32Schedule = generateAmortization(200000, 4.5, 'monthly', 'declining', '2026-04-01', 3);
   loans.push({
     id: generateId(), applicationDate: '2026-03-25', clientId: clients[11].id,
     groupId: groups[2].id, clientName: 'Peaceful Kachali',
     productId: products[1].id, productCode: '3ML', productName: '3-Month Loan',
     requestedAmount: 200000, approvedAmount: 200000, proposedInterestRate: 4.5,
     effectiveInterestRate: 65.3, totalCostOfCredit: 221300, interestMethod: 'declining',
-    status: 'ACTIVE', rejectionReason: null, collateral: [],
+    status: 'Active', rejectionReason: null, collateral: [],
     disbursementDate: '2026-04-01', payoutMethod: 'mobile_money',
     amortizationSchedule: m32Schedule, compulsorySavingsAmount: 40000,
     effectiveInterestRateCalculated: 65.3, disclosureStatementGenerated: true,
@@ -1282,7 +1282,7 @@ function seedData() {
     productId: products[0].id, productCode: 'PDL', productName: 'Payday Loan',
     requestedAmount: 100000, approvedAmount: null, proposedInterestRate: 7.5,
     effectiveInterestRate: null, totalCostOfCredit: null, interestMethod: 'flat',
-    status: 'REJECTED', rejectionReason: 'Insufficient income proof. Business too new.',
+    status: 'Rejected', rejectionReason: 'Insufficient income proof. Business too new.',
     collateral: [], disbursementDate: null, payoutMethod: null, amortizationSchedule: [],
     compulsorySavingsAmount: null, effectiveInterestRateCalculated: null,
     disclosureStatementGenerated: false, rbmReportingCategory: 'SHORT_TERM',
@@ -1291,14 +1291,14 @@ function seedData() {
   });
 
   // Payday Loan - ACTIVE - Golden Moyo (second loan)
-  var pdl4Schedule = genAmort(200000, 7.5, 'monthly', 'flat', '2026-05-01', 1);
+  var pdl4Schedule = generateAmortization(200000, 7.5, 'monthly', 'flat', '2026-05-01', 1);
   loans.push({
     id: generateId(), applicationDate: '2026-04-25', clientId: clients[10].id,
     groupId: groups[2].id, clientName: 'Golden Moyo',
     productId: products[0].id, productCode: 'PDL', productName: 'Payday Loan',
     requestedAmount: 200000, approvedAmount: 200000, proposedInterestRate: 7.5,
     effectiveInterestRate: 135.0, totalCostOfCredit: 241000, interestMethod: 'flat',
-    status: 'ACTIVE', rejectionReason: null, collateral: [],
+    status: 'Active', rejectionReason: null, collateral: [],
     disbursementDate: '2026-05-01', payoutMethod: 'cash',
     amortizationSchedule: pdl4Schedule, compulsorySavingsAmount: 40000,
     effectiveInterestRateCalculated: 135.0, disclosureStatementGenerated: true,
@@ -1314,7 +1314,7 @@ function seedData() {
     productId: products[2].id, productCode: 'SML', productName: '6-Month Loan (SML)',
     requestedAmount: 2000000, approvedAmount: null, proposedInterestRate: 4.0,
     effectiveInterestRate: null, totalCostOfCredit: null, interestMethod: 'declining',
-    status: 'DRAFT', rejectionReason: null, collateral: [{ description: 'Transport vehicles', marketValue: 4000000 }],
+    status: 'Draft', rejectionReason: null, collateral: [{ description: 'Transport vehicles', marketValue: 4000000 }],
     disbursementDate: null, payoutMethod: null, amortizationSchedule: [],
     compulsorySavingsAmount: null, effectiveInterestRateCalculated: null,
     disclosureStatementGenerated: false, rbmReportingCategory: 'MEDIUM_TERM',
@@ -1323,14 +1323,14 @@ function seedData() {
   });
 
   // 3-Month Loan - ACTIVE - Patuma Salima
-  var m33Schedule = genAmort(180000, 4.5, 'monthly', 'declining', '2026-05-01', 3);
+  var m33Schedule = generateAmortization(180000, 4.5, 'monthly', 'declining', '2026-05-01', 3);
   loans.push({
     id: generateId(), applicationDate: '2026-04-20', clientId: clients[13].id,
     groupId: groups[2].id, clientName: 'Patuma Salima',
     productId: products[1].id, productCode: '3ML', productName: '3-Month Loan',
     requestedAmount: 180000, approvedAmount: 180000, proposedInterestRate: 4.5,
     effectiveInterestRate: 65.3, totalCostOfCredit: 210100, interestMethod: 'declining',
-    status: 'ACTIVE', rejectionReason: null, collateral: [],
+    status: 'Active', rejectionReason: null, collateral: [],
     disbursementDate: '2026-05-01', payoutMethod: 'mobile_money',
     amortizationSchedule: m33Schedule, compulsorySavingsAmount: 36000,
     effectiveInterestRateCalculated: 65.3, disclosureStatementGenerated: true,
@@ -1340,14 +1340,14 @@ function seedData() {
   });
 
   // Business Loan - ACTIVE - John Nkhoma
-  var bsl2Schedule = genAmort(1500000, 3.8, 'monthly', 'declining', '2026-04-10', 12);
+  var bsl2Schedule = generateAmortization(1500000, 3.8, 'monthly', 'declining', '2026-04-10', 12);
   loans.push({
     id: generateId(), applicationDate: '2026-03-20', clientId: clients[5].id,
     groupId: groups[0].id, clientName: 'John Nkhoma',
     productId: products[5].id, productCode: 'BSL', productName: 'Business Loan',
     requestedAmount: 1500000, approvedAmount: 1500000, proposedInterestRate: 3.8,
     effectiveInterestRate: 54.4, totalCostOfCredit: 2090000, interestMethod: 'declining',
-    status: 'ACTIVE', rejectionReason: null, collateral: [{ description: 'Transport business (minibuses)', marketValue: 3000000 }],
+    status: 'Active', rejectionReason: null, collateral: [{ description: 'Transport business (minibuses)', marketValue: 3000000 }],
     disbursementDate: '2026-04-10', payoutMethod: 'bank_transfer',
     amortizationSchedule: bsl2Schedule, compulsorySavingsAmount: 300000,
     effectiveInterestRateCalculated: 54.4, disclosureStatementGenerated: true,
@@ -1357,14 +1357,14 @@ function seedData() {
   });
 
   // Executive Scheme - APPROVED - Agnes Kamanga
-  var esc2Schedule = genAmort(8000000, 3.2, 'monthly', 'declining', '2026-07-01', 12);
+  var esc2Schedule = generateAmortization(8000000, 3.2, 'monthly', 'declining', '2026-07-01', 12);
   loans.push({
     id: generateId(), applicationDate: '2026-05-15', clientId: clients[4].id,
     groupId: groups[0].id, clientName: 'Agnes Kamanga',
     productId: products[4].id, productCode: 'ESC', productName: 'Executive Scheme',
     requestedAmount: 8000000, approvedAmount: 8000000, proposedInterestRate: 3.2,
     effectiveInterestRate: 44.1, totalCostOfCredit: 10880000, interestMethod: 'declining',
-    status: 'APPROVED', rejectionReason: null, collateral: [{ description: 'Real estate investment', marketValue: 12000000 }],
+    status: 'Approved', rejectionReason: null, collateral: [{ description: 'Real estate investment', marketValue: 12000000 }],
     disbursementDate: null, payoutMethod: null, amortizationSchedule: esc2Schedule,
     compulsorySavingsAmount: 1600000, effectiveInterestRateCalculated: 44.1,
     disclosureStatementGenerated: true, rbmReportingCategory: 'LONG_TERM',
@@ -1373,14 +1373,14 @@ function seedData() {
   });
 
   // Special Scheme - ACTIVE - Tiyamike Kachali
-  var ssc2Schedule = genAmort(4000000, 3.5, 'monthly', 'declining', '2026-01-10', 10);
+  var ssc2Schedule = generateAmortization(4000000, 3.5, 'monthly', 'declining', '2026-01-10', 10);
   loans.push({
     id: generateId(), applicationDate: '2025-12-20', clientId: clients[19].id,
     groupId: null, clientName: 'Tiyamike Kachali',
     productId: products[3].id, productCode: 'SSC', productName: 'Special Scheme',
     requestedAmount: 4000000, approvedAmount: 4000000, proposedInterestRate: 3.5,
     effectiveInterestRate: 48.2, totalCostOfCredit: 5700000, interestMethod: 'declining',
-    status: 'ACTIVE', rejectionReason: null, collateral: [{ description: 'Commercial building', marketValue: 6000000 }],
+    status: 'Active', rejectionReason: null, collateral: [{ description: 'Commercial building', marketValue: 6000000 }],
     disbursementDate: '2026-01-10', payoutMethod: 'bank_transfer',
     amortizationSchedule: ssc2Schedule, compulsorySavingsAmount: 800000,
     effectiveInterestRateCalculated: 48.2, disclosureStatementGenerated: true,
@@ -1390,14 +1390,14 @@ function seedData() {
   });
 
   // SML - ACTIVE - Samuel Nkhoma
-  var sml5Schedule = genAmort(900000, 4.0, 'monthly', 'declining', '2026-05-10', 6);
+  var sml5Schedule = generateAmortization(900000, 4.0, 'monthly', 'declining', '2026-05-10', 6);
   loans.push({
     id: generateId(), applicationDate: '2026-04-30', clientId: clients[19].id,
     groupId: null, clientName: 'Samuel Nkhoma',
     productId: products[2].id, productCode: 'SML', productName: '6-Month Loan (SML)',
     requestedAmount: 900000, approvedAmount: 900000, proposedInterestRate: 4.0,
     effectiveInterestRate: 58.3, totalCostOfCredit: 1086000, interestMethod: 'declining',
-    status: 'ACTIVE', rejectionReason: null, collateral: [{ description: 'General merchandise stock', marketValue: 1500000 }],
+    status: 'Active', rejectionReason: null, collateral: [{ description: 'General merchandise stock', marketValue: 1500000 }],
     disbursementDate: '2026-05-10', payoutMethod: 'mobile_money',
     amortizationSchedule: sml5Schedule, compulsorySavingsAmount: 180000,
     effectiveInterestRateCalculated: 58.3, disclosureStatementGenerated: true,
@@ -1407,14 +1407,14 @@ function seedData() {
   });
 
   // Payday Loan - ACTIVE - Norman Kapito
-  var pdl5Schedule = genAmort(100000, 7.5, 'monthly', 'flat', '2026-06-01', 1);
+  var pdl5Schedule = generateAmortization(100000, 7.5, 'monthly', 'flat', '2026-06-01', 1);
   loans.push({
     id: generateId(), applicationDate: '2026-05-25', clientId: clients[14].id,
     groupId: groups[2].id, clientName: 'Norman Kapito',
     productId: products[0].id, productCode: 'PDL', productName: 'Payday Loan',
     requestedAmount: 100000, approvedAmount: 100000, proposedInterestRate: 7.5,
     effectiveInterestRate: 135.0, totalCostOfCredit: 112000, interestMethod: 'flat',
-    status: 'ACTIVE', rejectionReason: null, collateral: [],
+    status: 'Active', rejectionReason: null, collateral: [],
     disbursementDate: '2026-06-01', payoutMethod: 'cash',
     amortizationSchedule: pdl5Schedule, compulsorySavingsAmount: 20000,
     effectiveInterestRateCalculated: 135.0, disclosureStatementGenerated: true,
@@ -1424,14 +1424,14 @@ function seedData() {
   });
 
   // 3-Month Loan - ACTIVE - Peter Mwale
-  var m34Schedule = genAmort(400000, 4.5, 'monthly', 'declining', '2026-03-01', 3);
+  var m34Schedule = generateAmortization(400000, 4.5, 'monthly', 'declining', '2026-03-01', 3);
   loans.push({
     id: generateId(), applicationDate: '2026-02-15', clientId: clients[3].id,
     groupId: groups[0].id, clientName: 'Peter Mwale',
     productId: products[1].id, productCode: '3ML', productName: '3-Month Loan',
     requestedAmount: 400000, approvedAmount: 400000, proposedInterestRate: 4.5,
     effectiveInterestRate: 65.3, totalCostOfCredit: 462400, interestMethod: 'declining',
-    status: 'ACTIVE', rejectionReason: null, collateral: [{ description: 'Rice stock', marketValue: 600000 }],
+    status: 'Active', rejectionReason: null, collateral: [{ description: 'Rice stock', marketValue: 600000 }],
     disbursementDate: '2026-03-01', payoutMethod: 'mobile_money',
     amortizationSchedule: m34Schedule, compulsorySavingsAmount: 80000,
     effectiveInterestRateCalculated: 65.3, disclosureStatementGenerated: true,
@@ -1447,7 +1447,7 @@ function seedData() {
     productId: products[0].id, productCode: 'PDL', productName: 'Payday Loan',
     requestedAmount: 500000, approvedAmount: null, proposedInterestRate: 7.5,
     effectiveInterestRate: null, totalCostOfCredit: null, interestMethod: 'flat',
-    status: 'REJECTED', rejectionReason: 'Existing active loan balance too high.',
+    status: 'Rejected', rejectionReason: 'Existing active loan balance too high.',
     collateral: [], disbursementDate: null, payoutMethod: null, amortizationSchedule: [],
     compulsorySavingsAmount: null, effectiveInterestRateCalculated: null,
     disclosureStatementGenerated: false, rbmReportingCategory: 'SHORT_TERM',
@@ -1456,14 +1456,14 @@ function seedData() {
   });
 
   // Enterprise Loan - ACTIVE - Chimwemwe Jere
-  var ent2Schedule = genAmort(6000000, 3.0, 'monthly', 'declining', '2026-01-01', 18);
+  var ent2Schedule = generateAmortization(6000000, 3.0, 'monthly', 'declining', '2026-01-01', 18);
   loans.push({
     id: generateId(), applicationDate: '2025-12-10', clientId: clients[16].id,
     groupId: groups[1].id, clientName: 'Chimwemwe Jere',
     productId: products[6].id, productCode: 'ENT', productName: 'Enterprise Loan',
     requestedAmount: 6000000, approvedAmount: 6000000, proposedInterestRate: 3.0,
     effectiveInterestRate: 42.6, totalCostOfCredit: 8128000, interestMethod: 'declining',
-    status: 'ACTIVE', rejectionReason: null, collateral: [{ description: 'Fishing fleet (10 boats)', marketValue: 10000000 }],
+    status: 'Active', rejectionReason: null, collateral: [{ description: 'Fishing fleet (10 boats)', marketValue: 10000000 }],
     disbursementDate: '2026-01-01', payoutMethod: 'bank_transfer',
     amortizationSchedule: ent2Schedule, compulsorySavingsAmount: 1200000,
     effectiveInterestRateCalculated: 42.6, disclosureStatementGenerated: true,
@@ -1482,25 +1482,25 @@ function seedData() {
       id: generateId(), productCode: 'SAV-COMP', productName: 'Compulsory Savings', productType: 'COMPULSORY',
       interestRate: 2.0, interestCalculationMethod: 'DAILY_BALANCE', minimumBalance: 5000,
       minimumOpeningAmount: 0, withdrawalRestrictions: JSON.stringify(['Withdrawable only on loan closure']),
-      maturityMonths: null, status: 'ACTIVE', createdAt: now, updatedAt: now
+      maturityMonths: null, status: 'Active', createdAt: now, updatedAt: now
     },
     {
       id: generateId(), productCode: 'SAV-REC', productName: 'Recurring Deposit', productType: 'RECURRING',
       interestRate: 4.0, interestCalculationMethod: 'DAILY_BALANCE', minimumBalance: 5000,
       minimumOpeningAmount: 1000, withdrawalRestrictions: JSON.stringify(['Monthly withdrawal', 'Minimum balance MWK 5,000']),
-      maturityMonths: null, status: 'ACTIVE', createdAt: now, updatedAt: now
+      maturityMonths: null, status: 'Active', createdAt: now, updatedAt: now
     },
     {
       id: generateId(), productCode: 'SAV-FIX', productName: 'Fixed Deposit', productType: 'FIXED',
       interestRate: 6.0, interestCalculationMethod: 'DAILY_BALANCE', minimumBalance: 50000,
       minimumOpeningAmount: 50000, withdrawalRestrictions: JSON.stringify(['No withdrawal until maturity']),
-      maturityMonths: 12, status: 'ACTIVE', createdAt: now, updatedAt: now
+      maturityMonths: 12, status: 'Active', createdAt: now, updatedAt: now
     },
     {
       id: generateId(), productCode: 'SAV-VOL', productName: 'Voluntary Savings', productType: 'VOLUNTARY',
       interestRate: 2.0, interestCalculationMethod: 'DAILY_BALANCE', minimumBalance: 500,
       minimumOpeningAmount: 500, withdrawalRestrictions: JSON.stringify(['Anytime, no restrictions']),
-      maturityMonths: null, status: 'ACTIVE', createdAt: now, updatedAt: now
+      maturityMonths: null, status: 'Active', createdAt: now, updatedAt: now
     }
   ];
   setCollection(StorageKeys.SAVINGS_PRODUCTS, savingsProducts);
@@ -1511,12 +1511,22 @@ function seedData() {
   var savingsAccounts = [];
   var savingsBalances = [30000, 45000, 20000, 60000, 80000, 15000, 25000, 100000, 35000, 40000, 55000, 70000, 28000, 90000, 120000, 38000, 52000, 65000, 15000, 200000];
   for (var si = 0; si < clients.length; si++) {
+    var accNum = 'SAV-' + String(si + 1).padStart(6, '0');
     savingsAccounts.push({
-      id: generateId(), clientId: clients[si].id, clientName: clients[si].fullName,
-      productId: savingsProducts[3].id, productCode: 'SAV-VOL',
-      balance: savingsBalances[si], status: 'ACTIVE',
+      id: generateId(),
+      accountNumber: accNum,
+      accountHolder: clients[si].fullName,
+      clientId: clients[si].id,
+      clientName: clients[si].fullName,
+      productId: savingsProducts[1].id, // Recurring
+      productCode: 'SAV-REC',
+      branchId: clients[si].branchId,
+      balance: savingsBalances[si],
+      status: 'Active',
       openedDate: '2025-' + String(Math.floor(Math.random() * 12) + 1).padStart(2, '0') + '-01',
-      lastInterestPosted: now, createdAt: now, updatedAt: now
+      lastInterestPosted: now,
+      createdAt: now,
+      updatedAt: now
     });
   }
   setCollection(StorageKeys.SAVINGS_ACCOUNTS, savingsAccounts);
@@ -1559,7 +1569,7 @@ function seedData() {
   // 11. COLLECTION RECORDS
   // ========================================
   var collections = [];
-  var activeLoanClients = loans.filter(function(l) { return l.status === 'ACTIVE'; });
+  var activeLoanClients = loans.filter(function(l) { return l.status === 'Active'; });
   for (var ci = 0; ci < 25; ci++) {
     var al = activeLoanClients[ci % activeLoanClients.length];
     var amt = Math.floor(al.approvedAmount * 0.05) + (ci * 5000);
@@ -1592,12 +1602,12 @@ function seedData() {
   // 13. SMS TEMPLATES
   // ========================================
   var smsTemplates = [
-    { id: 'TMPL_DISBURSE', name: 'Loan Disbursed', triggerEvent: 'loan_disbursed', template: 'Saile Financial Services: Your [PRODUCT] of MWK [AMOUNT] has been disbursed. First payment of MWK [PAYMENT] due on [DATE]. Account: [ACCOUNT]', status: 'active', createdAt: now, updatedAt: now },
-    { id: 'TMPL_DUE_REMIND', name: 'Payment Due Reminder (3 days)', triggerEvent: 'payment_due_3days', template: 'Reminder: Your loan payment of MWK [AMOUNT] is due on [DATE]. Please pay at any Saile branch or via Airtel Money/TNM Mpamba.', status: 'active', createdAt: now, updatedAt: now },
-    { id: 'TMPL_PAYMENT_RCVD', name: 'Payment Received', triggerEvent: 'payment_received', template: 'Thank you! Payment of MWK [AMOUNT] received. Outstanding balance: MWK [BALANCE]. Next due: [DATE].', status: 'active', createdAt: now, updatedAt: now },
-    { id: 'TMPL_OVERDUE', name: 'Payment Overdue', triggerEvent: 'payment_overdue', template: 'URGENT: Your loan payment of MWK [AMOUNT] was due yesterday. Please pay immediately to avoid penalties.', status: 'active', createdAt: now, updatedAt: now },
-    { id: 'TMPL_PAR_ALERT', name: 'PAR Alert to Branch Manager', triggerEvent: 'par_threshold', template: 'ALERT: Branch [BRANCH] PAR 30 is now [PERCENT]%. Loans: [COUNT]. Please review immediately.', status: 'active', createdAt: now, updatedAt: now },
-    { id: 'TMPL_MONTHLY_SUMMARY', name: 'Monthly Portfolio Summary (MD)', triggerEvent: 'monthly_summary', template: 'Saile Monthly Summary: Portfolio MWK [PORTFOLIO], Clients [CLIENTS], Disbursements MWK [DISBURSED], Collections MWK [COLLECTED], PAR 30: [PAR30]%', status: 'active', createdAt: now, updatedAt: now }
+    { id: 'TMPL_DISBURSE', name: 'Loan Disbursed', triggerEvent: 'loan_disbursed', template: 'Saile Financial Services: Your [PRODUCT] of MWK [AMOUNT] has been disbursed. First payment of MWK [PAYMENT] due on [DATE]. Account: [ACCOUNT]', status: 'Active', createdAt: now, updatedAt: now },
+    { id: 'TMPL_DUE_REMIND', name: 'Payment Due Reminder (3 days)', triggerEvent: 'payment_due_3days', template: 'Reminder: Your loan payment of MWK [AMOUNT] is due on [DATE]. Please pay at any Saile branch or via Airtel Money/TNM Mpamba.', status: 'Active', createdAt: now, updatedAt: now },
+    { id: 'TMPL_PAYMENT_RCVD', name: 'Payment Received', triggerEvent: 'payment_received', template: 'Thank you! Payment of MWK [AMOUNT] received. Outstanding balance: MWK [BALANCE]. Next due: [DATE].', status: 'Active', createdAt: now, updatedAt: now },
+    { id: 'TMPL_OVERDUE', name: 'Payment Overdue', triggerEvent: 'payment_overdue', template: 'URGENT: Your loan payment of MWK [AMOUNT] was due yesterday. Please pay immediately to avoid penalties.', status: 'Active', createdAt: now, updatedAt: now },
+    { id: 'TMPL_PAR_ALERT', name: 'PAR Alert to Branch Manager', triggerEvent: 'par_threshold', template: 'ALERT: Branch [BRANCH] PAR 30 is now [PERCENT]%. Loans: [COUNT]. Please review immediately.', status: 'Active', createdAt: now, updatedAt: now },
+    { id: 'TMPL_MONTHLY_SUMMARY', name: 'Monthly Portfolio Summary (MD)', triggerEvent: 'monthly_summary', template: 'Saile Monthly Summary: Portfolio MWK [PORTFOLIO], Clients [CLIENTS], Disbursements MWK [DISBURSED], Collections MWK [COLLECTED], PAR 30: [PAR30]%', status: 'Active', createdAt: now, updatedAt: now }
   ];
   setCollection(StorageKeys.SMS_TEMPLATES, smsTemplates);
 
@@ -1605,8 +1615,8 @@ function seedData() {
   // 14. SMS LOGS
   // ========================================
   var smsLogs = [
-    { id: generateId(), recipientPhone: '+265991234567', recipientName: 'Grace Banda', templateCode: 'TMPL_DISBURSE', messageContent: 'Saile Financial Services: Your Payday Loan of MWK 150,000 has been disbursed. First payment of MWK 161,250 due on 2026-06-15. Account: ACC-001', triggerEvent: 'loan_disbursed', status: 'DELIVERED', sentAt: '2026-05-15T10:30:00.000Z', deliveredAt: '2026-05-15T10:30:15.000Z', error: null, branchId: branches[0].id, createdAt: now },
-    { id: generateId(), recipientPhone: '+265993456789', recipientName: 'Mary Chirwa', templateCode: 'TMPL_DUE_REMIND', messageContent: 'Reminder: Your loan payment of MWK 106,850 is due on 2026-06-10. Please pay at any Saile branch or via Airtel Money/TNM Mpamba.', triggerEvent: 'payment_due_3days', status: 'DELIVERED', sentAt: '2026-06-07T09:00:00.000Z', deliveredAt: '2026-06-07T09:00:12.000Z', error: null, branchId: branches[3].id, createdAt: now }
+    { id: generateId(), recipientPhone: '+265991234567', recipientName: 'Grace Banda', templateCode: 'TMPL_DISBURSE', messageContent: 'Saile Financial Services: Your Payday Loan of MWK 150,000 has been disbursed. First payment of MWK 161,250 due on 2026-06-15. Account: ACC-001', triggerEvent: 'loan_disbursed', status: 'Delivered', sentAt: '2026-05-15T10:30:00.000Z', deliveredAt: '2026-05-15T10:30:15.000Z', error: null, branchId: branches[0].id, createdAt: now },
+    { id: generateId(), recipientPhone: '+265993456789', recipientName: 'Mary Chirwa', templateCode: 'TMPL_DUE_REMIND', messageContent: 'Reminder: Your loan payment of MWK 106,850 is due on 2026-06-10. Please pay at any Saile branch or via Airtel Money/TNM Mpamba.', triggerEvent: 'payment_due_3days', status: 'Delivered', sentAt: '2026-06-07T09:00:00.000Z', deliveredAt: '2026-06-07T09:00:12.000Z', error: null, branchId: branches[3].id, createdAt: now }
   ];
   setCollection(StorageKeys.SMS_LOGS, smsLogs);
 
@@ -1615,7 +1625,7 @@ function seedData() {
   // ========================================
   var totalPortfolio = 0, totalProvision = 0;
   loans.forEach(function(l) {
-    if (l.status === 'ACTIVE' && l.approvedAmount) { totalPortfolio += l.approvedAmount; }
+    if (l.status === 'Active' && l.approvedAmount) { totalPortfolio += l.approvedAmount; }
   });
 
   var parSnapshots = [

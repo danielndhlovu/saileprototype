@@ -81,7 +81,7 @@ function renderAudit(container, options) {
         html += '<tr class="border-b border-[#d1d5db] hover:bg-[#f4f4f5]">';
         html += '<td class="px-4 py-3 text-[#6b7280] whitespace-nowrap">' + formatDateTime(entry.timestamp) + '</td>';
         html += '<td class="px-4 py-3 font-medium text-[#0f766e]">' + escapeHtml(entry.user) + '</td>';
-        html += '<td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs font-medium bg-sky-50 text-sky-700">' + escapeHtml(entry.role) + '</span></td>';
+        html += '<td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs font-medium bg-[#f0f9ff] text-[#0369a1]">' + escapeHtml(entry.role) + '</span></td>';
         html += '<td class="px-4 py-3">' + escapeHtml(entry.action) + '</td>';
         html += '<td class="px-4 py-3 text-[#6b7280] hidden md:table-cell">' + escapeHtml(entry.module || '-') + '</td>';
         html += '<td class="px-4 py-3 text-[#6b7280] hidden lg:table-cell text-xs max-w-[200px] truncate">';

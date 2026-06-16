@@ -59,7 +59,7 @@ function renderTopBar(session, branchName) {
       '<div class="w-9 h-9 rounded-lg bg-[#f4f4f5] border border-[#d1d5db] flex items-center justify-center">' +
         '<svg class="w-5 h-5 text-[#0f766e]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L3 7v10l9 5 9-5V7l-9-5zm0 2.18l6.5 3.64v7.36L12 18.82l-6.5-3.64V7.82L12 4.18z"/></svg>' +
       '</div>' +
-      '<button class="bg-[#f4f4f5] border border-[#d1d5db] rounded-lg px-3 py-1.5 text-sm text-[#6b7280] hover:bg-[#d1d5db] transition-colors hidden md:flex items-center gap-1.5">' +
+      '<button id="topbar-search-btn" class="bg-[#f4f4f5] border border-[#d1d5db] rounded-lg px-3 py-1.5 text-sm text-[#6b7280] hover:bg-[#d1d5db] transition-colors hidden md:flex items-center gap-1.5">' +
         '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>' +
         '<span>Search</span>' +
       '</button>' +
@@ -104,13 +104,138 @@ function renderTopBar(session, branchName) {
     logoutBtnMobile.addEventListener('click', function() { destroySession(); });
   }
 
-  // Create button action (navigate to clients for now)
+  // Create button action
   var createBtn = document.getElementById('topbar-create-btn');
   if (createBtn) {
-    createBtn.addEventListener('click', function() {
-      window.location.hash = '#/clients';
+    createBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      showCreateDropdown(this);
     });
   }
+
+  // Search button
+  var searchBtn = document.getElementById('topbar-search-btn');
+  if (searchBtn) {
+    searchBtn.addEventListener('click', function() {
+      showSearchOverlay();
+    });
+  }
+}
+
+/**
+ * Show a dropdown for quick create actions.
+ */
+function showCreateDropdown(anchor) {
+  const existing = document.getElementById('create-dropdown');
+  if (existing) {
+    existing.remove();
+    return;
+  }
+
+  const dropdown = document.createElement('div');
+  dropdown.id = 'create-dropdown';
+  dropdown.className = 'fixed mt-2 w-48 bg-white rounded-xl shadow-xl border border-[#d1d5db] z-[60] overflow-hidden py-1';
+
+  const rect = anchor.getBoundingClientRect();
+  dropdown.style.top = rect.bottom + 'px';
+  dropdown.style.left = (rect.right - 192) + 'px';
+
+  const actions = [
+    { label: 'New Client', route: '#/clients' },
+    { label: 'New Loan', route: '#/loans' },
+    { label: 'Record Collection', route: '#/collections' },
+    { label: 'Open Savings', route: '#/savings' }
+  ];
+
+  actions.forEach(action => {
+    const item = document.createElement('button');
+    item.className = 'w-full text-left px-4 py-2 text-sm text-[#0f766e] hover:bg-[#f4f4f5] transition-colors';
+    item.textContent = action.label;
+    item.onclick = () => {
+      window.location.hash = action.route;
+      dropdown.remove();
+    };
+    dropdown.appendChild(item);
+  });
+
+  document.body.appendChild(dropdown);
+
+  const closeDropdown = (e) => {
+    if (!dropdown.contains(e.target) && e.target !== anchor) {
+      dropdown.remove();
+      document.removeEventListener('click', closeDropdown);
+    }
+  };
+  setTimeout(() => document.addEventListener('click', closeDropdown), 0);
+}
+
+/**
+ * Show a global search overlay.
+ */
+function showSearchOverlay() {
+  const overlay = document.createElement('div');
+  overlay.className = 'fixed inset-0 bg-black/50 z-[10000] flex items-start justify-center pt-20 px-4';
+  overlay.innerHTML = `
+    <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden">
+      <div class="p-4 border-b border-[#d1d5db] flex items-center gap-3">
+        <svg class="w-5 h-5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input type="text" id="global-search-input" class="flex-1 outline-none text-lg text-[#0f766e]" placeholder="Search clients, loans, accounts..." autofocus>
+        <kbd class="text-xs text-[#6b7280] bg-[#f4f4f5] px-1.5 py-0.5 rounded border border-[#d1d5db]">ESC</kbd>
+      </div>
+      <div id="search-results" class="max-h-[60vh] overflow-y-auto p-2">
+        <p class="text-center py-8 text-[#6b7280] text-sm">Start typing to search across Saile platform...</p>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+  const input = overlay.querySelector('#global-search-input');
+  const results = overlay.querySelector('#search-results');
+
+  const close = () => {
+    overlay.remove();
+    document.removeEventListener('keydown', handleEsc);
+  };
+
+  const handleEsc = (e) => { if (e.key === 'Escape') close(); };
+  document.addEventListener('keydown', handleEsc);
+  overlay.onclick = (e) => { if (e.target === overlay) close(); };
+
+  input.addEventListener('input', debounce(() => {
+    const q = input.value.trim().toLowerCase();
+    if (!q) {
+      results.innerHTML = '<p class="text-center py-8 text-[#6b7280] text-sm">Start typing to search...</p>';
+      return;
+    }
+
+    const clients = getCollection(StorageKeys.CLIENTS).filter(c => c.fullName.toLowerCase().includes(q) || c.nationalId.toLowerCase().includes(q));
+    const loans = getCollection(StorageKeys.LOANS).filter(l => l.clientName.toLowerCase().includes(q) || (l.productCode && l.productCode.toLowerCase().includes(q)));
+
+    let html = '';
+    if (clients.length) {
+      html += '<h4 class="text-xs font-bold text-[#6b7280] uppercase px-3 py-2">Clients</h4>';
+      clients.forEach(c => {
+        html += `<button class="w-full text-left p-3 rounded-xl hover:bg-[#f4f4f5] group transition-colors" onclick="window.location.hash='#/clients'; document.querySelector('.fixed.inset-0').remove()">
+          <p class="font-medium text-[#0f766e]">${escapeHtml(c.fullName)}</p>
+          <p class="text-xs text-[#6b7280]">${escapeHtml(c.nationalId)}</p>
+        </button>`;
+      });
+    }
+    if (loans.length) {
+      html += '<h4 class="text-xs font-bold text-[#6b7280] uppercase px-3 py-2 mt-2">Loans</h4>';
+      loans.forEach(l => {
+        html += `<button class="w-full text-left p-3 rounded-xl hover:bg-[#f4f4f5] group transition-colors" onclick="window.location.hash='#/loans'; document.querySelector('.fixed.inset-0').remove()">
+          <p class="font-medium text-[#0f766e]">${escapeHtml(l.clientName)}</p>
+          <p class="text-xs text-[#6b7280]">${escapeHtml(l.productName)} — ${formatCurrency(l.requestedAmount)}</p>
+        </button>`;
+      });
+    }
+
+    if (!html) {
+      html = '<p class="text-center py-8 text-[#6b7280] text-sm">No results found for "' + escapeHtml(q) + '"</p>';
+    }
+    results.innerHTML = html;
+  }, 300));
 }
 
 /**
@@ -401,5 +526,15 @@ function startClock() {
 }
 
 // Expose on window
+/**
+ * Global navigation function to change application state via hash.
+ * Used by onclick attributes in dashboard and other screens.
+ * @param {string} hash - The destination hash (e.g. "#/loans")
+ */
+function navigateTo(hash) {
+  window.location.hash = hash;
+}
+
+window.navigateTo = navigateTo;
 window.renderNavigation = renderNavigation;
 window.NAV_ICONS = NAV_ICONS;

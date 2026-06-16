@@ -29,7 +29,7 @@ function renderCollections(container, options) {
     var html = '<div class="space-y-6">';
     html += '<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">';
     html += '<div>';
-    html += '<h1 class="text-lg font-semibold text-[#0f766e">Saile Collections</h1>';
+    html += '<h1 class="text-lg font-semibold text-[#0f766e]">Saile Collections</h1>';
     html += '<p class="text-sm text-[#6b7280]">' + collections.length + ' records today</p>';
     html += '</div>';
     if (!readOnly) {
@@ -65,7 +65,7 @@ function renderCollections(container, options) {
     }
     for (var j = 0; j < filtered.length; j++) {
       var col = filtered[j];
-      var syncBadge = col.synced ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700';
+      var syncBadge = col.synced ? 'bg-[#f0fdf4] text-[#0f766e]' : 'bg-[#fffbeb] text-[#92400e]';
       var syncText = col.synced ? 'Synced' : 'Pending';
 
       html += '<div class="bg-white rounded-2xl border border-[#d1d5db] p-4">';
@@ -82,7 +82,7 @@ function renderCollections(container, options) {
       html += '<span>' + escapeHtml(col.paymentMode) + '</span>';
       html += '<span>' + formatDateTime(col.collectedAt) + '</span>';
       if (col.penaltyApplied > 0) {
-        html += '<span class="text-red-600">Penalty: ' + formatCurrency(col.penaltyApplied) + '</span>';
+        html += '<span class="text-[#dc2626]">Penalty: ' + formatCurrency(col.penaltyApplied) + '</span>';
       }
       html += '</div></div>';
     }
@@ -216,8 +216,8 @@ function showReceiptModal(collection) {
   modal.className = 'fixed inset-0 z-[10000] flex items-center justify-center bg-black/50';
   modal.innerHTML = '<div class="bg-white rounded-2xl p-6 max-w-sm w-full mx-4 shadow-xl">' +
     '<div class="text-center mb-4">' +
-      '<div class="w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-3">' +
-        '<svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>' +
+      '<div class="w-12 h-12 bg-[#f0fdf4] rounded-full flex items-center justify-center mx-auto mb-3">' +
+        '<svg class="w-6 h-6 text-[#059669]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>' +
       '</div>' +
       '<h3 class="text-lg font-semibold text-[#0f766e]">Payment Receipt</h3>' +
     '</div>' +
