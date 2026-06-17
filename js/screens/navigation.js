@@ -298,19 +298,33 @@ function showModulesDropdown(anchor, role) {
   const navItems = getNavigationItems(role);
   const dropdown = document.createElement('div');
   dropdown.id = 'modules-dropdown';
-  dropdown.className = 'fixed mt-2 w-56 bg-white rounded-xl shadow-xl border border-[#d1d5db] z-[60] overflow-y-auto py-1 max-h-[80vh]';
+  dropdown.className = 'fixed mt-2 w-64 bg-white rounded-xl shadow-xl border border-[#d1d5db] z-[60] overflow-y-auto py-1 max-h-[80vh]';
 
   const rect = anchor.getBoundingClientRect();
   dropdown.style.top = rect.bottom + 'px';
   dropdown.style.left = rect.left + 'px';
 
   navItems.forEach(item => {
+    if (item.divider) {
+      const divider = document.createElement('div');
+      divider.className = 'my-1 border-t border-gray-100';
+      dropdown.appendChild(divider);
+      return;
+    }
+
     const btn = document.createElement('button');
-    btn.className = 'w-full text-left px-4 py-2.5 text-sm text-[#6b7280] hover:bg-[#f4f4f5] transition-colors flex items-center gap-3';
-    btn.innerHTML = '<span class="text-[#0f766e]">' + (NAV_ICONS[item.icon] || '') + '</span>' +
-                    '<span class="font-medium">' + item.label + '</span>';
+    btn.className = 'w-full text-left px-4 py-2.5 text-sm text-[#6b7280] hover:bg-[#f4f4f5] transition-colors flex items-center gap-3 group relative';
+
+    let innerHTML = '<span class="text-[#0f766e] group-hover:scale-110 transition-transform">' + (NAV_ICONS[item.icon] || '') + '</span>' +
+                    '<span class="font-medium flex-1">' + item.label + '</span>';
+
+    if (item.badge) {
+      innerHTML += '<span class="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">' + item.badge + '</span>';
+    }
+
+    btn.innerHTML = innerHTML;
     btn.onclick = () => {
-      window.location.hash = item.route;
+      navigateTo(item.route);
       dropdown.remove();
     };
     dropdown.appendChild(btn);
@@ -650,12 +664,40 @@ function startClock() {
 
 // Expose on window
 /**
- * Global navigation function to change application state via hash.
+ * Global navigation function to change application state via hash or action.
  * Used by onclick attributes in dashboard and other screens.
- * @param {string} hash - The destination hash (e.g. "#/loans")
+ * @param {string} target - The destination hash (e.g. "#/loans") or action (e.g. "scroll:id")
  */
-function navigateTo(hash) {
-  window.location.hash = hash;
+function navigateTo(target) {
+  if (!target) return;
+
+  if (target.startsWith('#')) {
+    window.location.hash = target;
+  } else if (target.startsWith('scroll:')) {
+    const id = target.split(':')[1];
+    if (window.location.hash !== '#/dashboard') {
+       window.location.hash = '#/dashboard';
+       // Wait for dashboard to render
+       setTimeout(() => {
+         const el = document.getElementById(id);
+         if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+       }, 500);
+    } else {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  } else if (target.startsWith('action:')) {
+    const action = target.split(':')[1];
+    // Custom action handling
+    console.log('Performing action:', action);
+    if (action === 'pending-approvals') {
+      window.location.hash = '#/loans?status=Pending';
+    } else if (action === 'alerts') {
+      const btn = document.getElementById('topbar-notif-btn');
+      if (btn) btn.click();
+    }
+    // Add more action handlers as needed for the prototype
+  }
 }
 
 window.navigateTo = navigateTo;

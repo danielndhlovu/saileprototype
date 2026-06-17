@@ -40,6 +40,73 @@ var ROLE_PERMISSIONS = {
 };
 
 /**
+ * Role-specific navigation mapping based on screenshots.
+ * Items can have:
+ * - label: Text to display
+ * - icon: Icon key from NAV_ICONS
+ * - route: URL hash or action string (scroll:id, action:id)
+ * - badge: Number to display in red circle
+ */
+var ROLE_NAV_CONFIG = {
+  md: [
+    { label: 'Executive Dashboard', icon: 'home', route: '#/dashboard' },
+    { label: 'Analytics', icon: 'chart', route: 'scroll:portfolio' },
+    { label: 'Branch Scorecard', icon: 'home', route: 'scroll:branches' },
+    { label: 'Product Mix', icon: 'document', route: 'scroll:products' },
+    { label: 'Financial Performance', icon: 'money', route: 'scroll:financial' },
+    { label: 'Operational Efficiency', icon: 'refresh', route: 'scroll:efficiency' },
+    { label: 'Compliance', icon: 'clipboard', route: 'scroll:compliance' },
+    { label: 'Scenario Modeling', icon: 'calculator', route: 'scroll:scenarios' },
+    { divider: true },
+    { label: 'Alerts', icon: 'calendar', route: 'scroll:brief', badge: 4 },
+    { label: 'Approve Loans', icon: 'money', route: 'action:pending-approvals', badge: 4 },
+    { label: 'Board Report', icon: 'report', route: 'action:full-pl' },
+    { label: 'Help', icon: 'gear', route: '#/settings' }
+  ],
+  auditor: [
+    { label: 'Anomaly Detection', icon: 'clipboard', route: 'scroll:view-audit' },
+    { label: 'Audit Dashboard', icon: 'home', route: '#/dashboard' },
+    { label: 'Audit Trail', icon: 'report', route: '#/audit' },
+    { label: 'Spot Checks', icon: 'clipboard', route: 'scroll:compliance' },
+    { label: 'Risk Heatmap', icon: 'chart', route: 'scroll:heatmap' },
+    { divider: true },
+    { label: 'Alerts', icon: 'calendar', route: 'action:alerts' },
+    { label: 'Generate Report', icon: 'document', route: 'action:generate-audit-report' },
+    { label: 'Help', icon: 'gear', route: '#/settings' }
+  ],
+  branch_manager: [
+    { label: 'Branch Dashboard', icon: 'home', route: '#/dashboard' },
+    { label: 'My Team', icon: 'people', route: 'scroll:staff' },
+    { label: 'Cash Management', icon: 'money', route: 'scroll:cash' },
+    { label: 'Today\'s Targets', icon: 'refresh', route: 'scroll:targets' },
+    { label: 'Loan Applications', icon: 'document', route: '#/loans' },
+    { divider: true },
+    { label: 'Alerts', icon: 'calendar', route: 'action:alerts', badge: 2 },
+    { label: 'Help', icon: 'gear', route: '#/settings' }
+  ],
+  loan_officer: [
+    { label: 'My Dashboard', icon: 'home', route: '#/dashboard' },
+    { label: 'My Clients', icon: 'people', route: '#/clients' },
+    { label: 'Loan Applications', icon: 'document', route: '#/loans' },
+    { label: 'Collections', icon: 'money', route: '#/collections' },
+    { divider: true },
+    { label: 'Alerts', icon: 'calendar', route: 'action:alerts', badge: 1 },
+    { label: 'Help', icon: 'gear', route: '#/settings' }
+  ],
+  admin: [
+    { label: 'System Overview', icon: 'home', route: '#/dashboard' },
+    { label: 'User Management', icon: 'users', route: '#/users' },
+    { label: 'System Config', icon: 'gear', route: '#/settings' },
+    { label: 'Security', icon: 'report', route: 'scroll:security' },
+    { label: 'Sync Status', icon: 'refresh', route: '#/sync' },
+    { label: 'Backups', icon: 'document', route: 'scroll:backups' },
+    { divider: true },
+    { label: 'Audit Log', icon: 'report', route: '#/audit' },
+    { label: 'Help', icon: 'gear', route: '#/settings' }
+  ]
+};
+
+/**
  * All possible navigation items.
  */
 var ALL_NAV_ITEMS = [
@@ -85,6 +152,9 @@ function getDefaultRoute(role) {
 }
 
 function getNavigationItems(role) {
+  if (ROLE_NAV_CONFIG[role]) {
+    return ROLE_NAV_CONFIG[role];
+  }
   var permitted = getPermittedModules(role);
   return ALL_NAV_ITEMS.filter(function(item) {
     return permitted.indexOf(item.module) !== -1;

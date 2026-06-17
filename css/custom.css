@@ -333,9 +333,9 @@ table {
   cursor: pointer; transition: opacity .15s;
 }
 .alert-bar:hover { opacity: .85; }
-.alert-bar.critical { background: #FEE2E2; border-left: 4px solid var(--red); }
-.alert-bar.warning { background: #FEF3C7; border-left: 4px solid var(--amber); }
-.alert-bar.healthy { background: #D1FAE5; border-left: 4px solid var(--green); }
+.alert-bar.critical { background: #FEE2E2; }
+.alert-bar.warning { background: #FEF3C7; }
+.alert-bar.healthy { background: #D1FAE5; }
 .alert-bar-title { font-weight: 700; }
 .alert-bar-desc { color: var(--text-muted); margin-top: 1px; }
 
@@ -453,12 +453,12 @@ input[type=range] { width: 100%; accent-color: var(--blue-dark); }
 }
 
 .anomaly-card {
-  background: #FEF2F2; border: 1px solid #FECACA; border-left: 4px solid var(--red);
+  background: #FEF2F2; border: 1px solid #FECACA;
   border-radius: 8px; padding: 12px 16px; margin-bottom: 10px;
 }
 .anomaly-title { font-size: 13px; font-weight: 700; color: #991B1B; }
 .anomaly-meta { font-size: 11px; color: #B91C1C; margin-top: 4px; }
-.anomaly-card.high { background: #FFFBEB; border-color: #FDE68A; border-left-color: var(--amber); }
+.anomaly-card.high { background: #FFFBEB; border-color: #FDE68A; }
 .anomaly-card.high .anomaly-title { color: #92400E; }
 .anomaly-card.high .anomaly-meta { color: #B45309; }
 

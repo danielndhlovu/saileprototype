@@ -375,7 +375,7 @@ function renderMDDashboard(container, user) {
           </div>
           <div class="mt-12">
             <div class="alert-bar critical" style="margin-bottom:8px">⚠️ Enterprise Loan PAR elevated at 6.8% · Review large exposure policy</div>
-            <div class="alert-bar" style="background:#EFF6FF;border-left:4px solid var(--blue);margin-bottom:0">💡 Executive Scheme growing fastest (+22%) · Consider increasing cap</div>
+            <div class="alert-bar" style="background:#EFF6FF;margin-bottom:0">💡 Executive Scheme growing fastest (+22%) · Consider increasing cap</div>
           </div>
         </div>
       </div>
