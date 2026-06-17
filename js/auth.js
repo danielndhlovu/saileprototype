@@ -93,7 +93,6 @@ function renderDesktopLogin(container) {
           '<button data-role="loan_officer" class="role-pill px-6 py-3 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:bg-gray-50 hover:shadow-lg">Loan Officer</button>' +
           '<button data-role="accountant" class="role-pill px-6 py-3 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:bg-gray-50 hover:shadow-lg">Accountant</button>' +
           '<button data-role="auditor" class="role-pill px-6 py-3 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:bg-gray-50 hover:shadow-lg">Auditor</button>' +
-          '<button data-role="field_officer" class="role-pill px-6 py-3 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:bg-gray-50 hover:shadow-lg">Field Officer</button>' +
         '</div>' +
         '<div id="login-message" class="rounded-xl px-4 py-3 text-sm"></div>' +
       '</div>' +
@@ -238,7 +237,6 @@ function renderMobileLogin(container) {
         '<button data-role="finance_manager" class="role-pill w-full px-4 py-3 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:shadow-lg">Finance Manager</button>' +
         '<button data-role="branch_manager" class="role-pill w-full px-4 py-3 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:shadow-lg">Branch Manager</button>' +
         '<button data-role="loan_officer" class="role-pill w-full px-4 py-3 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:shadow-lg">Loan Officer</button>' +
-        '<button data-role="field_officer" class="role-pill w-full px-4 py-3 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:shadow-lg">Field Officer</button>' +
         '<button data-role="accountant" class="role-pill w-full px-4 py-3 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:shadow-lg">Accountant</button>' +
         '<button data-role="auditor" class="role-pill w-full px-4 py-3 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:shadow-lg">Auditor</button>' +
       '</div>' +
@@ -334,18 +332,18 @@ function handlePinEntry(pin) {
   var hashedInput = hashPin(pin);
 
   if (storedPin && hashedInput === storedPin) {
-    // Find field officer user
+    // Find loan officer user (formerly field officer)
     var users = getCollection(StorageKeys.USERS);
-    var fieldOfficer = null;
+    var loanOfficer = null;
     for (var i = 0; i < users.length; i++) {
-      if (users[i].role === 'field_officer') {
-        fieldOfficer = users[i];
+      if (users[i].role === 'loan_officer') {
+        loanOfficer = users[i];
         break;
       }
     }
-    if (fieldOfficer) {
-      createSession(fieldOfficer);
-      window.location.hash = getDefaultRoute('field_officer');
+    if (loanOfficer) {
+      createSession(loanOfficer);
+      window.location.hash = getDefaultRoute('loan_officer');
     }
   } else {
     // Shake animation on error

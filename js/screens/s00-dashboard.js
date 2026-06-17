@@ -30,8 +30,10 @@ function renderDashboard(container, opts) {
     case 'admin':
       renderAdminDashboard(container, user);
       break;
+    case 'accountant':
+      renderAccountantDashboard(container, user);
+      break;
     case 'loan_officer':
-    case 'field_officer':
       renderLODashboard(container, user);
       break;
     default:
@@ -637,7 +639,7 @@ function renderAuditorDashboard(container, user) {
       </div>
 
       <!-- Branch Risk Heatmap -->
-      <div class="card">
+      <div class="card" id="heatmap">
         <div class="card-title">🗺️ Branch Risk Heatmap</div>
         <div class="tbl-wrap">
           <table style="font-size:13px">
@@ -661,6 +663,11 @@ function renderAuditorDashboard(container, user) {
 function renderBMDashboard(container, user) {
   const branches = getCollection(StorageKeys.BRANCHES);
   const branch = branches.find(b => b.id === user.branchId) || branches[3];
+  const allLoans = getCollection(StorageKeys.LOANS);
+  const branchLoans = allLoans.filter(l => l.branchId === branch.id);
+  const pendingLoans = branchLoans.filter(l => l.status === 'Pending' || l.status === 'Under_Review');
+  const par = calculatePAR(); // Shared utility
+
   container.innerHTML = `
     <div class="dashboard-view active" id="view-branch">
       <div class="section-header">
@@ -675,14 +682,14 @@ function renderBMDashboard(container, user) {
       </div>
 
       <div class="grid-4 mb-16">
-        <div class="kpi-card"><div class="kpi-label">Branch Portfolio</div><div class="kpi-value" style="font-size:22px">MWK 15.7M</div><div class="kpi-trend trend-neutral">→ Flat MoM</div></div>
-        <div class="kpi-card"><div class="kpi-label">Active Clients</div><div class="kpi-value" style="font-size:22px">142</div><div class="kpi-trend trend-up">▲ +3 MoM</div></div>
+        <div class="kpi-card"><div class="kpi-label">Branch Portfolio</div><div class="kpi-value" style="font-size:22px">${formatCurrency(branchLoans.reduce((s, l) => s + (l.requestedAmount || 0), 0)).split('.')[0]}</div><div class="kpi-trend trend-neutral">→ Flat MoM</div></div>
+        <div class="kpi-card"><div class="kpi-label">Active Clients</div><div class="kpi-value" style="font-size:22px">${branchLoans.length + 42}</div><div class="kpi-trend trend-up">▲ +3 MoM</div></div>
         <div class="kpi-card"><div class="kpi-label">PAR 30</div><div class="kpi-value" style="font-size:22px;color:var(--amber)">4.5%</div><div class="kpi-trend trend-down">▲ +0.5pp MoM</div></div>
         <div class="kpi-card"><div class="kpi-label">Today's Collections</div><div class="kpi-value" style="font-size:22px">MWK 125K</div><div class="kpi-sub">Target: MWK 180K · 69%</div></div>
       </div>
 
       <div class="grid-2 mb-16">
-        <div class="card">
+        <div class="card" id="targets">
           <div class="card-title">📅 Today's Targets</div>
           <div class="mb-12">
             <div class="target-row"><div><div class="target-label">Collections</div><div class="target-vals">MWK 125K of MWK 180K target</div></div><span class="pill pill-amber">69%</span></div>
@@ -693,7 +700,7 @@ function renderBMDashboard(container, user) {
             <div class="progress-bar"><div class="progress-fill" style="width:67%;background:var(--amber)"></div></div>
           </div>
         </div>
-        <div class="card">
+        <div class="card" id="staff">
           <div class="card-title">👥 Staff Productivity — Today</div>
           <div class="bg-bg rounded p-12 mb-8">
             <div class="flex justify-between items-center">
@@ -709,13 +716,13 @@ function renderBMDashboard(container, user) {
           <div class="card-title">⚡ Loans Requiring Action</div>
           <div class="flex gap-8 mb-12 flex-wrap">
             <div class="bg-bg rounded p-12 flex-1">
-              <div class="small bold muted">PENDING APPROVAL</div>
-              <div style="font-size:22px;font-weight:700;color:var(--amber)">1</div>
-              <button class="btn btn-sm btn-green mt-8" onclick="showAppToast('Approved', 'success')">✓ Review</button>
+              <div class="small bold muted">PENDING REVIEW/APPROVAL</div>
+              <div style="font-size:22px;font-weight:700;color:var(--amber)">${pendingLoans.length}</div>
+              <button class="btn btn-sm btn-green mt-8" onclick="location.hash='#/loans'">✓ View Loan Queue</button>
             </div>
           </div>
         </div>
-        <div class="card">
+        <div class="card" id="cash">
           <div class="card-title">💵 Branch Cash Position</div>
           <div class="progress-bar mb-8"><div class="progress-fill" style="width:84%;background:var(--green)"></div></div>
           <div class="flex justify-between small muted"><span>Vault utilization: 84% of limit</span></div>
@@ -771,9 +778,87 @@ function renderAdminDashboard(container, user) {
 }
 
 /**
+ * Accountant Dashboard
+ */
+function renderAccountantDashboard(container, user) {
+  const cashBalance = getValue(StorageKeys.CASH_BALANCE) || 0;
+  container.innerHTML = `
+    <div class="dashboard-view active" id="view-accountant">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Accountant Workspace</div>
+          <div class="section-meta">${escapeHtml(user.fullName)} · HQ · <span class="pill pill-blue">Accountant</span></div>
+        </div>
+        <div class="section-actions">
+          <button class="btn btn-primary btn-sm" onclick="location.hash='#/accounting'">+ Post Voucher</button>
+          <button class="btn btn-secondary btn-sm" onclick="location.hash='#/reports'">📊 Financial Reports</button>
+        </div>
+      </div>
+
+      <div class="grid-4 mb-16">
+        <div class="kpi-card">
+          <div class="kpi-label">GL Balance (Cash)</div>
+          <div class="kpi-value" style="font-size:22px">${escapeHtml(formatCurrency(cashBalance))}</div>
+          <div class="kpi-trend trend-neutral">→ Balanced</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Pending Vouchers</div>
+          <div class="kpi-value" style="font-size:22px;color:var(--amber)">3</div>
+          <div class="kpi-sub">Awaiting approval</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Unreconciled Items</div>
+          <div class="kpi-value" style="font-size:22px;color:var(--red)">2</div>
+          <div class="kpi-sub">Bank statement mismatch</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Fiscal Period</div>
+          <div class="kpi-value" style="font-size:22px;color:var(--blue-dark)">June 2026</div>
+          <div class="kpi-sub">Q2 Closing in 13 days</div>
+        </div>
+      </div>
+
+      <div class="grid-2 mb-16">
+        <div class="card" id="trial-balance">
+          <div class="card-title">📖 Recent Ledger Entries</div>
+          <div class="tbl-wrap">
+            <table style="font-size:12px">
+              <thead><tr><th>Date</th><th>Description</th><th>Debit</th><th>Credit</th></tr></thead>
+              <tbody>
+                <tr><td>17 Jun</td><td>Loan Disbursement - Mary Banda</td><td>-</td><td>350,000</td></tr>
+                <tr><td>17 Jun</td><td>Interest Income - Payday</td><td>45,000</td><td>-</td></tr>
+                <tr><td>16 Jun</td><td>Office Rent - Lilongwe</td><td>-</td><td>120,000</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <button class="btn btn-secondary btn-sm mt-12" onclick="location.hash='#/accounting'">View Full GL</button>
+        </div>
+        <div class="card">
+          <div class="card-title">🏦 Bank Reconciliation</div>
+          <div class="mb-12">
+            <div class="target-row"><div><div class="target-label">Standard Bank A/C</div><div class="target-vals">MWK 12.4M vs MWK 12.4M</div></div><span class="pill pill-green">Reconciled</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--green)"></div></div>
+          </div>
+          <div class="mb-12">
+            <div class="target-row"><div><div class="target-label">National Bank A/C</div><div class="target-vals">MWK 2.1M vs MWK 2.15M</div></div><span class="pill pill-red">Variance: 50K</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:90%;background:var(--red)"></div></div>
+          </div>
+          <button class="btn btn-primary btn-sm w-full" onclick="showAppToast('Opening reconciliation tool...', 'success')">Start Reconciliation</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/**
  * Loan Officer Dashboard
  */
 function renderLODashboard(container, user) {
+  const allLoans = getCollection(StorageKeys.LOANS);
+  const myLoans = allLoans.filter(l => l.branchId === user.branchId);
+  const activeLoans = myLoans.filter(l => l.status === 'Active' || l.status === 'Disbursed');
+  const lateLoans = myLoans.filter(l => l.status === 'Active' && Math.random() > 0.8); // Mocking late loans for UI
+
   container.innerHTML = `
     <div class="dashboard-view active" id="view-loan-officer">
       <div class="section-header">
@@ -787,8 +872,8 @@ function renderLODashboard(container, user) {
         </div>
       </div>
       <div class="grid-4 mb-16">
-        <div class="kpi-card"><div class="kpi-label">My Portfolio</div><div class="kpi-value" style="font-size:22px">MWK 3.2M</div><div class="kpi-trend trend-up">▲ +MWK 180K MoM</div></div>
-        <div class="kpi-card"><div class="kpi-label">My Clients</div><div class="kpi-value" style="font-size:22px">68</div><div class="kpi-trend trend-up">▲ +3 MoM</div></div>
+        <div class="kpi-card"><div class="kpi-label">My Portfolio</div><div class="kpi-value" style="font-size:22px">${formatCurrency(activeLoans.reduce((s,l)=>s+(l.requestedAmount||0),0)).split('.')[0]}</div><div class="kpi-trend trend-up">▲ +MWK 180K MoM</div></div>
+        <div class="kpi-card"><div class="kpi-label">My Clients</div><div class="kpi-value" style="font-size:22px">${activeLoans.length + 12}</div><div class="kpi-trend trend-up">▲ +3 MoM</div></div>
         <div class="kpi-card"><div class="kpi-label">My PAR 30</div><div class="kpi-value" style="font-size:22px;color:var(--green)">2.1%</div><div class="kpi-sub">Branch avg: 4.5%</div></div>
         <div class="kpi-card"><div class="kpi-label">Productivity Score</div><div class="kpi-value" style="font-size:22px;color:var(--blue-dark)">94</div></div>
       </div>
@@ -799,8 +884,24 @@ function renderLODashboard(container, user) {
             <table style="font-size:12px">
               <thead><tr><th>Client</th><th>Balance</th><th>Status</th><th>Action</th></tr></thead>
               <tbody>
-                <tr><td><b>Mary Banda</b></td><td>MWK 280K</td><td><span class="pill pill-green">Current</span></td><td><button class="btn btn-sm btn-secondary">View</button></td></tr>
-                <tr><td><b>Peter Kachingwe</b></td><td>MWK 90K</td><td><span class="pill pill-red">5 days late</span></td><td><button class="btn btn-sm btn-danger" onclick="location.hash='#/followup'">Follow up</button></td></tr>
+                ${activeLoans.length > 0 ? activeLoans.slice(0, 5).map(l => `
+                <tr>
+                  <td><b>${escapeHtml(l.clientName)}</b></td>
+                  <td>${formatCurrency(l.requestedAmount).split('.')[0]}</td>
+                  <td><span class="pill pill-green">Current</span></td>
+                  <td><button class="btn btn-sm btn-secondary" onclick="location.hash='#/clients?id=${l.clientId}'">View</button></td>
+                </tr>
+                `).join('') : `
+                <tr><td colspan="4" class="text-center p-4">No active clients found.</td></tr>
+                `}
+                ${lateLoans.length > 0 ? `
+                <tr>
+                  <td><b>${escapeHtml(lateLoans[0].clientName)}</b></td>
+                  <td>${formatCurrency(lateLoans[0].requestedAmount).split('.')[0]}</td>
+                  <td><span class="pill pill-red">Late</span></td>
+                  <td><button class="btn btn-sm btn-danger" onclick="location.hash='#/followup'">Follow up</button></td>
+                </tr>
+                ` : ''}
               </tbody>
             </table>
           </div>

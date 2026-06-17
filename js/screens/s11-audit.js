@@ -51,7 +51,6 @@ function renderAudit(container, options) {
     html += '<select id="audit-filter-role" class="px-3 py-2 border border-[#d1d5db] rounded-xl text-sm">';
     html += '<option value="">All Roles</option>';
     html += '<option value="admin"' + (filterRole === 'admin' ? ' selected' : '') + '>Admin</option>';
-    html += '<option value="field_officer"' + (filterRole === 'field_officer' ? ' selected' : '') + '>Field Officer</option>';
     html += '<option value="accountant"' + (filterRole === 'accountant' ? ' selected' : '') + '>Accountant</option>';
     html += '<option value="auditor"' + (filterRole === 'auditor' ? ' selected' : '') + '>Auditor</option>';
     html += '<option value="system"' + (filterRole === 'system' ? ' selected' : '') + '>System</option>';

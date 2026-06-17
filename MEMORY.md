@@ -30,10 +30,14 @@
   - Staff productivity leaderboard.
   - Real-time target tracking (Collections vs. Disbursements).
   - Local cash management (Vault utilization vs. limits).
-- **Loan Officer (e.g., Kenneth Malita)**:
+- **Loan Officer (e.g., Liness Nkhata - Lilongwe)**:
   - Operational workspace.
   - Client follow-up queue with "Next Due" dates.
   - Mobile-ready collection plan.
+- **Accountant (Mr. Kamanga Banda - HQ)**:
+  - Financial operations workspace.
+  - GL Balance monitoring and Bank Reconciliation tools.
+  - Pending voucher queue and recent ledger entry visibility.
 - **Admin (Mr. Isaac Banda)**:
   - System health and infrastructure.
   - Automated jobs monitoring.

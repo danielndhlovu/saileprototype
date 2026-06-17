@@ -557,7 +557,7 @@ function renderLeftRail(navItems, role, isCollapsed) {
     // Role switcher
     html += '<div class="mt-2">';
     html += '<select id="role-switcher" class="w-full text-xs border border-[#d1d5db] rounded-xl px-3 py-1.5 bg-[#f4f4f5] text-[#0f766e]">';
-    var roles = ['admin', 'md', 'finance_manager', 'branch_manager', 'loan_officer', 'field_officer', 'accountant', 'auditor'];
+    var roles = ['admin', 'md', 'finance_manager', 'branch_manager', 'loan_officer', 'accountant', 'auditor'];
     for (var r = 0; r < roles.length; r++) {
       var sel = roles[r] === role ? ' selected' : '';
       html += '<option value="' + roles[r] + '"' + sel + '>' + roles[r].replace(/_/g, ' ') + '</option>';
@@ -691,10 +691,15 @@ function navigateTo(target) {
     // Custom action handling
     console.log('Performing action:', action);
     if (action === 'pending-approvals') {
-      window.location.hash = '#/loans?status=Pending';
+      window.location.hash = '#/loans'; // Loans screen handles its own internal state
     } else if (action === 'alerts') {
       const btn = document.getElementById('topbar-notif-btn');
       if (btn) btn.click();
+    } else if (action === 'post-voucher') {
+      window.location.hash = '#/accounting';
+      // If we want to jump straight to the form, we'd need to expose renderVoucherForm
+    } else if (action === 'generate-audit-report') {
+      showAppToast('Generating audit report...', 'success');
     }
     // Add more action handlers as needed for the prototype
   }

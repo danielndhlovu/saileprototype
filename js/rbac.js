@@ -31,6 +31,11 @@ var ROLE_PERMISSIONS = {
     actions: ['read','create','update','record_payment','create_collection','create_followup'],
     defaultRoute: '#/dashboard'
   },
+  accountant: {
+    modules: ['dashboard','clients','loans','repayment','collections','savings','accounting','reports','sync'],
+    actions: ['read','update','create_voucher','record_payment'],
+    defaultRoute: '#/dashboard'
+  },
   auditor: {
     modules: ['dashboard','reports','audit','clients','loans'],
     actions: ['read'],
@@ -91,6 +96,17 @@ var ROLE_NAV_CONFIG = {
     { label: 'Collections', icon: 'money', route: '#/collections' },
     { divider: true },
     { label: 'Alerts', icon: 'calendar', route: 'action:alerts', badge: 1 },
+    { label: 'Help', icon: 'gear', route: '#/settings' }
+  ],
+  accountant: [
+    { label: 'Finance Dashboard', icon: 'home', route: '#/dashboard' },
+    { label: 'General Ledger', icon: 'calculator', route: '#/accounting' },
+    { label: 'Savings & Deposits', icon: 'savings', route: '#/savings' },
+    { label: 'Financial Reports', icon: 'report', route: '#/reports' },
+    { label: 'Trial Balance', icon: 'clipboard', route: 'scroll:trial-balance' },
+    { divider: true },
+    { label: 'Post Voucher', icon: 'plus', route: 'action:post-voucher' },
+    { label: 'Alerts', icon: 'calendar', route: 'action:alerts', badge: 3 },
     { label: 'Help', icon: 'gear', route: '#/settings' }
   ],
   admin: [
