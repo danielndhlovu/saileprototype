@@ -37,10 +37,42 @@ function renderNavigation(role) {
   var branchName = (settings && settings.branchName) || 'Lilongwe';
 
   renderTopBar(session, branchName);
+  renderBreadcrumb();
   // renderLeftRail(navItems, role, isCollapsed); // Removed as per requirement
   // renderRightPanel(session); // Removed as per requirement
   renderMobileTabs(navItems);
   startClock();
+}
+
+/**
+ * Render the breadcrumb based on current route.
+ */
+function renderBreadcrumb() {
+  const container = document.getElementById('breadcrumb-container');
+  if (!container) return;
+
+  const hash = window.location.hash || '#/dashboard';
+  const path = hash.replace('#/', '').split('?')[0];
+  const parts = path === '' ? ['dashboard'] : path.split('/');
+
+  let html = '<nav class="flex items-center text-[11px] font-medium text-[#6b7280] bg-gray-50 px-4 py-1.5 rounded-full border border-gray-100" aria-label="Breadcrumb"><ol class="flex items-center space-x-2">';
+  html += '<li><a href="#/dashboard" class="hover:text-[#0f766e] flex items-center gap-1"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg></a></li>';
+
+  let cumulative = '#';
+  parts.forEach((part, index) => {
+    cumulative += '/' + part;
+    const label = part.charAt(0).toUpperCase() + part.slice(1).replace(/-/g, ' ');
+    html += '<li class="flex items-center space-x-2"><svg class="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>';
+    if (index === parts.length - 1) {
+      html += '<span class="text-[#111827] font-semibold">' + escapeHtml(label) + '</span>';
+    } else {
+      html += '<a href="' + cumulative + '" class="hover:text-[#0f766e] transition-colors">' + escapeHtml(label) + '</a>';
+    }
+    html += '</li>';
+  });
+
+  html += '</ol></nav>';
+  container.innerHTML = html;
 }
 
 /**
@@ -54,45 +86,56 @@ function renderTopBar(session, branchName) {
   var dateStr = today.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
   topBar.innerHTML = '' +
-    '<!-- Left: Logo + action buttons -->' +
+    '<!-- Left Side Icons and Navigation -->' +
     '<div class="flex items-center gap-2">' +
+      '<!-- Logo -->' +
       '<div class="w-9 h-9 rounded-lg bg-[#f4f4f5] border border-[#d1d5db] flex items-center justify-center cursor-pointer hover:bg-gray-100" onclick="window.location.hash=\'#/dashboard\'" title="Dashboard">' +
         '<svg class="w-5 h-5 text-[#0f766e]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L3 7v10l9 5 9-5V7l-9-5zm0 2.18l6.5 3.64v7.36L12 18.82l-6.5-3.64V7.82L12 4.18z"/></svg>' +
       '</div>' +
+
+      '<!-- Navigation Dropdown -->' +
       '<button id="topbar-modules-btn" class="bg-[#f4f4f5] border border-[#d1d5db] rounded-lg px-3 py-1.5 text-sm text-[#0f766e] hover:bg-[#d1d5db] transition-colors hidden md:flex items-center gap-1.5 font-medium">' +
-        '<span>Modules</span>' +
+        '<span>Navigation</span>' +
         '<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>' +
       '</button>' +
+
+      '<!-- Advanced Search / AI -->' +
       '<button id="topbar-search-btn" class="bg-[#f4f4f5] border border-[#d1d5db] rounded-lg px-3 py-1.5 text-sm text-[#6b7280] hover:bg-[#d1d5db] transition-colors hidden md:flex items-center gap-1.5">' +
         '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>' +
-        '<span>Search</span>' +
+        '<span>Search / AI</span>' +
       '</button>' +
-      '<button class="bg-[#f4f4f5] border border-[#d1d5db] rounded-lg px-2.5 py-1.5 text-[#6b7280] hover:bg-[#d1d5db] transition-colors hidden md:block">' +
-        '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>' +
-      '</button>' +
-      '<button class="bg-[#f4f4f5] border border-[#d1d5db] rounded-lg px-2.5 py-1.5 text-[#6b7280] hover:bg-[#d1d5db] transition-colors relative hidden md:block">' +
+
+
+      '<!-- Functional Notification Icon -->' +
+      '<button id="topbar-notif-btn" class="bg-[#f4f4f5] border border-[#d1d5db] rounded-lg px-2.5 py-1.5 text-[#6b7280] hover:bg-[#d1d5db] transition-colors relative hidden md:block">' +
         '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>' +
         '<span class="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-[#d94f4f] rounded-full border-2 border-white"></span>' +
       '</button>' +
-      '<button class="bg-[#f4f4f5] border border-[#d1d5db] rounded-lg px-2.5 py-1.5 text-[#6b7280] hover:bg-[#d1d5db] transition-colors hidden md:block">' +
-        '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"/></svg>' +
-      '</button>' +
     '</div>' +
-    '<!-- Mobile menu toggle -->' +
-    '<button id="nav-collapse-btn" class="p-2 rounded-lg hover:bg-[#f4f4f5] transition-colors lg:hidden" aria-label="Toggle navigation">' +
-      '<svg class="w-5 h-5 text-[#0f766e]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>' +
-    '</button>' +
-    '<div class="flex-1"></div>' +
-    '<!-- Right: Language, date, clock, create -->' +
+
+    '<!-- Center: Breadcrumbs -->' +
+    '<div class="flex-1 flex items-center justify-center px-4 overflow-hidden">' +
+       '<div id="breadcrumb-container" class="hidden lg:block truncate"></div>' +
+    '</div>' +
+
+    '<!-- Right Side: Lang, Time, Date, Profile -->' +
     '<div class="hidden md:flex items-center gap-3">' +
       '<button class="bg-[#f4f4f5] border border-[#d1d5db] rounded-lg px-3 py-1.5 text-sm text-[#6b7280] hover:bg-[#d1d5db] transition-colors">En &#9662;</button>' +
       '<span id="nav-clock" class="text-xs text-[#6b7280] font-mono">--:--</span>' +
-      '<span class="text-xs text-[#6b7280]">' + escapeHtml(dateStr) + '</span>' +
-      '<button id="topbar-create-btn" class="bg-[#111827] text-white rounded-xl px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors flex items-center gap-1">' +
-        'Create <span class="ml-1">&rarr;</span>' +
+      '<span class="text-xs text-[#6b7280] mr-2">' + escapeHtml(dateStr) + '</span>' +
+
+      '<!-- User Profile Dropdown -->' +
+      '<button id="topbar-profile-btn" class="bg-[#111827] text-white rounded-xl pl-2 pr-4 py-1.5 text-sm font-medium hover:bg-gray-800 transition-colors flex items-center gap-2">' +
+        '<div class="w-6 h-6 rounded-full bg-[#0f766e] flex items-center justify-center text-[10px]">' + (session ? escapeHtml(session.name.charAt(0).toUpperCase()) : '?') + '</div>' +
+        '<span>' + (session ? escapeHtml(session.name.split(' ')[session.name.split(' ').length-1]) : 'User') + '</span>' +
+        '<svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>' +
       '</button>' +
     '</div>' +
-    '<!-- Mobile: profile + logout -->' +
+
+    '<!-- Mobile Menu Toggle -->' +
+    '<button id="nav-collapse-btn" class="p-2 rounded-lg hover:bg-[#f4f4f5] transition-colors lg:hidden" aria-label="Toggle navigation">' +
+      '<svg class="w-5 h-5 text-[#0f766e]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>' +
+    '</button>' +
     '<div class="flex md:hidden items-center gap-2">' +
       '<div class="w-8 h-8 rounded-full bg-[#111827] flex items-center justify-center text-white text-xs font-medium">' +
         (session ? escapeHtml(session.name.charAt(0).toUpperCase()) : '?') +
@@ -108,7 +151,7 @@ function renderTopBar(session, branchName) {
     logoutBtnMobile.addEventListener('click', function() { destroySession(); });
   }
 
-  // Modules button action
+  // Modules button action (renamed to Navigation)
   var modulesBtn = document.getElementById('topbar-modules-btn');
   if (modulesBtn) {
     modulesBtn.addEventListener('click', function(e) {
@@ -117,12 +160,21 @@ function renderTopBar(session, branchName) {
     });
   }
 
-  // Create button action
-  var createBtn = document.getElementById('topbar-create-btn');
-  if (createBtn) {
-    createBtn.addEventListener('click', function(e) {
+  // Notification button action
+  var notifBtn = document.getElementById('topbar-notif-btn');
+  if (notifBtn) {
+    notifBtn.addEventListener('click', function(e) {
       e.stopPropagation();
-      showCreateDropdown(this);
+      showNotificationsDropdown(this);
+    });
+  }
+
+  // Profile button action
+  var profileBtn = document.getElementById('topbar-profile-btn');
+  if (profileBtn) {
+    profileBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      showProfileDropdown(this);
     });
   }
 
@@ -138,37 +190,88 @@ function renderTopBar(session, branchName) {
 /**
  * Show a dropdown for quick create actions.
  */
-function showCreateDropdown(anchor) {
-  const existing = document.getElementById('create-dropdown');
-  if (existing) {
-    existing.remove();
-    return;
-  }
+function showNotificationsDropdown(anchor) {
+  const existing = document.getElementById('notif-dropdown');
+  if (existing) { existing.remove(); return; }
 
   const dropdown = document.createElement('div');
-  dropdown.id = 'create-dropdown';
-  dropdown.className = 'fixed mt-2 w-48 bg-white rounded-xl shadow-xl border border-[#d1d5db] z-[60] overflow-hidden py-1';
+  dropdown.id = 'notif-dropdown';
+  dropdown.className = 'fixed mt-2 w-80 bg-white rounded-xl shadow-xl border border-[#d1d5db] z-[60] overflow-hidden';
 
   const rect = anchor.getBoundingClientRect();
   dropdown.style.top = rect.bottom + 'px';
-  dropdown.style.left = (rect.right - 192) + 'px';
+  dropdown.style.left = (rect.right - 320) + 'px';
 
-  const actions = [
-    { label: 'New Client', route: '#/clients' },
-    { label: 'New Loan', route: '#/loans' },
-    { label: 'Record Collection', route: '#/collections' },
-    { label: 'Open Savings', route: '#/savings' }
+  const notifications = [
+    { title: 'New Loan Application', desc: 'Mary Banda applied for MWK 350K', time: '10m ago', icon: '📝' },
+    { title: 'PAR Alert', desc: 'Karonga branch PAR 30 reached 6.8%', time: '1h ago', icon: '⚠️' },
+    { title: 'System Backup', desc: 'Cloud backup completed successfully', time: '3h ago', icon: '✅' }
   ];
 
-  actions.forEach(action => {
-    const item = document.createElement('button');
-    item.className = 'w-full text-left px-4 py-2 text-sm text-[#0f766e] hover:bg-[#f4f4f5] transition-colors';
-    item.textContent = action.label;
-    item.onclick = () => {
-      window.location.hash = action.route;
+  let html = '<div class="px-4 py-3 border-b border-gray-100 flex justify-between items-center"><span class="font-bold text-sm">Notifications</span><button class="text-[10px] text-primary hover:underline">Mark all read</button></div>';
+  html += '<div class="max-h-80 overflow-y-auto">';
+  notifications.forEach(n => {
+    html += `<div class="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-50 last:border-0">
+      <div class="flex gap-3">
+        <div class="text-lg">${n.icon}</div>
+        <div class="flex-1">
+          <p class="text-sm font-medium text-dark">${escapeHtml(n.title)}</p>
+          <p class="text-xs text-secondary mt-0.5">${escapeHtml(n.desc)}</p>
+          <p class="text-[10px] text-gray-400 mt-1">${n.time}</p>
+        </div>
+      </div>
+    </div>`;
+  });
+  html += '</div>';
+  html += '<div class="px-4 py-2 border-t border-gray-100 text-center"><button class="text-xs text-primary font-medium hover:underline">View all alerts</button></div>';
+
+  dropdown.innerHTML = html;
+  document.body.appendChild(dropdown);
+
+  const closeDropdown = (e) => {
+    if (!dropdown.contains(e.target) && e.target !== anchor) {
+      dropdown.remove();
+      document.removeEventListener('click', closeDropdown);
+    }
+  };
+  setTimeout(() => document.addEventListener('click', closeDropdown), 0);
+}
+
+function showProfileDropdown(anchor) {
+  const existing = document.getElementById('profile-dropdown');
+  if (existing) { existing.remove(); return; }
+
+  const session = getSession();
+  const dropdown = document.createElement('div');
+  dropdown.id = 'profile-dropdown';
+  dropdown.className = 'fixed mt-2 w-56 bg-white rounded-xl shadow-xl border border-[#d1d5db] z-[60] overflow-hidden py-1';
+
+  const rect = anchor.getBoundingClientRect();
+  dropdown.style.top = rect.bottom + 'px';
+  dropdown.style.left = (rect.right - 224) + 'px';
+
+  const items = [
+    { label: 'My Profile', icon: '👤', action: () => { window.location.hash = '#/settings'; } },
+    { label: 'Settings', icon: '⚙️', action: () => { window.location.hash = '#/settings'; } },
+    { label: 'Divider' },
+    { label: 'Log Out', icon: '🚪', action: () => { destroySession(); }, color: 'text-red-600' }
+  ];
+
+  items.forEach(item => {
+    if (item.label === 'Divider') {
+      const d = document.createElement('div');
+      d.className = 'my-1 border-t border-gray-100';
+      dropdown.appendChild(d);
+      return;
+    }
+    const btn = document.createElement('button');
+    btn.className = `w-full text-left px-4 py-2.5 text-sm flex items-center gap-3 hover:bg-gray-50 transition-colors ${item.color || 'text-dark'}`;
+    btn.innerHTML = `<span>${item.icon}</span><span class="font-medium">${item.label}</span>`;
+    btn.onclick = () => {
+      item.action();
       dropdown.remove();
     };
-    dropdown.appendChild(item);
+    dropdown.appendChild(btn);
   });
 
   document.body.appendChild(dropdown);
@@ -229,16 +332,22 @@ function showModulesDropdown(anchor, role) {
  */
 function showSearchOverlay() {
   const overlay = document.createElement('div');
+  overlay.id = 'search-overlay';
   overlay.className = 'fixed inset-0 bg-black/50 z-[10000] flex items-start justify-center pt-20 px-4';
   overlay.innerHTML = `
-    <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden">
+    <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col">
       <div class="p-4 border-b border-[#d1d5db] flex items-center gap-3">
-        <svg class="w-5 h-5 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-        <input type="text" id="global-search-input" class="flex-1 outline-none text-lg text-[#0f766e]" placeholder="Search clients, loans, accounts..." autofocus>
+        <div id="search-mode-indicator" class="bg-primary/10 text-primary px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider">Search</div>
+        <input type="text" id="global-search-input" class="flex-1 outline-none text-lg text-[#0f766e]" placeholder="Search or ask AI (e.g. 'take me to loans')..." autofocus>
         <kbd class="text-xs text-[#6b7280] bg-[#f4f4f5] px-1.5 py-0.5 rounded border border-[#d1d5db]">ESC</kbd>
       </div>
       <div id="search-results" class="max-h-[60vh] overflow-y-auto p-2">
-        <p class="text-center py-8 text-[#6b7280] text-sm">Start typing to search across Saile platform...</p>
+        <p class="text-center py-8 text-[#6b7280] text-sm">Start typing to search or ask Saile AI...</p>
+      </div>
+      <div class="p-3 bg-gray-50 border-t border-gray-100 flex gap-4 text-[10px] text-gray-400">
+        <span><b>↑↓</b> to navigate</span>
+        <span><b>↵</b> to select</span>
+        <span>Type <b>/</b> for AI commands</span>
       </div>
     </div>
   `;
@@ -246,6 +355,7 @@ function showSearchOverlay() {
   document.body.appendChild(overlay);
   const input = overlay.querySelector('#global-search-input');
   const results = overlay.querySelector('#search-results');
+  const modeInd = overlay.querySelector('#search-mode-indicator');
 
   const close = () => {
     overlay.remove();
@@ -259,9 +369,35 @@ function showSearchOverlay() {
   input.addEventListener('input', debounce(() => {
     const q = input.value.trim().toLowerCase();
     if (!q) {
-      results.innerHTML = '<p class="text-center py-8 text-[#6b7280] text-sm">Start typing to search...</p>';
+      modeInd.textContent = 'Search';
+      modeInd.className = 'bg-primary/10 text-primary px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider';
+      results.innerHTML = `
+        <div class="p-4">
+          <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">Quick Shortcuts</p>
+          <div class="grid grid-cols-2 gap-2">
+            <button class="flex items-center gap-2 p-3 rounded-xl hover:bg-gray-50 text-xs text-secondary border border-gray-100" onclick="window.location.hash='#/loans'; document.getElementById('search-overlay').remove()"><span class="text-base">📝</span> Loan Management</button>
+            <button class="flex items-center gap-2 p-3 rounded-xl hover:bg-gray-50 text-xs text-secondary border border-gray-100" onclick="window.location.hash='#/clients'; document.getElementById('search-overlay').remove()"><span class="text-base">👥</span> Client Registry</button>
+            <button class="flex items-center gap-2 p-3 rounded-xl hover:bg-gray-50 text-xs text-secondary border border-gray-100" onclick="window.location.hash='#/reports'; document.getElementById('search-overlay').remove()"><span class="text-base">📊</span> Reports</button>
+            <button class="flex items-center gap-2 p-3 rounded-xl hover:bg-gray-50 text-xs text-secondary border border-gray-100" onclick="window.location.hash='#/settings'; document.getElementById('search-overlay').remove()"><span class="text-base">⚙️</span> Settings</button>
+          </div>
+          <div class="mt-6 p-4 rounded-2xl bg-primary/5 border border-primary/10">
+             <p class="text-[11px] font-bold text-primary uppercase mb-2">✨ Advanced AI Search</p>
+             <p class="text-[11px] text-primary/70 leading-relaxed">Try typing: <i>"take me to loans"</i>, <i>"show Karonga branch"</i>, or <i>"/late"</i> for instant navigation.</p>
+          </div>
+        </div>`;
       return;
     }
+
+    // Check for AI mode
+    if (q.startsWith('/') || q.includes('take me') || q.includes('show') || q.includes('open')) {
+      modeInd.textContent = 'Saile AI';
+      modeInd.className = 'bg-purple-100 text-purple-700 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider';
+      handleAISearch(q, results);
+      return;
+    }
+
+    modeInd.textContent = 'Search';
+    modeInd.className = 'bg-primary/10 text-primary px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider';
 
     const clients = getCollection(StorageKeys.CLIENTS).filter(c => c.fullName.toLowerCase().includes(q) || c.nationalId.toLowerCase().includes(q));
     const loans = getCollection(StorageKeys.LOANS).filter(l => l.clientName.toLowerCase().includes(q) || (l.productCode && l.productCode.toLowerCase().includes(q)));
@@ -291,6 +427,59 @@ function showSearchOverlay() {
     }
     results.innerHTML = html;
   }, 300));
+}
+
+/**
+ * Handle AI-powered navigation and query processing.
+ */
+function handleAISearch(q, resultsContainer) {
+  const commands = [
+    { trigger: 'loan', route: '#/loans', label: 'Go to Loan Management', icon: '📝', keywords: ['loan', 'apply', 'disburse', 'approved'] },
+    { trigger: 'client', route: '#/clients', label: 'Go to Client Registry', icon: '👥', keywords: ['client', 'customer', 'borrower', 'people'] },
+    { trigger: 'report', route: '#/reports', label: 'Open Financial Reports', icon: '📊', keywords: ['report', 'profit', 'loss', 'balance', 'financial'] },
+    { trigger: 'account', route: '#/accounting', label: 'Go to Accounting', icon: '💰', keywords: ['account', 'ledger', 'gl', 'voucher', 'finance'] },
+    { trigger: 'audit', route: '#/audit', label: 'View Audit Logs', icon: '📜', keywords: ['audit', 'log', 'trace', 'security'] },
+    { trigger: 'setting', route: '#/settings', label: 'System Settings', icon: '⚙️', keywords: ['setting', 'config', 'profile', 'password'] },
+    { trigger: 'karonga', route: '#/dashboard', label: 'Drill-down: Karonga Branch', icon: '🏦', action: () => { if(window.openDashboardModal) window.openDashboardModal('branch-detail-karonga'); }, keywords: ['karonga', 'branch', 'north'] },
+    { trigger: 'late', route: '#/followup', label: 'Show Overdue Loans', icon: '⏰', keywords: ['late', 'overdue', 'past due', 'par', 'follow'] },
+    { trigger: 'savings', route: '#/savings', label: 'Client Savings Accounts', icon: '🐷', keywords: ['savings', 'deposit', 'withdraw'] }
+  ];
+
+  const matches = commands.filter(c => c.keywords.some(k => q.includes(k)));
+
+  if (matches.length > 0) {
+    let html = '<div class="p-4"><p class="text-xs font-bold text-purple-600 uppercase mb-4 tracking-widest flex items-center gap-2"><span>✨</span> Saile AI Intent Detected</p>';
+    matches.forEach((m, idx) => {
+      html += `<button class="w-full text-left p-4 rounded-2xl bg-gradient-to-r from-purple-50 to-white hover:from-purple-100 hover:to-purple-50 mb-3 border border-purple-100 flex items-center gap-4 group transition-all shadow-sm" id="ai-cmd-${idx}">
+        <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-md text-lg border border-purple-100">${m.icon}</div>
+        <div class="flex-1">
+          <p class="font-bold text-purple-900">${m.label}</p>
+          <p class="text-[10px] text-purple-500 uppercase font-medium tracking-tight">Smart Navigation Shortcut</p>
+        </div>
+        <span class="text-purple-400 group-hover:translate-x-1 transition-transform">→</span>
+      </button>`;
+    });
+    html += '</div>';
+    resultsContainer.innerHTML = html;
+
+    matches.forEach((m, idx) => {
+      const btn = document.getElementById(`ai-cmd-${idx}`);
+      if (btn) btn.onclick = () => {
+        window.location.hash = m.route;
+        if (m.action) setTimeout(m.action, 300);
+        const overlay = document.getElementById('search-overlay');
+        if (overlay) overlay.remove();
+      };
+    });
+  } else {
+    resultsContainer.innerHTML = `
+      <div class="p-8 text-center">
+        <div class="text-3xl mb-4">🤖</div>
+        <p class="text-sm text-dark font-medium">Thinking...</p>
+        <p class="text-xs text-secondary mt-2 italic">"I'm learning your natural language patterns. Try 'take me to loans' or 'show reports'."</p>
+      </div>
+    `;
+  }
 }
 
 /**
