@@ -8,10 +8,25 @@ var ROLE_PERMISSIONS = {
     actions: ['create','read','update','delete','approve','disburse'],
     defaultRoute: '#/dashboard'
   },
+  md: {
+    modules: ['dashboard','clients','groups','loans','repayment','collections','followup','savings','accounting','reports','users','settings','audit','sync','migration'],
+    actions: ['create','read','update','delete','approve','disburse','view_financial_reports'],
+    defaultRoute: '#/dashboard'
+  },
+  finance_manager: {
+    modules: ['dashboard','clients','groups','loans','repayment','collections','followup','savings','accounting','reports','users','settings','audit','sync','migration'],
+    actions: ['create','read','update','delete','approve','disburse','view_financial_reports'],
+    defaultRoute: '#/dashboard'
+  },
   branch_manager: {
     modules: ['dashboard','clients','groups','loans','repayment','collections','followup','savings','accounting','reports','settings','audit','sync'],
     actions: ['create','read','update','approve','disburse'],
     defaultRoute: '#/dashboard'
+  },
+  loan_officer: {
+    modules: ['dashboard','clients','groups','loans','repayment','collections','followup','savings','sync'],
+    actions: ['read','create','update','record_payment','create_collection','create_followup'],
+    defaultRoute: '#/loans'
   },
   field_officer: {
     modules: ['collections','followup','repayment','clients','sync','savings'],

@@ -82,52 +82,85 @@ function renderDesktopLogin(container) {
           '<h1 class="text-2xl font-bold text-[#0f766e]">Saile</h1>' +
           '<p class="text-[#6b7280] text-sm">Financial Services Platform</p>' +
         '</div>' +
-        '<h2 class="text-2xl font-semibold text-[#0f766e] mb-2">Sign In</h2>' +
-        '<p class="text-[#6b7280] text-sm mb-6">Select your role and enter credentials</p>' +
+        '<h2 class="text-2xl font-semibold text-[#0f766e] mb-2">Select Your Role</h2>' +
+        '<p class="text-[#6b7280] text-sm mb-8">Click your role to access the system</p>' +
         '<!-- Role pills -->' +
-        '<div class="flex flex-wrap gap-2 mb-6" id="role-pills">' +
-          '<button data-role="admin" class="role-pill px-4 py-2 rounded-xl text-sm font-medium border transition-colors bg-[#111827] text-white border-[#111827]">Admin</button>' +
-          '<button data-role="branch_manager" class="role-pill px-4 py-2 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:bg-gray-50">Branch Manager</button>' +
-          '<button data-role="accountant" class="role-pill px-4 py-2 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:bg-gray-50">Accountant</button>' +
-          '<button data-role="auditor" class="role-pill px-4 py-2 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:bg-gray-50">Auditor</button>' +
+        '<div class="flex flex-wrap gap-3 mb-8" id="role-pills">' +
+          '<button data-role="admin" class="role-pill px-6 py-3 rounded-xl text-sm font-medium border transition-colors bg-[#111827] text-white border-[#111827] hover:shadow-lg">Admin</button>' +
+          '<button data-role="md" class="role-pill px-6 py-3 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:bg-gray-50 hover:shadow-lg">MD</button>' +
+          '<button data-role="finance_manager" class="role-pill px-6 py-3 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:bg-gray-50 hover:shadow-lg">Finance</button>' +
+          '<button data-role="branch_manager" class="role-pill px-6 py-3 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:bg-gray-50 hover:shadow-lg">Branch Manager</button>' +
+          '<button data-role="loan_officer" class="role-pill px-6 py-3 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:bg-gray-50 hover:shadow-lg">Loan Officer</button>' +
+          '<button data-role="accountant" class="role-pill px-6 py-3 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:bg-gray-50 hover:shadow-lg">Accountant</button>' +
+          '<button data-role="auditor" class="role-pill px-6 py-3 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:bg-gray-50 hover:shadow-lg">Auditor</button>' +
+          '<button data-role="field_officer" class="role-pill px-6 py-3 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:bg-gray-50 hover:shadow-lg">Field Officer</button>' +
         '</div>' +
-        '<!-- Form -->' +
-        '<form id="login-form" class="space-y-4">' +
-          '<div>' +
-            '<label class="block text-sm font-medium text-[#0f766e] mb-1.5">Email</label>' +
-            '<input type="email" id="login-email" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#0f766e] focus:border-[#0f766e] text-sm" placeholder="admin@saile.mw" required>' +
-          '</div>' +
-          '<div>' +
-            '<label class="block text-sm font-medium text-[#0f766e] mb-1.5">Password</label>' +
-            '<input type="password" id="login-password" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl focus:ring-2 focus:ring-[#0f766e] focus:border-[#0f766e] text-sm" placeholder="Enter password" required>' +
-          '</div>' +
-          '<div id="login-message" class="hidden text-sm rounded-xl px-3 py-2"></div>' +
-          '<button type="submit" class="w-full bg-[#111827] text-white px-6 py-2.5 rounded-xl hover:bg-gray-800 font-medium text-sm transition-colors">Sign In</button>' +
-        '</form>' +
-        '<p class="text-xs text-[#6b7280] mt-4 text-center">Demo: admin@saile.mw / password123</p>' +
+        '<div id="login-message" class="rounded-xl px-4 py-3 text-sm"></div>' +
       '</div>' +
     '</div>' +
   '</div>';
 
   // Role pill click handlers
   var pills = container.querySelectorAll('.role-pill');
+  console.log('Login: Found ' + pills.length + ' role buttons');
+  
   pills.forEach(function(pill) {
-    pill.addEventListener('click', function() {
-      selectedRole = this.getAttribute('data-role');
+    pill.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      var selectedRole = this.getAttribute('data-role');
+      console.log('Login: Clicked role:', selectedRole);
+      
+      var msgEl = document.getElementById('login-message');
+      
+      // Find a user with this role
+      var users = getCollection(StorageKeys.USERS);
+      console.log('Login: Found ' + users.length + ' users in storage');
+      
+      var user = null;
+      for (var i = 0; i < users.length; i++) {
+        if (users[i].role === selectedRole && users[i].status === 'Active') {
+          user = users[i];
+          break;
+        }
+      }
+      
+      if (!user) {
+        console.log('Login: No active user found for role:', selectedRole);
+        if (msgEl) {
+          msgEl.className = 'text-sm rounded-xl px-4 py-3 bg-[#fef2f2] text-[#111827]';
+          msgEl.textContent = 'No active user found for this role.';
+        }
+        return;
+      }
+      
+      console.log('Login: Authenticating user:', user.fullName, 'with role:', selectedRole);
+      
+      // Update UI
       pills.forEach(function(p) {
-        p.className = 'role-pill px-4 py-2 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:bg-gray-50';
+        p.className = 'role-pill px-6 py-3 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:bg-gray-50 hover:shadow-lg';
       });
-      this.className = 'role-pill px-4 py-2 rounded-xl text-sm font-medium border transition-colors bg-[#111827] text-white border-[#111827]';
+      this.className = 'role-pill px-6 py-3 rounded-xl text-sm font-medium border transition-colors bg-[#111827] text-white border-[#111827] hover:shadow-lg';
+      
+      // Show loading message
+      if (msgEl) {
+        msgEl.className = 'text-sm rounded-xl px-4 py-3 bg-[#f0fdf4] text-[#0f766e]';
+        msgEl.textContent = 'Logging in as ' + escapeHtml(user.fullName) + '...';
+      }
+      
+      // Update last login
+      updateItem(StorageKeys.USERS, user.id, { lastLogin: new Date().toISOString() });
+      
+      // Create session and navigate
+      createSession(user);
+      
+      console.log('Login: Session created, navigating to:', getDefaultRoute(selectedRole));
+      
+      setTimeout(function() {
+        window.location.hash = getDefaultRoute(selectedRole);
+      }, 300);
     });
-  });
-
-  // Form submit
-  var form = document.getElementById('login-form');
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    var email = document.getElementById('login-email').value.trim();
-    var password = document.getElementById('login-password').value;
-    handleDesktopLogin(email, password, selectedRole);
   });
 }
 
@@ -191,64 +224,89 @@ function handleDesktopLogin(email, password, role) {
  * @param {HTMLElement} container
  */
 function renderMobileLogin(container) {
-  var enteredPin = '';
-
-  container.innerHTML = '<div class="min-h-screen bg-[#111827] flex flex-col items-center justify-center p-6">' +
-    '<div class="text-center mb-8">' +
+  container.innerHTML = '<div class="min-h-screen bg-gradient-to-b from-[#0f766e] to-[#0a5b56] flex flex-col items-center justify-center p-6">' +
+    '<div class="text-center mb-12">' +
       '<h1 class="text-3xl font-bold text-white mb-2">Saile</h1>' +
-      '<p class="text-gray-400 text-sm">Enter your PIN to continue</p>' +
+      '<p class="text-gray-200 text-sm">Financial Services Platform</p>' +
     '</div>' +
-    '<!-- PIN dots -->' +
-    '<div id="pin-dots" class="flex gap-3 mb-8">' +
-      '<div class="w-4 h-4 rounded-full border-2 border-gray-500 pin-dot"></div>' +
-      '<div class="w-4 h-4 rounded-full border-2 border-gray-500 pin-dot"></div>' +
-      '<div class="w-4 h-4 rounded-full border-2 border-gray-500 pin-dot"></div>' +
-      '<div class="w-4 h-4 rounded-full border-2 border-gray-500 pin-dot"></div>' +
-    '</div>' +
-    '<div id="pin-error" class="hidden text-[#f87171] text-sm mb-4"></div>' +
-    '<!-- PIN pad -->' +
-    '<div id="pin-pad" class="grid grid-cols-3 gap-3 max-w-[240px]">' +
-      '<button class="pin-key w-[72px] h-[72px] rounded-full bg-gray-700 text-white text-xl font-medium hover:bg-gray-600 transition-colors flex items-center justify-center" data-key="1">1</button>' +
-      '<button class="pin-key w-[72px] h-[72px] rounded-full bg-gray-700 text-white text-xl font-medium hover:bg-gray-600 transition-colors flex items-center justify-center" data-key="2">2</button>' +
-      '<button class="pin-key w-[72px] h-[72px] rounded-full bg-gray-700 text-white text-xl font-medium hover:bg-gray-600 transition-colors flex items-center justify-center" data-key="3">3</button>' +
-      '<button class="pin-key w-[72px] h-[72px] rounded-full bg-gray-700 text-white text-xl font-medium hover:bg-gray-600 transition-colors flex items-center justify-center" data-key="4">4</button>' +
-      '<button class="pin-key w-[72px] h-[72px] rounded-full bg-gray-700 text-white text-xl font-medium hover:bg-gray-600 transition-colors flex items-center justify-center" data-key="5">5</button>' +
-      '<button class="pin-key w-[72px] h-[72px] rounded-full bg-gray-700 text-white text-xl font-medium hover:bg-gray-600 transition-colors flex items-center justify-center" data-key="6">6</button>' +
-      '<button class="pin-key w-[72px] h-[72px] rounded-full bg-gray-700 text-white text-xl font-medium hover:bg-gray-600 transition-colors flex items-center justify-center" data-key="7">7</button>' +
-      '<button class="pin-key w-[72px] h-[72px] rounded-full bg-gray-700 text-white text-xl font-medium hover:bg-gray-600 transition-colors flex items-center justify-center" data-key="8">8</button>' +
-      '<button class="pin-key w-[72px] h-[72px] rounded-full bg-gray-700 text-white text-xl font-medium hover:bg-gray-600 transition-colors flex items-center justify-center" data-key="9">9</button>' +
-      '<button class="pin-key w-[72px] h-[72px] rounded-full bg-gray-800 text-white text-xl font-medium hover:bg-gray-600 transition-colors flex items-center justify-center" data-key="back">&larr;</button>' +
-      '<button class="pin-key w-[72px] h-[72px] rounded-full bg-gray-700 text-white text-xl font-medium hover:bg-gray-600 transition-colors flex items-center justify-center" data-key="0">0</button>' +
-      '<button class="pin-key w-[72px] h-[72px] rounded-full bg-[#0f766e] text-white text-xl font-medium hover:bg-teal-800 transition-colors flex items-center justify-center" data-key="submit">&check;</button>' +
-    '</div>' +
-    '<!-- Biometric card -->' +
-    '<div class="mt-8 bg-gray-800 rounded-xl p-4 w-full max-w-[240px] text-center">' +
-      '<div class="text-gray-400 text-xs mb-2">Biometric Login</div>' +
-      '<div class="text-2xl">&#128274;</div>' +
-      '<div class="text-gray-500 text-xs mt-1">Not available in prototype</div>' +
+    '<div class="w-full max-w-sm">' +
+      '<h2 class="text-xl font-semibold text-white mb-2 text-center">Select Your Role</h2>' +
+      '<p class="text-gray-200 text-sm text-center mb-8">Tap to access your dashboard</p>' +
+      '<div class="space-y-3" id="role-pills">' +
+        '<button data-role="admin" class="role-pill w-full px-4 py-3 rounded-xl text-sm font-medium border transition-colors bg-[#111827] text-white border-[#111827] hover:shadow-lg">Admin</button>' +
+        '<button data-role="md" class="role-pill w-full px-4 py-3 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:shadow-lg">Managing Director</button>' +
+        '<button data-role="finance_manager" class="role-pill w-full px-4 py-3 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:shadow-lg">Finance Manager</button>' +
+        '<button data-role="branch_manager" class="role-pill w-full px-4 py-3 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:shadow-lg">Branch Manager</button>' +
+        '<button data-role="loan_officer" class="role-pill w-full px-4 py-3 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:shadow-lg">Loan Officer</button>' +
+        '<button data-role="field_officer" class="role-pill w-full px-4 py-3 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:shadow-lg">Field Officer</button>' +
+        '<button data-role="accountant" class="role-pill w-full px-4 py-3 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:shadow-lg">Accountant</button>' +
+        '<button data-role="auditor" class="role-pill w-full px-4 py-3 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:shadow-lg">Auditor</button>' +
+      '</div>' +
+      '<div id="login-message" class="mt-6 rounded-xl px-4 py-3 text-sm text-center hidden"></div>' +
     '</div>' +
   '</div>';
 
-  // PIN pad event handlers
-  var pad = document.getElementById('pin-pad');
-  pad.addEventListener('click', function(e) {
-    var btn = e.target.closest('.pin-key');
-    if (!btn) return;
-    var key = btn.getAttribute('data-key');
-
-    if (key === 'back') {
-      enteredPin = enteredPin.slice(0, -1);
-    } else if (key === 'submit') {
-      if (enteredPin.length === 4) {
-        handlePinEntry(enteredPin);
-        enteredPin = '';
+  // Role pill click handlers
+  var pills = container.querySelectorAll('.role-pill');
+  console.log('Mobile Login: Found ' + pills.length + ' role buttons');
+  
+  pills.forEach(function(pill) {
+    pill.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      var selectedRole = this.getAttribute('data-role');
+      console.log('Mobile Login: Clicked role:', selectedRole);
+      
+      var msgEl = document.getElementById('login-message');
+      
+      // Find a user with this role
+      var users = getCollection(StorageKeys.USERS);
+      console.log('Mobile Login: Found ' + users.length + ' users in storage');
+      
+      var user = null;
+      for (var i = 0; i < users.length; i++) {
+        if (users[i].role === selectedRole && users[i].status === 'Active') {
+          user = users[i];
+          break;
+        }
       }
-    } else {
-      if (enteredPin.length < 4) {
-        enteredPin += key;
+      
+      if (!user) {
+        console.log('Mobile Login: No active user found for role:', selectedRole);
+        if (msgEl) {
+          msgEl.className = 'mt-6 rounded-xl px-4 py-3 text-sm text-center bg-[#fef2f2] text-[#111827]';
+          msgEl.textContent = 'No active user found for this role.';
+        }
+        return;
       }
-    }
-    updatePinDots(enteredPin.length);
+      
+      console.log('Mobile Login: Authenticating user:', user.fullName, 'with role:', selectedRole);
+      
+      // Update UI
+      pills.forEach(function(p) {
+        p.className = 'role-pill w-full px-4 py-3 rounded-xl text-sm font-medium border transition-colors bg-white text-[#0f766e] border-[#d1d5db] hover:shadow-lg';
+      });
+      this.className = 'role-pill w-full px-4 py-3 rounded-xl text-sm font-medium border transition-colors bg-[#111827] text-white border-[#111827] hover:shadow-lg';
+      
+      // Show loading message
+      if (msgEl) {
+        msgEl.className = 'mt-6 rounded-xl px-4 py-3 text-sm text-center bg-[#f0fdf4] text-[#0f766e]';
+        msgEl.textContent = 'Logging in...';
+      }
+      
+      // Update last login
+      updateItem(StorageKeys.USERS, user.id, { lastLogin: new Date().toISOString() });
+      
+      // Create session and navigate
+      createSession(user);
+      
+      console.log('Mobile Login: Session created, navigating to:', getDefaultRoute(selectedRole));
+      
+      setTimeout(function() {
+        window.location.hash = getDefaultRoute(selectedRole);
+      }, 300);
+    });
   });
 }
 

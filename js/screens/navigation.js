@@ -298,7 +298,7 @@ function renderLeftRail(navItems, role, isCollapsed) {
     // Role switcher
     html += '<div class="mt-2">';
     html += '<select id="role-switcher" class="w-full text-xs border border-[#d1d5db] rounded-xl px-3 py-1.5 bg-[#f4f4f5] text-[#0f766e]">';
-    var roles = ['admin', 'branch_manager', 'field_officer', 'accountant', 'auditor'];
+    var roles = ['admin', 'md', 'finance_manager', 'branch_manager', 'loan_officer', 'field_officer', 'accountant', 'auditor'];
     for (var r = 0; r < roles.length; r++) {
       var sel = roles[r] === role ? ' selected' : '';
       html += '<option value="' + roles[r] + '"' + sel + '>' + roles[r].replace(/_/g, ' ') + '</option>';
