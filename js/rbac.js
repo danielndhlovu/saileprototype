@@ -10,12 +10,14 @@ var ROLE_PERMISSIONS = {
   },
   md: {
     modules: ['dashboard','clients','groups','loans','repayment','collections','followup','savings','accounting','reports','users','settings','audit','sync','migration'],
-    actions: ['create','read','update','delete','approve','disburse','view_financial_reports'],
+    actions: ['read','update','approve','disburse','view_financial_reports'],
+    readOnly: ['clients','groups','collections','followup','users'], // Restricted from creation in these modules
     defaultRoute: '#/dashboard'
   },
   finance_manager: {
     modules: ['dashboard','clients','groups','loans','repayment','collections','followup','savings','accounting','reports','users','settings','audit','sync','migration'],
-    actions: ['create','read','update','delete','approve','disburse','view_financial_reports'],
+    actions: ['read','update','approve','disburse','view_financial_reports','create_voucher'],
+    readOnly: ['clients','groups','users'],
     defaultRoute: '#/dashboard'
   },
   branch_manager: {

@@ -24,7 +24,7 @@ function renderLoans(container, options) {
     html += '<h1 class="text-lg font-semibold text-[#0f766e]">Saile Loan Management</h1>';
     html += '<p class="text-sm text-[#6b7280]">' + loans.length + ' total applications across ' + products.length + ' products</p>';
     html += '</div>';
-    if (!readOnly && role !== 'accountant') {
+    if (!readOnly && canPerformAction(role, 'create')) {
       html += '<button id="btn-new-loan" class="bg-[#111827] text-white px-6 py-2.5 rounded-xl hover:bg-[#047857] font-medium text-sm">+ New Application</button>';
     }
     html += '</div>';
