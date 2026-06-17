@@ -1,418 +1,655 @@
 /**
  * Dashboard Screen
  * Handles role-specific dashboard rendering and logic.
+ * Integrated from Saile EIS Enhanced Prototype.
  */
 
-function renderDashboard() {
+function renderDashboard(container, opts) {
   const user = getValue(StorageKeys.SESSION);
   if (!user) return;
 
   const role = user.role;
-  const content = document.getElementById('app-content');
 
   // Clear previous content
-  content.innerHTML = '';
+  container.innerHTML = '';
 
   // Role-based dispatcher
   switch (role) {
     case 'md':
-      renderMDDashboard(content, user);
+      renderMDDashboard(container, user);
       break;
     case 'finance_manager':
-      renderFMDashboard(content, user);
+      renderFMDashboard(container, user);
       break;
     case 'auditor':
-      renderAuditorDashboard(content, user);
+      renderAuditorDashboard(container, user);
       break;
     case 'branch_manager':
-      renderBMDashboard(content, user);
+      renderBMDashboard(container, user);
+      break;
+    case 'admin':
+      renderAdminDashboard(container, user);
       break;
     case 'loan_officer':
     case 'field_officer':
-      renderLODashboard(content, user);
-      break;
-    case 'admin':
-      renderAdminDashboard(content, user);
+      renderLODashboard(container, user);
       break;
     default:
-      renderDefaultDashboard(content, user);
+      renderDefaultDashboard(container, user);
   }
 
-  // Initialize interactive elements
+  // Initialize common UI elements
   initDashboardListeners();
+  renderFAB();
 }
 
 /**
  * MD / Executive Dashboard
- * Focus: Strategy, Risk, High-level KPIs, Growth.
  */
 function renderMDDashboard(container, user) {
   const stats = calculateDashboardStats();
   const par = calculatePAR();
   const branches = getCollection(StorageKeys.BRANCHES);
+  const loans = getCollection(StorageKeys.LOANS);
 
   container.innerHTML = `
-    <div class="space-y-6">
-      <div class="flex justify-between items-end">
-        <div>
-          <h1 class="text-2xl font-bold text-dark">Good morning, Mr. Kafinyangwe</h1>
-          <p class="text-secondary text-sm">${escapeHtml(todayISO())} - Executive Intelligence System</p>
-        </div>
-        <div class="flex gap-3">
-          <button class="bg-white border border-border px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2">
-             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-             Portfolio Report
-          </button>
-          <button class="bg-primary text-white px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2">
-             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-             AI Insights
-          </button>
-        </div>
+    <div class="dashboard-view active" id="view-executive">
+      <!-- Sticky Section Nav -->
+      <div class="sticky-section-nav" style="margin:-24px -24px 24px;padding-left:24px;">
+        <div class="sec-nav-item active" onclick="scrollToSection('brief')">Morning Brief</div>
+        <div class="sec-nav-item" onclick="scrollToSection('portfolio')">Portfolio Quality</div>
+        <div class="sec-nav-item" onclick="scrollToSection('branches')">Branch Scorecard</div>
+        <div class="sec-nav-item" onclick="scrollToSection('products')">Product Mix</div>
+        <div class="sec-nav-item" onclick="scrollToSection('financial')">Financial</div>
+        <div class="sec-nav-item" onclick="scrollToSection('efficiency')">Efficiency</div>
+        <div class="sec-nav-item" onclick="scrollToSection('compliance')">Compliance</div>
+        <div class="sec-nav-item" onclick="scrollToSection('alerts-config')">Alerts</div>
+        <div class="sec-nav-item" onclick="scrollToSection('scenarios')">Scenarios</div>
+        <div class="sec-nav-item" onclick="scrollToSection('benchmarks')">Benchmarks</div>
       </div>
 
-      <!-- Portfolio KPIs -->
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div class="bg-white p-6 rounded-card border border-border">
-          <p class="text-xs font-semibold text-secondary uppercase tracking-wider mb-1">Portfolio Outstanding</p>
-          <h3 class="text-2xl font-bold text-primary">${escapeHtml(formatCurrency(par.totalOutstanding))}</h3>
-          <p class="text-xs text-emerald-600 mt-2 flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 15l7-7 7 7"/></svg>
-            +12% MoM
-          </p>
-        </div>
-        <div class="bg-white p-6 rounded-card border border-border">
-          <p class="text-xs font-semibold text-secondary uppercase tracking-wider mb-1">Active Clients</p>
-          <h3 class="text-2xl font-bold text-dark">${escapeHtml(stats.activeClients.toString())}</h3>
-          <p class="text-xs text-emerald-600 mt-2 flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 15l7-7 7 7"/></svg>
-            +32 MoM
-          </p>
-        </div>
-        <div class="bg-white p-6 rounded-card border border-border">
-          <p class="text-xs font-semibold text-secondary uppercase tracking-wider mb-1">Active Loans</p>
-          <h3 class="text-2xl font-bold text-dark">${escapeHtml(stats.activeLoans.toString())}</h3>
-          <p class="text-xs text-emerald-600 mt-2 flex items-center gap-1">
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 15l7-7 7 7"/></svg>
-            +18 MoM
-          </p>
-        </div>
-        <div class="bg-white p-6 rounded-card border border-border">
-          <p class="text-xs font-semibold text-secondary uppercase tracking-wider mb-1">PAR 30</p>
-          <h3 class="text-2xl font-bold text-warning">${escapeHtml(formatPercentage(par.par1_30_pct))}</h3>
-          <p class="text-xs text-secondary mt-2">Target: <5%</p>
-        </div>
-      </div>
-
-      <!-- Critical Alerts & Compliance -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div class="bg-primary/5 border border-primary/20 rounded-card p-6">
-          <h4 class="text-sm font-bold text-primary mb-4 flex items-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
-            Critical Alerts
-          </h4>
-          <div class="space-y-3">
-             <div class="flex items-center justify-between p-3 bg-white rounded-xl border border-primary/10 shadow-sm">
-                <span class="text-sm font-medium text-dark">2 loans pending your approval</span>
-                <span class="text-[10px] bg-warning/20 text-warning px-2 py-1 rounded-full font-bold">URGENT</span>
-             </div>
-             <div class="flex items-center justify-between p-3 bg-white rounded-xl border border-primary/10 shadow-sm">
-                <span class="text-sm font-medium text-dark">Provision Coverage at 103%</span>
-                <span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full font-bold">STABLE</span>
-             </div>
+      <!-- SECTION 1: Morning Brief -->
+      <div class="section-gap" id="brief">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Good morning, Mr. Kafinyangwe 👋</div>
+            <div class="section-meta" id="brief-date-sub">${escapeHtml(getFormattedFullDate())} · Q2 2026, Week 25</div>
+          </div>
+          <div class="section-actions">
+            <div style="display:flex;gap:4px;flex-wrap:wrap;">
+              <button class="btn btn-secondary btn-sm" onclick="setPeriod('today')">Today</button>
+              <button class="btn btn-secondary btn-sm" onclick="setPeriod('week')">Week</button>
+              <button class="btn btn-primary btn-sm" onclick="setPeriod('month')">This Month</button>
+              <button class="btn btn-secondary btn-sm" onclick="setPeriod('quarter')">Quarter</button>
+              <button class="btn btn-secondary btn-sm" onclick="setPeriod('year')">YTD</button>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="refreshDashboard(this)">🔄 Refresh</button>
+            <button class="btn btn-secondary btn-sm" onclick="showAIInsights()">🤖 AI Insights</button>
           </div>
         </div>
 
-        <div class="bg-white border border-border rounded-card p-6">
-          <h4 class="text-sm font-bold text-dark mb-4 flex items-center gap-2">
-            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-            Portfolio Risk Thermometer
-          </h4>
-          <div class="space-y-4">
-             <div>
-                <div class="flex justify-between text-xs mb-1">
-                   <span class="text-secondary font-medium">PAR 1-30 Days</span>
-                   <span class="text-dark font-bold">${escapeHtml(formatPercentage(par.par1_30_pct))}</span>
-                </div>
-                <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
-                   <div class="bg-warning h-full" style="width: ${par.par1_30_pct}%"></div>
-                </div>
-             </div>
-             <div>
-                <div class="flex justify-between text-xs mb-1">
-                   <span class="text-secondary font-medium">PAR 31-90 Days</span>
-                   <span class="text-dark font-bold">${escapeHtml(formatPercentage(par.par31_90_pct))}</span>
-                </div>
-                <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
-                   <div class="bg-orange-500 h-full" style="width: ${par.par31_90_pct}%"></div>
-                </div>
-             </div>
-             <div>
-                <div class="flex justify-between text-xs mb-1">
-                   <span class="text-secondary font-medium">PAR 90+ Days</span>
-                   <span class="text-dark font-bold">${escapeHtml(formatPercentage(par.par90plus_pct))}</span>
-                </div>
-                <div class="w-full bg-gray-100 h-2 rounded-full overflow-hidden">
-                   <div class="bg-red-600 h-full" style="width: ${par.par90plus_pct}%"></div>
-                </div>
-             </div>
+        <!-- KPI Strip -->
+        <div class="grid-4 mb-16">
+          <div class="kpi-card">
+            <div class="kpi-label">Portfolio Outstanding</div>
+            <div class="kpi-value kpi-lg">${escapeHtml(formatCurrency(par.totalOutstanding))}</div>
+            <div class="kpi-trend trend-up">▲ +2.1% MoM</div>
+            <div class="kpi-sub">vs last month</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Active Clients</div>
+            <div class="kpi-value kpi-lg">${escapeHtml(stats.activeClients.toString())}</div>
+            <div class="kpi-trend trend-up">▲ +12 MoM</div>
+            <div class="kpi-sub">vs last month</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Active Loans</div>
+            <div class="kpi-value kpi-lg">${escapeHtml(stats.activeLoans.toString())}</div>
+            <div class="kpi-trend trend-up">▲ +8 MoM</div>
+            <div class="kpi-sub">vs last month</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">PAR 30</div>
+            <div class="kpi-value kpi-lg" style="color:var(--amber)">${escapeHtml(formatPercentage(par.par1_30_pct))}</div>
+            <div class="kpi-trend trend-down">▲ +0.3pp MoM</div>
+            <div class="kpi-sub">Target: &lt;5%</div>
+          </div>
+        </div>
+
+        <!-- Alerts -->
+        <div class="card">
+          <div class="card-title">⚠️ 4 Alerts Requiring Your Attention <span class="card-subtitle" style="font-size:11px">· Auto-refreshes every 5 min</span></div>
+          <div class="alert-bar critical" onclick="openDashboardModal('branch-detail-karonga')">
+            <span>🔴</span>
+            <div>
+              <div class="alert-bar-title">Karonga Branch PAR 30 at 6.8% — above 5% threshold</div>
+              <div class="alert-bar-desc">Branch Manager: Geoffrey Ngwira · LOs: Bertha Mwale (5.2%), Charles Mwase (8.4%) — Click to review branch detail</div>
+            </div>
+            <span style="margin-left:auto;font-size:16px">→</span>
+          </div>
+          <div class="alert-bar warning" onclick="openDashboardModal('pending-approvals')">
+            <span>🟡</span>
+            <div>
+              <div class="alert-bar-title">4 loans pending MD approval &gt;48 hours (total: MWK 2.4M)</div>
+              <div class="alert-bar-desc">Oldest: 52 hours · Lilongwe x2, Mzuzu x1, Blantyre x1 — Click to approve</div>
+            </div>
+            <span style="margin-left:auto;font-size:16px">→</span>
+          </div>
+          <div class="alert-bar warning" onclick="scrollToSection('compliance')">
+            <span>🟡</span>
+            <div>
+              <div class="alert-bar-title">Q2 RBM Reports due in 14 days — 3 of 4 pending</div>
+              <div class="alert-bar-desc">RBM-003, RBM-004, RBM-008 not yet submitted — Click to view compliance tracker</div>
+            </div>
+            <span style="margin-left:auto;font-size:16px">→</span>
+          </div>
+          <div class="alert-bar healthy" onclick="openDashboardModal('full-risk-report')">
+            <span>🟢</span>
+            <div>
+              <div class="alert-bar-title">Provision Coverage 103% — RBM Minimum Met</div>
+              <div class="alert-bar-desc">Actual provision meets required capital buffer. Strong capital buffer.</div>
+            </div>
+            <span style="margin-left:auto;font-size:16px">→</span>
           </div>
         </div>
       </div>
 
-      <!-- What-If Scenario Modeling -->
-      <div class="bg-dark text-white rounded-card p-6">
-        <h4 class="text-sm font-bold mb-6 flex items-center gap-2">
-          <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
-          What-If Scenario Modeling
-        </h4>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-           <div class="space-y-4">
-              <label class="block text-xs font-medium text-gray-400">Increase Interest Rates by (%):</label>
-              <input type="range" id="rate-slider" min="0" max="10" step="0.5" value="0" class="w-full accent-primary">
-              <div class="flex justify-between text-[10px] text-gray-500"><span>0%</span><span>+10%</span></div>
-           </div>
-           <div class="space-y-4">
-              <label class="block text-xs font-medium text-gray-400">Improve Collection Efficiency by (%):</label>
-              <input type="range" id="efficiency-slider" min="0" max="20" step="1" value="0" class="w-full accent-primary">
-              <div class="flex justify-between text-[10px] text-gray-500"><span>0%</span><span>+20%</span></div>
-           </div>
-           <div class="bg-white/5 rounded-xl p-4 border border-white/10">
-              <p class="text-xs text-gray-400 mb-1">Projected Annual Revenue Increase</p>
-              <h3 id="projected-revenue" class="text-xl font-bold text-emerald-400">${escapeHtml(formatCurrency(0))}</h3>
-              <p class="text-[10px] text-gray-500 mt-2">Based on current portfolio of ${escapeHtml(formatCurrency(par.totalOutstanding))}</p>
-           </div>
+      <!-- SECTION 2: Portfolio Quality -->
+      <div class="section-gap" id="portfolio">
+        <div class="section-header">
+          <div>
+            <div class="section-title">📊 Portfolio Quality — Risk Thermometer</div>
+            <div class="section-meta">Last updated: Today, 06:00 AM · Next snapshot: 06:00 AM tomorrow</div>
+          </div>
+          <div class="section-actions">
+            <button class="btn btn-secondary btn-sm" onclick="refreshDashboard(this)">🔄 Refresh</button>
+            <button class="btn btn-primary btn-sm" onclick="openDashboardModal('full-risk-report')">📄 Full Risk Report</button>
+          </div>
+        </div>
+
+        <div class="grid-2 mb-16">
+          <!-- PAR Composition -->
+          <div class="card">
+            <div class="card-title">PAR Composition <span class="card-subtitle">Click any bar to drill-down</span></div>
+            <div class="par-row" onclick="openDashboardModal('par-drilldown-1-30')" style="cursor:pointer">
+              <span class="par-label">PAR 1–30</span>
+              <div class="par-bar-track"><div class="par-bar-fill" style="width:${par.par1_30_pct}%;background:var(--amber)"></div></div>
+              <span class="par-value" style="color:var(--amber)">${escapeHtml(formatPercentage(par.par1_30_pct))}</span>
+              <span class="par-status">🟡</span>
+            </div>
+            <div class="par-row" onclick="openDashboardModal('par-drilldown-31-60')" style="cursor:pointer">
+              <span class="par-label">PAR 31–60</span>
+              <div class="par-bar-track"><div class="par-bar-fill" style="width:${par.par31_60_pct}%;background:var(--amber)"></div></div>
+              <span class="par-value" style="color:var(--amber)">${escapeHtml(formatPercentage(par.par31_60_pct))}</span>
+              <span class="par-status">🟡</span>
+            </div>
+            <div class="par-row" onclick="openDashboardModal('par-drilldown-61-90')" style="cursor:pointer">
+              <span class="par-label">PAR 61–90</span>
+              <div class="par-bar-track"><div class="par-bar-fill" style="width:${par.par61_90_pct}%;background:var(--green)"></div></div>
+              <span class="par-value" style="color:var(--green)">${escapeHtml(formatPercentage(par.par61_90_pct))}</span>
+              <span class="par-status">🟢</span>
+            </div>
+            <div class="par-row" onclick="openDashboardModal('par-drilldown-90plus')" style="cursor:pointer">
+              <span class="par-label">PAR 90+</span>
+              <div class="par-bar-track"><div class="par-bar-fill" style="width:${par.par90plus_pct}%;background:var(--red)"></div></div>
+              <span class="par-value" style="color:var(--red)">${escapeHtml(formatPercentage(par.par90plus_pct))}</span>
+              <span class="par-status">🟢</span>
+            </div>
+            <div class="par-row">
+              <span class="par-label">Write-offs</span>
+              <div class="par-bar-track"><div class="par-bar-fill" style="width:2%;background:var(--text-muted)"></div></div>
+              <span class="par-value" style="color:var(--text-muted)">0.1%</span>
+              <span class="par-status">🟢</span>
+            </div>
+            <hr class="divider">
+            <div class="flex justify-between items-center">
+              <span class="muted small">Target PAR 30: &lt;5%</span>
+              <span class="pill pill-amber">🟡 Approaching</span>
+            </div>
+          </div>
+
+          <!-- PAR Trend Chart -->
+          <div class="card">
+            <div class="card-title">PAR Trend — Last 12 Months <span class="card-subtitle">Target line at 5%</span></div>
+            <div class="chart-wrap" style="height:160px">
+              <canvas id="par-trend-chart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Provision Adequacy &amp; Write-off Status</div>
+          <div class="grid-4">
+            <div>
+              <div class="kpi-label">Required Provision</div>
+              <div class="kpi-value" style="font-size:22px">MWK 3.1M</div>
+              <div class="small muted">RBM-based calculation</div>
+            </div>
+            <div>
+              <div class="kpi-label">Actual Provision Held</div>
+              <div class="kpi-value" style="font-size:22px;color:var(--green)">MWK 3.2M</div>
+              <div class="small muted">Coverage: 103%</div>
+            </div>
+            <div>
+              <div class="kpi-label">Write-off Risk (PAR 90+)</div>
+              <div class="kpi-value" style="font-size:22px;color:var(--amber)">MWK 1.8M</div>
+              <div class="small muted">2.4% of portfolio</div>
+            </div>
+            <div>
+              <div class="kpi-label">Recovery Rate YTD</div>
+              <div class="kpi-value" style="font-size:22px;color:var(--amber)">34%</div>
+              <div class="small muted">Target: 40% · Below target</div>
+            </div>
+          </div>
+          <hr class="divider">
+          <div class="flex gap-12 flex-wrap items-center">
+            <span class="pill pill-green">✓ Coverage Ratio: 103%</span>
+            <span class="pill pill-green">✓ RBM Minimum 100% Met</span>
+            <span class="pill pill-amber">⚠ Recovery Rate Below Target</span>
+          </div>
         </div>
       </div>
 
-      <!-- Branch Performance Scorecard -->
-      <div class="bg-white border border-border rounded-card overflow-hidden">
-        <div class="p-6 border-b border-border flex justify-between items-center">
-           <h4 class="text-sm font-bold text-dark">Branch Operational Scorecard</h4>
-           <span class="text-xs text-secondary italic">Last updated: Just now</span>
+      <!-- SECTION 3: Branch Scorecard -->
+      <div class="section-gap" id="branches">
+        <div class="section-header">
+          <div>
+            <div class="section-title">🏦 Branch Performance Scorecard — Q2 2026</div>
+            <div class="section-meta">Click column header to sort · Click branch name for detail</div>
+          </div>
+          <div class="section-actions">
+            <button class="btn btn-secondary btn-sm" onclick="exportTableCSV('branch-table', 'saile-branch-scorecard-q2-2026')">📥 Export CSV</button>
+            <button class="btn btn-secondary btn-sm" onclick="simulateExportPDF()">📄 Export PDF</button>
+            <button class="btn btn-primary btn-sm" onclick="openDashboardModal('set-targets')">🎯 Set Targets</button>
+          </div>
         </div>
-        <div class="overflow-x-auto">
-           <table class="w-full text-left">
-              <thead class="bg-gray-50 text-[10px] uppercase font-bold text-secondary">
-                 <tr>
-                    <th class="px-6 py-4">Branch Name</th>
-                    <th class="px-6 py-4 text-right">Portfolio</th>
-                    <th class="px-6 py-4 text-center">PAR 30</th>
-                    <th class="px-6 py-4 text-center">Efficiency</th>
-                    <th class="px-6 py-4 text-center">Status</th>
-                 </tr>
+
+        <div class="card">
+          <div class="tbl-wrap">
+            <table id="branch-table">
+              <thead>
+                <tr>
+                  <th onclick="sortTable('branch-table',0)">Branch ↕</th>
+                  <th onclick="sortTable('branch-table',1)">Portfolio ↕</th>
+                  <th onclick="sortTable('branch-table',2)">Clients ↕</th>
+                  <th onclick="sortTable('branch-table',3)">Avg Loan ↕</th>
+                  <th onclick="sortTable('branch-table',4)">Disbursed ↕</th>
+                  <th onclick="sortTable('branch-table',5)">Collected ↕</th>
+                  <th onclick="sortTable('branch-table',6)">PAR 30 ↕</th>
+                  <th onclick="sortTable('branch-table',7)">Status</th>
+                  <th>Trend</th>
+                  <th>Action</th>
+                </tr>
               </thead>
-              <tbody class="divide-y divide-border">
+              <tbody>
                  ${branches.map(b => {
-                    const branchLoans = getCollection(StorageKeys.LOANS).filter(l => l.branchId === b.id);
-                    const branchPortfolio = branchLoans.reduce((sum, l) => sum + (l.loanAmount || 0), 0);
+                    const branchLoans = loans.filter(l => l.branchId === b.id);
+                    const branchPortfolio = branchLoans.reduce((sum, l) => sum + (l.approvedAmount || 0), 0);
+                    const branchClients = branchLoans.length + 50;
+                    const branchAvg = branchClients > 0 ? (branchPortfolio + 1000000) / branchClients : 0;
+
+                    const isKaronga = b.branchName.includes('Karonga');
+                    const isLilongwe = b.branchName.includes('Lilongwe');
+
+                    const portStr = isKaronga ? 'MWK 4.2M' : (isLilongwe ? 'MWK 22.1M' : formatCurrency(branchPortfolio/10).split('.')[0] + 'K');
+                    const clientCount = isKaronga ? 85 : (isLilongwe ? 198 : branchClients);
+                    const parVal = isKaronga ? '6.8%' : (isLilongwe ? '3.1%' : '4.2%');
+                    const statusPill = isKaronga ? '<span class="pill pill-red">🔴 Critical</span>' : '<span class="pill pill-green">🟢 Healthy</span>';
+                    const rowClass = isKaronga ? 'class="tbl-row-highlight"' : '';
+
                     return `
-                       <tr class="hover:bg-gray-50 transition-colors">
-                          <td class="px-6 py-4">
-                             <p class="text-sm font-semibold text-dark">${escapeHtml(b.branchName)}</p>
-                             <p class="text-[10px] text-secondary">${escapeHtml(b.branchCode)}</p>
-                          </td>
-                          <td class="px-6 py-4 text-right text-sm font-medium text-dark">${escapeHtml(formatCurrency(branchPortfolio))}</td>
-                          <td class="px-6 py-4 text-center">
-                             <span class="px-2 py-1 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-bold">0.0%</span>
-                          </td>
-                          <td class="px-6 py-4 text-center text-sm">98.2%</td>
-                          <td class="px-6 py-4 text-center">
-                             <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
-                          </td>
-                       </tr>
+                      <tr ${rowClass}>
+                        <td><b>${escapeHtml(b.branchName.split('-')[0].trim())}</b><div class="small muted">Mgr: ${escapeHtml(b.managerName)}</div></td>
+                        <td>${escapeHtml(portStr)}</td>
+                        <td>${clientCount}</td>
+                        <td>${escapeHtml(formatCurrency(branchAvg).split('.')[0])}</td>
+                        <td>MWK 1.5M</td>
+                        <td>MWK 1.2M</td>
+                        <td><span class="${isKaronga ? 'text-red' : 'text-green'} bold">${parVal}</span></td>
+                        <td>${statusPill}</td>
+                        <td><span class="${isKaronga ? 'text-red' : 'text-green'} bold">${isKaronga ? '▼' : '▲'}</span></td>
+                        <td><button class="btn btn-sm btn-secondary" onclick="openDashboardModal('branch-detail-${b.id}')">View</button></td>
+                      </tr>
                     `;
                  }).join('')}
               </tbody>
-           </table>
+              <tfoot>
+                <tr style="background:#F9FAFB;font-weight:700;">
+                  <td>TOTAL / AVERAGE</td>
+                  <td>MWK 75.2M</td><td>850</td><td>MWK 88,471</td>
+                  <td>MWK 26.3M</td><td>MWK 25.2M</td>
+                  <td>4.2%</td><td></td><td><span class="text-green bold">▲</span></td><td></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
         </div>
       </div>
+
+      <!-- SECTION 4: Product Mix -->
+      <div class="section-gap" id="products">
+        <div class="section-header">
+          <div>
+            <div class="section-title">💼 Product Mix &amp; Performance</div>
+            <div class="section-meta">Bubble chart: X=Risk (PAR30) · Y=Growth · Size=Portfolio</div>
+          </div>
+          <div class="section-actions">
+            <button class="btn btn-secondary btn-sm" onclick="compareProducts()">📊 Compare Products</button>
+            <button class="btn btn-primary btn-sm" onclick="openDashboardModal('model-product')">🔬 Model New Product</button>
+          </div>
+        </div>
+
+        <div class="grid-2 mb-16">
+          <div class="card">
+            <div class="card-title">Portfolio Composition</div>
+            <div class="chart-wrap" style="height:200px">
+              <canvas id="product-donut-chart"></canvas>
+            </div>
+            <div class="bubble-legend mt-12" id="product-legend"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Product Performance Matrix <span class="card-subtitle">Lower-right = ideal (low risk, high growth)</span></div>
+            <div class="chart-wrap" style="height:200px">
+              <canvas id="product-bubble-chart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="tbl-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Product</th><th>Portfolio</th><th>% Total</th>
+                  <th>Avg Loan</th><th>PAR 30</th><th>Growth YoY</th>
+                  <th>NIM</th><th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><b>Payday Loan</b></td><td>MWK 30.1M</td><td>40.0%</td><td>MWK 45,000</td><td><span class="text-green">2.1%</span></td><td class="text-green">+18%</td><td>22%</td><td><span class="pill pill-green">🟢</span></td></tr>
+                <tr><td><b>SML (6-Month)</b></td><td>MWK 18.8M</td><td>25.0%</td><td>MWK 125,000</td><td><span class="text-green">3.8%</span></td><td class="text-green">+12%</td><td>18%</td><td><span class="pill pill-green">🟢</span></td></tr>
+                <tr><td><b>Business Loan</b></td><td>MWK 11.3M</td><td>15.0%</td><td>MWK 350,000</td><td><span class="text-amber">5.2%</span></td><td class="text-green">+8%</td><td>15%</td><td><span class="pill pill-amber">🟡</span></td></tr>
+                <tr class="tbl-row-highlight"><td><b>Enterprise</b></td><td>MWK 1.5M</td><td>2.0%</td><td>MWK 750,000</td><td><span class="text-red">6.8%</span></td><td class="text-red">-3%</td><td>10%</td><td><span class="pill pill-red">🔴</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="mt-12">
+            <div class="alert-bar critical" style="margin-bottom:8px">⚠️ Enterprise Loan PAR elevated at 6.8% · Review large exposure policy</div>
+            <div class="alert-bar" style="background:#EFF6FF;border-left:4px solid var(--blue);margin-bottom:0">💡 Executive Scheme growing fastest (+22%) · Consider increasing cap</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 5: Financial Performance -->
+      <div class="section-gap" id="financial">
+        <div class="section-header">
+          <div>
+            <div class="section-title">💰 Financial Performance — YTD 2026</div>
+            <div class="section-meta">Period: January 1 – June 17, 2026</div>
+          </div>
+          <div class="section-actions">
+            <button class="btn btn-primary btn-sm" onclick="openDashboardModal('full-pl')">📋 View Full P&amp;L</button>
+            <button class="btn btn-secondary btn-sm" onclick="openDashboardModal('balance-sheet')">📊 Balance Sheet</button>
+          </div>
+        </div>
+
+        <div class="grid-4 mb-16">
+          <div class="kpi-card">
+            <div class="kpi-label">Total Revenue YTD</div>
+            <div class="kpi-value" style="font-size:22px;color:var(--green)">MWK 12.4M</div>
+            <div class="kpi-trend trend-up">▲ +18.5% YoY</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Total Expenses YTD</div>
+            <div class="kpi-value" style="font-size:22px;color:var(--amber)">MWK 8.9M</div>
+            <div class="kpi-trend trend-down">▲ +12.1% YoY</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Net Income YTD</div>
+            <div class="kpi-value" style="font-size:22px;color:var(--blue-dark)">MWK 3.5M</div>
+            <div class="kpi-trend trend-up">▲ +37.3% YoY</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Return on Equity</div>
+            <div class="kpi-value" style="font-size:22px;color:var(--blue-dark)">18.2%</div>
+            <div class="kpi-trend trend-up">▲ +2.1pp YoY</div>
+          </div>
+        </div>
+
+        <div class="grid-2 mb-16">
+          <div class="card">
+            <div class="card-title">Revenue vs. Expenses — Monthly</div>
+            <div class="chart-wrap" style="height:180px">
+              <canvas id="fin-bar-chart"></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Profitability Trend — 12 Months</div>
+            <div class="chart-wrap" style="height:180px">
+              <canvas id="profit-trend-chart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 9: Scenario Modeling -->
+      <div class="section-gap" id="scenarios">
+        <div class="section-header">
+          <div>
+            <div class="section-title">🔬 What-If Scenario Modeling</div>
+            <div class="section-meta">Interactive business decision modeling · Real-time output</div>
+          </div>
+          <div class="section-actions">
+            <button class="btn btn-secondary btn-sm">📁 Saved Scenarios</button>
+            <button class="btn btn-primary btn-sm" onclick="saveScenario()">📥 Export to PDF</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="grid-2" style="gap:24px">
+            <div>
+              <div class="semibold mb-12">Scenario Inputs</div>
+              <div class="slider-group">
+                <div class="slider-label"><span>New Loan Officers Hired</span><span id="sl-los-val" class="text-blue bold">3</span></div>
+                <input type="range" min="0" max="10" value="3" id="sl-los" oninput="updateScenario()">
+              </div>
+              <div class="slider-group">
+                <div class="slider-label"><span>Portfolio Growth Target (%)</span><span id="sl-growth-val" class="text-blue bold">15%</span></div>
+                <input type="range" min="0" max="50" value="15" id="sl-growth" oninput="updateScenario()">
+              </div>
+              <div class="slider-group">
+                <div class="slider-label"><span>Interest Rate Change (pp)</span><span id="sl-rate-val" class="text-blue bold">+0pp</span></div>
+                <input type="range" min="-5" max="5" value="0" id="sl-rate" oninput="updateScenario()">
+              </div>
+              <div class="slider-group">
+                <div class="slider-label"><span>PAR Stress Scenario (pp increase)</span><span id="sl-par-val" class="text-blue bold">+0pp</span></div>
+                <input type="range" min="0" max="10" value="0" id="sl-par" oninput="updateScenario()">
+              </div>
+              <div class="slider-group">
+                <div class="slider-label"><span>New Branch (setup cost MWK M)</span><span id="sl-branch-val" class="text-blue bold">0M</span></div>
+                <input type="range" min="0" max="10" value="0" id="sl-branch" oninput="updateScenario()">
+              </div>
+            </div>
+            <div>
+              <div class="semibold mb-12">Projected Outputs (12-month)</div>
+              <div class="scenario-output-grid">
+                <div class="scenario-output-card">
+                  <div class="scenario-output-label">Portfolio</div>
+                  <div class="scenario-output-val" id="sc-portfolio">MWK 87.3M</div>
+                  <div class="scenario-output-delta text-green" id="sc-portfolio-d">▲ +15% (compound)</div>
+                </div>
+                <div class="scenario-output-card">
+                  <div class="scenario-output-label">Active Clients</div>
+                  <div class="scenario-output-val" id="sc-clients">1044</div>
+                  <div class="scenario-output-delta text-green" id="sc-clients-d">▲ +194 vs today</div>
+                </div>
+                <div class="scenario-output-card">
+                  <div class="scenario-output-label">Net Income</div>
+                  <div class="scenario-output-val" id="sc-income">MWK 4.4M</div>
+                  <div class="scenario-output-delta text-green" id="sc-income-d">▲ +45.2%</div>
+                </div>
+                <div class="scenario-output-card">
+                  <div class="scenario-output-label">PAR 30</div>
+                  <div class="scenario-output-val" id="sc-par">4.2%</div>
+                  <div class="scenario-output-delta text-green" id="sc-par-d">→ No change</div>
+                </div>
+              </div>
+              <button class="btn btn-secondary btn-sm mt-12" onclick="saveScenario()">💾 Save This Scenario</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="back-to-top" onclick="window.scrollTo(0,0)">⬆️ Back to Top</div>
     </div>
   `;
+
+  setTimeout(() => {
+    initMDCharts();
+    updateScenario();
+    observeSections();
+  }, 100);
 }
 
 /**
  * Finance Manager Dashboard
- * Focus: Cash flow, GL reconciliations, RBM Reporting.
  */
 function renderFMDashboard(container, user) {
-  const trialBalance = calculateTrialBalance();
   const cashBalance = getValue(StorageKeys.CASH_BALANCE) || 0;
-
   container.innerHTML = `
-    <div class="space-y-6">
-      <div class="flex justify-between items-end">
+    <div class="dashboard-view active" id="view-finance">
+      <div class="section-header">
         <div>
-          <h1 class="text-2xl font-bold text-dark">Financial Management Control</h1>
-          <p class="text-secondary text-sm">Treasury & Reporting — Finance Manager</p>
+          <div class="section-title">Finance Manager Dashboard</div>
+          <div class="section-meta">Matias Kafinyangwe · All Branches · <span class="pill pill-blue">Finance Manager</span></div>
+        </div>
+        <div class="section-actions">
+          <button class="btn btn-primary btn-sm" onclick="generateRBMReport(this)">📋 Generate RBM Report</button>
+          <button class="btn btn-secondary btn-sm" onclick="location.hash='#/accounting'">📊 View GL</button>
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-white p-6 rounded-card border border-border">
-          <p class="text-xs font-semibold text-secondary uppercase tracking-wider mb-1">Bank Balance (All Accounts)</p>
-          <h3 class="text-2xl font-bold text-dark">${escapeHtml(formatCurrency(12450000))}</h3>
-          <p class="text-[10px] text-emerald-600 mt-2 font-bold flex items-center gap-1">
-             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 15l7-7 7 7"/></svg>
-             MWK 1.2M Today
-          </p>
-        </div>
-        <div class="bg-white p-6 rounded-card border border-border">
-          <p class="text-xs font-semibold text-secondary uppercase tracking-wider mb-1">Cash On Hand</p>
-          <h3 class="text-2xl font-bold text-primary">${escapeHtml(formatCurrency(cashBalance))}</h3>
-          <p class="text-[10px] text-secondary mt-2">Branch Vaults</p>
-        </div>
-        <div class="bg-white p-6 rounded-card border border-border">
-          <p class="text-xs font-semibold text-secondary uppercase tracking-wider mb-1">Expected Collections</p>
-          <h3 class="text-2xl font-bold text-dark">${escapeHtml(formatCurrency(8500500))}</h3>
-          <p class="text-[10px] text-secondary mt-2">Projected Cash Flow</p>
+      <!-- Cash Position -->
+      <div class="card mb-16">
+        <div class="card-title">💵 Cash Position — Today</div>
+        <div class="grid-4">
+          <div class="kpi-card"><div class="kpi-label">Bank Accounts</div><div class="kpi-value" style="font-size:22px;color:var(--blue-dark)">MWK 12.4M</div><div class="kpi-trend trend-up">▲ +MWK 0.8M vs yesterday</div></div>
+          <div class="kpi-card"><div class="kpi-label">Cash on Hand (All Branches)</div><div class="kpi-value" style="font-size:22px">${escapeHtml(formatCurrency(cashBalance))}</div><div class="kpi-trend trend-up">▲ +MWK 0.4M vs yesterday</div></div>
+          <div class="kpi-card"><div class="kpi-label">Total Cash Position</div><div class="kpi-value" style="font-size:22px;color:var(--green)">MWK 14.5M</div><div class="kpi-trend trend-up">▲ +MWK 1.2M vs yesterday</div></div>
+          <div class="kpi-card"><div class="kpi-label">Expected Collections (30d)</div><div class="kpi-value" style="font-size:22px;color:var(--green)">MWK 8.5M</div><div class="kpi-sub">vs MWK 6.2M disbursements → Net +MWK 2.3M</div></div>
         </div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div class="bg-white border border-border rounded-card p-6">
-           <h4 class="text-sm font-bold text-dark mb-4">General Ledger Reconciliation</h4>
-           <div class="p-4 bg-gray-50 rounded-xl border border-border mb-4">
-              <div class="flex justify-between items-center mb-1">
-                 <span class="text-xs text-secondary font-medium">Status</span>
-                 <span class="${trialBalance.isBalanced ? 'text-emerald-600' : 'text-error'} font-bold text-[10px] uppercase">
-                    ${trialBalance.isBalanced ? '✓ Balanced' : '✗ Out of Balance'}
-                 </span>
-              </div>
-              <div class="grid grid-cols-2 gap-4 mt-4">
-                 <div>
-                    <p class="text-[10px] text-secondary uppercase font-bold">Total Debits</p>
-                    <p class="text-lg font-bold text-dark">${escapeHtml(formatCurrency(trialBalance.totalDebits))}</p>
-                 </div>
-                 <div>
-                    <p class="text-[10px] text-secondary uppercase font-bold">Total Credits</p>
-                    <p class="text-lg font-bold text-dark">${escapeHtml(formatCurrency(trialBalance.totalCredits))}</p>
-                 </div>
-              </div>
-           </div>
-           <button class="w-full py-3 bg-[#111827] text-white rounded-xl text-sm font-bold hover:bg-primary transition-colors">
-              Generate Trial Balance
-           </button>
+      <div class="grid-2 mb-16">
+        <div class="card">
+          <div class="card-title">General Ledger Status</div>
+          <div class="compliance-item">
+            <span class="compliance-icon">✅</span>
+            <div><div class="compliance-title">Last Reconciliation: Today</div><div class="compliance-sub">All accounts balanced · MWK 0 variance</div></div>
+            <div class="compliance-status-col"><span class="pill pill-green">Balanced</span></div>
+          </div>
+          <div class="compliance-item">
+            <span class="compliance-icon">🟡</span>
+            <div><div class="compliance-title">Unreconciled Items: 3</div><div class="compliance-sub">Total: MWK 45,000 · Oldest: 3 days</div></div>
+            <div class="compliance-status-col"><button class="btn btn-sm btn-secondary" onclick="reconcileGL(this)">Reconcile</button></div>
+          </div>
+          <hr class="divider">
+          <div class="flex gap-8">
+            <button class="btn btn-secondary btn-sm" onclick="location.hash='#/accounting'">View Trial Balance</button>
+            <button class="btn btn-secondary btn-sm" onclick="openDashboardModal('full-pl')">View P&amp;L</button>
+            <button class="btn btn-secondary btn-sm" onclick="openDashboardModal('balance-sheet')">Balance Sheet</button>
+          </div>
         </div>
 
-        <div class="bg-white border border-border rounded-card p-6">
-           <h4 class="text-sm font-bold text-dark mb-4">RBM Compliance Reporting</h4>
-           <div class="space-y-3">
-              <div class="p-3 border border-border rounded-xl flex items-center justify-between hover:bg-gray-50 cursor-pointer transition-colors">
-                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary font-bold">RBM</div>
-                    <div>
-                       <p class="text-sm font-bold text-dark">RBM-001 Financial Position</p>
-                       <p class="text-[10px] text-secondary">Due in 4 days</p>
-                    </div>
-                 </div>
-                 <span class="text-[10px] bg-primary/10 text-primary px-2 py-1 rounded-full font-bold">Ready for Sign-off</span>
-              </div>
-              <div class="p-3 border border-border rounded-xl flex items-center justify-between hover:bg-gray-50 cursor-pointer transition-colors">
-                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center text-secondary font-bold">RBM</div>
-                    <div>
-                       <p class="text-sm font-bold text-dark">RBM-003 Loan Portfolio</p>
-                       <p class="text-[10px] text-secondary">Draft in progress</p>
-                    </div>
-                 </div>
-                 <span class="text-[10px] bg-gray-100 text-secondary px-2 py-1 rounded-full font-bold">Awaiting Branch Data</span>
-              </div>
-              <div class="p-3 border border-border rounded-xl flex items-center justify-between hover:bg-gray-50 cursor-pointer transition-colors">
-                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center text-red-600 font-bold">RBM</div>
-                    <div>
-                       <p class="text-sm font-bold text-dark">RBM-004 Savings</p>
-                       <p class="text-[10px] text-secondary">Overdue</p>
-                    </div>
-                 </div>
-                 <span class="text-[10px] bg-red-100 text-red-700 px-2 py-1 rounded-full font-bold">Zomba/Karonga overdue</span>
-              </div>
-           </div>
+        <div class="card">
+          <div class="card-title">RBM Report Status <span class="card-subtitle">Q2 2026 · 14 days remaining</span></div>
+          <div class="compliance-item"><span class="compliance-icon">✅</span><div><div class="compliance-title">RBM-001: Financial Position</div><div class="compliance-sub">Ready for MD sign-off</div></div><div class="compliance-status-col"><span class="pill pill-green">Ready</span></div></div>
+          <div class="compliance-item"><span class="compliance-icon">⏳</span><div><div class="compliance-title">RBM-003: Loan Portfolio</div><div class="compliance-sub">Awaiting branch data — 2 branches late</div></div><div class="compliance-status-col"><button class="btn btn-sm btn-danger">Send Reminder</button></div></div>
+        </div>
+      </div>
+
+      <!-- Exceptions -->
+      <div class="card mb-16">
+        <div class="card-title">⚠️ Exceptions Requiring Attention</div>
+        <div class="anomaly-card high">
+          <div class="anomaly-title">Branch Cash Limit Exceeded — Blantyre</div>
+          <div class="anomaly-meta">MWK 850K in vault vs. MWK 500K limit · Action: Transfer to HQ bank account</div>
+        </div>
+      </div>
+
+      <!-- Cash Flow -->
+      <div class="card">
+        <div class="card-title">💹 Cash Flow Projection — Next 30 Days</div>
+        <div class="chart-wrap" style="height:120px">
+          <canvas id="cashflow-chart"></canvas>
         </div>
       </div>
     </div>
   `;
+  setTimeout(() => { initFMCharts(); }, 100);
 }
 
 /**
  * Auditor Dashboard
- * Focus: Compliance, Audit Trail, Anomaly Detection.
  */
 function renderAuditorDashboard(container, user) {
-  const auditLogs = getCollection(StorageKeys.AUDIT_LOG).slice(-5).reverse();
-
   container.innerHTML = `
-    <div class="space-y-6">
-      <div class="flex justify-between items-end">
+    <div class="dashboard-view active" id="view-audit">
+      <div class="section-header">
         <div>
-          <h1 class="text-2xl font-bold text-dark">Compliance & Risk Audit</h1>
-          <p class="text-secondary text-sm">Read-only Forensic View — Mrs. Yuki Kafinyangwe</p>
+          <div class="section-title">Internal Audit Dashboard</div>
+          <div class="section-meta">Mrs. Yuki Kafinyangwe · <span class="pill pill-red">READ-ONLY — No modifications permitted</span></div>
         </div>
-        <button class="bg-white border border-border px-4 py-2 rounded-xl text-sm font-medium">Download Full Audit Log</button>
+        <div class="section-actions">
+          <button class="btn btn-secondary btn-sm" onclick="location.hash='#/audit'">📜 View Audit Log</button>
+          <button class="btn btn-secondary btn-sm">📄 Generate Audit Report</button>
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-         <div class="lg:col-span-2 space-y-6">
-            <div class="bg-white border border-border rounded-card p-6">
-               <h4 class="text-sm font-bold text-dark mb-4">Recent Audit Activity</h4>
-               <div class="space-y-4">
-                  ${auditLogs.map(log => `
-                     <div class="flex items-start gap-4 p-3 border-b border-gray-50 last:border-0">
-                        <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
-                           <svg class="w-4 h-4 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A10.003 10.003 0 0012 3m0 18a10.003 10.003 0 01-8.213-9.333L4 12m8 8V9m0 0H9m3 0h3"/></svg>
-                        </div>
-                        <div class="flex-1">
-                           <div class="flex justify-between items-start">
-                              <p class="text-sm font-semibold text-dark">${escapeHtml(log.action)}</p>
-                              <span class="text-[10px] text-secondary font-medium">${escapeHtml(formatDateTime(log.timestamp))}</span>
-                           </div>
-                           <p class="text-xs text-secondary mt-1">${escapeHtml(log.userName)} in ${escapeHtml(log.module)}</p>
-                        </div>
-                     </div>
-                  `).join('')}
-               </div>
-            </div>
+      <!-- Anomaly Detection -->
+      <div class="card mb-16">
+        <div class="card-title">🚨 Anomaly Detection — Last 7 Days <span style="color:var(--red)">12 anomalies</span> <span class="muted small">· 3 Critical · 5 High · 4 Medium</span></div>
+        <div class="semibold mb-8 text-red small">CRITICAL — Require Immediate Review</div>
+        <div class="anomaly-card">
+          <div class="anomaly-title">🔴 Loan #2847: MWK 2.5M disbursed — Client NRC not on file</div>
+          <div class="anomaly-meta">Branch: Lilongwe · Loan Officer: Kenneth Malita · Flagged by: Document Compliance Rule</div>
+        </div>
+        <hr class="divider">
+        <div class="semibold mb-8 text-amber small">HIGH — Review Within 48 Hours</div>
+        <div class="anomaly-card high">
+          <div class="anomaly-title">🟡 After-hours transactions: 5 payments entered after 18:00</div>
+          <div class="anomaly-meta">Branches: Blantyre (3), Karonga (2) · Users: Verified staff but outside policy hours</div>
+        </div>
+      </div>
 
-            <div class="bg-red-50 border border-red-100 rounded-card p-6">
-               <h4 class="text-sm font-bold text-red-700 mb-4 flex items-center gap-2">
-                  <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
-                  Anomaly Detection Alerts
-               </h4>
-               <div class="p-4 bg-white border border-red-100 rounded-xl">
-                  <p class="text-xs font-bold text-dark">Possible Double Disbursement Detected</p>
-                  <p class="text-[10px] text-secondary mt-1">Client: Mtisunge Phiri (Lilongwe Branch). Loan amount matched previous loan within 24h.</p>
-                  <button class="mt-3 text-[10px] font-bold text-primary hover:underline">Investigate Transaction</button>
-               </div>
-            </div>
-         </div>
+      <div class="grid-2 mb-16">
+        <div class="card">
+          <div class="card-title">📊 Audit Trail Summary — Last 30 Days</div>
+          <div class="grid-2" style="gap:10px">
+            <div class="bg-bg rounded p-12"><div class="kpi-label">Total Events Logged</div><div style="font-size:20px;font-weight:700">14,230</div></div>
+            <div class="bg-bg rounded p-12"><div class="kpi-label">High-Risk Events</div><div style="font-size:20px;font-weight:700;color:var(--red)">23</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">✅ Compliance Spot Checks</div>
+          <div class="compliance-item"><span class="compliance-icon">✅</span><div><div class="compliance-title">20 loans — EIR correctly disclosed</div></div></div>
+          <div class="compliance-item"><span class="compliance-icon">⚠️</span><div><div class="compliance-title">3 loans — Missing disclosure statements</div></div><div class="compliance-status-col"><span class="pill pill-amber">🟡 Flag</span></div></div>
+        </div>
+      </div>
 
-         <div class="space-y-6">
-            <div class="bg-white border border-border rounded-card p-6">
-               <h4 class="text-sm font-bold text-dark mb-4">Risk Heatmap</h4>
-               <div class="grid grid-cols-3 gap-2">
-                  <div class="h-12 bg-emerald-500 rounded"></div>
-                  <div class="h-12 bg-emerald-500 rounded"></div>
-                  <div class="h-12 bg-warning rounded"></div>
-                  <div class="h-12 bg-emerald-500 rounded"></div>
-                  <div class="h-12 bg-orange-500 rounded"></div>
-                  <div class="h-12 bg-red-600 rounded animate-pulse"></div>
-                  <div class="h-12 bg-emerald-500 rounded"></div>
-                  <div class="h-12 bg-emerald-500 rounded"></div>
-                  <div class="h-12 bg-emerald-500 rounded"></div>
-               </div>
-               <div class="mt-4 flex justify-between text-[10px] text-secondary font-medium">
-                  <span>Operational</span>
-                  <span>Credit</span>
-                  <span>Market</span>
-               </div>
-            </div>
-
-            <div class="bg-dark text-white rounded-card p-6">
-               <p class="text-[10px] text-gray-400 uppercase tracking-widest font-bold mb-4">Compliance Score</p>
-               <h3 class="text-4xl font-bold text-primary">94.8%</h3>
-               <p class="text-xs text-gray-500 mt-2">System integrity check passed.</p>
-            </div>
-         </div>
+      <!-- Branch Risk Heatmap -->
+      <div class="card">
+        <div class="card-title">🗺️ Branch Risk Heatmap</div>
+        <div class="tbl-wrap">
+          <table style="font-size:13px">
+            <thead>
+              <tr><th>Branch</th><th>Anomalies</th><th>PAR Risk</th><th>GL Risk</th><th>Overall</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><b>Lilongwe</b></td><td>2</td><td><div class="heat-cell heat-green">🟢</div></td><td><div class="heat-cell heat-green">🟢</div></td><td><span class="pill pill-green">🟢 Low</span></td></tr>
+              <tr class="tbl-row-highlight"><td><b>Karonga</b></td><td><span class="text-red bold">3</span></td><td><div class="heat-cell heat-red">🔴</div></td><td><div class="heat-cell heat-amber">🟡</div></td><td><span class="pill pill-red">🔴 High</span></td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   `;
@@ -420,78 +657,114 @@ function renderAuditorDashboard(container, user) {
 
 /**
  * Branch Manager Dashboard
- * Focus: Local performance, staff targets, collections.
  */
 function renderBMDashboard(container, user) {
-  const branch = getCollection(StorageKeys.BRANCHES).find(b => b.branchCode === user.branchCode) || { branchName: 'MZE - Mzuzu' };
-  const clients = getCollection(StorageKeys.CLIENTS).filter(c => c.branchId === branch.id);
-
+  const branches = getCollection(StorageKeys.BRANCHES);
+  const branch = branches.find(b => b.id === user.branchId) || branches[3];
   container.innerHTML = `
-    <div class="space-y-6">
-      <div class="flex justify-between items-end">
+    <div class="dashboard-view active" id="view-branch">
+      <div class="section-header">
         <div>
-          <h1 class="text-2xl font-bold text-dark">Branch Manager Workspace</h1>
-          <p class="text-secondary text-sm">${escapeHtml(branch.branchName)} · ${escapeHtml(user.branchCode || 'GEN')}</p>
+          <div class="section-title">Branch Manager Dashboard — ${escapeHtml(branch.branchName)}</div>
+          <div class="section-meta">${escapeHtml(user.fullName)} · Staff: 4</div>
+        </div>
+        <div class="section-actions">
+          <button class="btn btn-secondary btn-sm" onclick="location.hash='#/reports'">📋 Branch Report</button>
+          <button class="btn btn-primary btn-sm" onclick="location.hash='#/clients'">+ New Client</button>
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-         <div class="bg-white p-6 rounded-card border border-border">
-            <p class="text-[10px] font-bold text-secondary uppercase tracking-widest mb-1">Portfolio</p>
-            <h3 class="text-xl font-bold text-primary">${escapeHtml(formatCurrency(0))}</h3>
-            <p class="text-[10px] text-secondary mt-1">Branch Total</p>
-         </div>
-         <div class="bg-white p-6 rounded-card border border-border">
-            <p class="text-[10px] font-bold text-secondary uppercase tracking-widest mb-1">PAR 30</p>
-            <h3 class="text-xl font-bold text-emerald-600">0.0%</h3>
-            <p class="text-[10px] text-secondary mt-1">Local Risk</p>
-         </div>
-         <div class="bg-white border border-border rounded-card p-6 md:col-span-2">
-            <h4 class="text-xs font-bold text-dark mb-4">Staff Productivity</h4>
-            <div class="space-y-4">
-               <div class="flex items-center justify-between">
-                  <span class="text-sm font-medium text-dark">Mercy Jere</span>
-                  <span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full font-bold uppercase tracking-tighter">ON TRACK</span>
-               </div>
-               <div class="flex items-center justify-between">
-                  <span class="text-sm font-medium text-dark">Francis Moyo</span>
-                  <span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-1 rounded-full font-bold uppercase tracking-tighter">ON TRACK</span>
-               </div>
-            </div>
-         </div>
+      <div class="grid-4 mb-16">
+        <div class="kpi-card"><div class="kpi-label">Branch Portfolio</div><div class="kpi-value" style="font-size:22px">MWK 15.7M</div><div class="kpi-trend trend-neutral">→ Flat MoM</div></div>
+        <div class="kpi-card"><div class="kpi-label">Active Clients</div><div class="kpi-value" style="font-size:22px">142</div><div class="kpi-trend trend-up">▲ +3 MoM</div></div>
+        <div class="kpi-card"><div class="kpi-label">PAR 30</div><div class="kpi-value" style="font-size:22px;color:var(--amber)">4.5%</div><div class="kpi-trend trend-down">▲ +0.5pp MoM</div></div>
+        <div class="kpi-card"><div class="kpi-label">Today's Collections</div><div class="kpi-value" style="font-size:22px">MWK 125K</div><div class="kpi-sub">Target: MWK 180K · 69%</div></div>
       </div>
 
-      <div class="bg-white border border-border rounded-card p-6">
-         <h4 class="text-sm font-bold text-dark mb-6">Today's Performance Targets</h4>
-         <div class="space-y-6">
-            <div class="space-y-2">
-               <div class="flex justify-between text-xs font-medium">
-                  <span class="text-secondary">Collections</span>
-                  <span class="text-dark font-bold">MWK 125K / 180K (69%)</span>
-               </div>
-               <div class="w-full bg-gray-100 h-2.5 rounded-full overflow-hidden">
-                  <div class="bg-orange-500 h-full" style="width: 69%"></div>
-               </div>
+      <div class="grid-2 mb-16">
+        <div class="card">
+          <div class="card-title">📅 Today's Targets</div>
+          <div class="mb-12">
+            <div class="target-row"><div><div class="target-label">Collections</div><div class="target-vals">MWK 125K of MWK 180K target</div></div><span class="pill pill-amber">69%</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:69%;background:var(--amber)"></div></div>
+          </div>
+          <div class="mb-12">
+            <div class="target-row"><div><div class="target-label">Disbursements</div><div class="target-vals">2 of 3 target loans</div></div><span class="pill pill-amber">67%</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:67%;background:var(--amber)"></div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">👥 Staff Productivity — Today</div>
+          <div class="bg-bg rounded p-12 mb-8">
+            <div class="flex justify-between items-center">
+              <div><b>Jones Mwalwanda</b><div class="small muted">Portfolio: MWK 8.5M</div></div>
+              <span class="pill pill-green">On Track</span>
             </div>
-            <div class="space-y-2">
-               <div class="flex justify-between text-xs font-medium">
-                  <span class="text-secondary">New Disbursements</span>
-                  <span class="text-dark font-bold">2 / 5 Loans (40%)</span>
-               </div>
-               <div class="w-full bg-gray-100 h-2.5 rounded-full overflow-hidden">
-                  <div class="bg-red-500 h-full" style="width: 40%"></div>
-               </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2 mb-16">
+        <div class="card">
+          <div class="card-title">⚡ Loans Requiring Action</div>
+          <div class="flex gap-8 mb-12 flex-wrap">
+            <div class="bg-bg rounded p-12 flex-1">
+              <div class="small bold muted">PENDING APPROVAL</div>
+              <div style="font-size:22px;font-weight:700;color:var(--amber)">1</div>
+              <button class="btn btn-sm btn-green mt-8" onclick="showAppToast('Approved', 'success')">✓ Review</button>
             </div>
-            <div class="space-y-2">
-               <div class="flex justify-between text-xs font-medium">
-                  <span class="text-secondary">Client Recruitment</span>
-                  <span class="text-dark font-bold">4 / 5 New Clients (80%)</span>
-               </div>
-               <div class="w-full bg-gray-100 h-2.5 rounded-full overflow-hidden">
-                  <div class="bg-primary h-full" style="width: 80%"></div>
-               </div>
-            </div>
-         </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">💵 Branch Cash Position</div>
+          <div class="progress-bar mb-8"><div class="progress-fill" style="width:84%;background:var(--green)"></div></div>
+          <div class="flex justify-between small muted"><span>Vault utilization: 84% of limit</span></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * System Admin Dashboard
+ */
+function renderAdminDashboard(container, user) {
+  const users = getCollection(StorageKeys.USERS);
+  container.innerHTML = `
+    <div class="dashboard-view active" id="view-admin">
+      <div class="section-header">
+        <div>
+          <div class="section-title">System Administration Panel</div>
+          <div class="section-meta">${escapeHtml(user.fullName)} · Full System Access · <span class="pill pill-admin">System Administrator</span></div>
+        </div>
+      </div>
+      <div class="grid-4 mb-16">
+        <div class="kpi-card"><div class="kpi-label">Active Users</div><div class="kpi-value" style="font-size:22px">${escapeHtml(users.length.toString())}</div></div>
+        <div class="kpi-card"><div class="kpi-label">System Uptime</div><div class="kpi-value" style="font-size:22px;color:var(--green)">99.8%</div></div>
+        <div class="kpi-card"><div class="kpi-label">Data Records</div><div class="kpi-value" style="font-size:22px">48,230</div></div>
+        <div class="kpi-card"><div class="kpi-label">Last Backup</div><div class="kpi-value" style="font-size:22px;color:var(--green)">Today</div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">User Management</div>
+          <div class="tbl-wrap">
+            <table style="font-size:12px">
+              <thead><tr><th>Name</th><th>Role</th><th>Branch</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td><b>Elias Kafinyangwe</b></td><td><span class="role-tag role-md">MD</span></td><td>HQ</td><td><span class="pill pill-green">Active</span></td></tr>
+                <tr><td><b>Matias Kafinyangwe</b></td><td><span class="role-tag role-fm">Finance</span></td><td>HQ</td><td><span class="pill pill-green">Active</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <button class="btn btn-secondary btn-sm mt-12" onclick="location.hash='#/users'">+ Manage Users</button>
+        </div>
+        <div class="card">
+          <div class="card-title">System Health</div>
+          <div class="compliance-item"><span class="compliance-icon">🟢</span><div><div class="compliance-title">Database — MySQL 8.0</div><div class="compliance-sub">Response time: 12ms</div></div></div>
+          <div class="compliance-item"><span class="compliance-icon">🟢</span><div><div class="compliance-title">Automated Jobs — All Running</div></div></div>
+          <div class="compliance-item"><span class="compliance-icon">🟢</span><div><div class="compliance-title">Backup Service</div><div class="compliance-sub">Last: Today 03:00 AM</div></div></div>
+          <div class="compliance-item"><span class="compliance-icon">🟡</span><div><div class="compliance-title">SMS Gateway</div><div class="compliance-sub">API: Degraded</div></div></div>
+        </div>
       </div>
     </div>
   `;
@@ -499,146 +772,690 @@ function renderBMDashboard(container, user) {
 
 /**
  * Loan Officer Dashboard
- * Focus: Operations, Client management, Tasks.
  */
 function renderLODashboard(container, user) {
-  const clients = getCollection(StorageKeys.CLIENTS).slice(0, 5);
-  const collectionsDue = 12;
-
   container.innerHTML = `
-    <div class="space-y-6">
-      <div class="flex justify-between items-end">
+    <div class="dashboard-view active" id="view-loan-officer">
+      <div class="section-header">
         <div>
-          <h1 class="text-2xl font-bold text-dark">Field Operations</h1>
-          <p class="text-secondary text-sm">Welcome back, ${escapeHtml(user.fullName)}</p>
+          <div class="section-title">Loan Officer Workspace</div>
+          <div class="section-meta">${escapeHtml(user.fullName)} · Lilongwe Branch · <span class="pill pill-lo">Loan Officer</span></div>
         </div>
-        <button onclick="location.hash='#/clients/new'" class="bg-[#111827] text-white px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-primary transition-colors shadow-lg">
-           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-           New Client
-        </button>
+        <div class="section-actions">
+          <button class="btn btn-primary btn-sm" onclick="location.hash='#/loans'">+ New Loan Application</button>
+          <button class="btn btn-secondary btn-sm" onclick="location.hash='#/clients'">+ New Client</button>
+        </div>
       </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-         <div class="bg-primary/5 border border-primary/20 rounded-card p-6">
-            <h4 class="text-sm font-bold text-primary mb-4 flex items-center gap-2">
-               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-               Today's Schedule
-            </h4>
-            <div class="space-y-3">
-               <div class="p-4 bg-white rounded-xl border border-primary/10 shadow-sm flex justify-between items-center">
-                  <div>
-                     <p class="text-sm font-bold text-dark">${escapeHtml(collectionsDue)} Collections Due</p>
-                     <p class="text-[10px] text-secondary">Follow up with clients for today's repayments</p>
-                  </div>
-                  <button class="bg-[#111827] text-white text-[10px] px-3 py-1.5 rounded-lg font-bold">START TASK</button>
-               </div>
-               <div class="p-4 bg-white rounded-xl border border-primary/10 shadow-sm flex justify-between items-center">
-                  <div>
-                     <p class="text-sm font-bold text-dark">3 Pending Applications</p>
-                     <p class="text-[10px] text-secondary">Incomplete data verification</p>
-                  </div>
-                  <button class="bg-gray-100 text-secondary text-[10px] px-3 py-1.5 rounded-lg font-bold">VIEW</button>
-               </div>
-            </div>
-         </div>
-
-         <div class="bg-white border border-border rounded-card p-6">
-            <h4 class="text-sm font-bold text-dark mb-4">Quick Links</h4>
-            <div class="grid grid-cols-2 gap-3">
-               <a href="#/clients" class="flex flex-col items-center justify-center p-4 bg-gray-50 rounded-xl hover:bg-primary/5 hover:text-primary transition-colors border border-transparent hover:border-primary/20">
-                  <svg class="w-6 h-6 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-                  <span class="text-xs font-bold uppercase tracking-widest">Client Registry</span>
-               </a>
-               <a href="#/loans/new" class="flex flex-col items-center justify-center p-4 bg-gray-50 rounded-xl hover:bg-primary/5 hover:text-primary transition-colors border border-transparent hover:border-primary/20">
-                  <svg class="w-6 h-6 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                  <span class="text-xs font-bold uppercase tracking-widest">New Loan</span>
-               </a>
-            </div>
-         </div>
+      <div class="grid-4 mb-16">
+        <div class="kpi-card"><div class="kpi-label">My Portfolio</div><div class="kpi-value" style="font-size:22px">MWK 3.2M</div><div class="kpi-trend trend-up">▲ +MWK 180K MoM</div></div>
+        <div class="kpi-card"><div class="kpi-label">My Clients</div><div class="kpi-value" style="font-size:22px">68</div><div class="kpi-trend trend-up">▲ +3 MoM</div></div>
+        <div class="kpi-card"><div class="kpi-label">My PAR 30</div><div class="kpi-value" style="font-size:22px;color:var(--green)">2.1%</div><div class="kpi-sub">Branch avg: 4.5%</div></div>
+        <div class="kpi-card"><div class="kpi-label">Productivity Score</div><div class="kpi-value" style="font-size:22px;color:var(--blue-dark)">94</div></div>
       </div>
-
-      <div class="bg-white border border-border rounded-card overflow-hidden">
-         <div class="p-6 border-b border-border flex justify-between items-center">
-            <h4 class="text-sm font-bold text-dark">Recent Clients</h4>
-            <a href="#/clients" class="text-xs font-bold text-primary hover:underline">View All</a>
-         </div>
-         <div class="divide-y divide-border">
-            ${clients.map(c => `
-               <div class="px-6 py-4 flex justify-between items-center hover:bg-gray-50">
-                  <div>
-                     <p class="text-sm font-semibold text-dark">${escapeHtml(c.clientName)}</p>
-                     <p class="text-[10px] text-secondary">${escapeHtml(c.clientCode)} · ${escapeHtml(c.phone)}</p>
-                  </div>
-                  <span class="px-2 py-1 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-bold">Active</span>
-               </div>
-            `).join('')}
-         </div>
+      <div class="grid-2 mb-16">
+        <div class="card">
+          <div class="card-title">My Clients — Quick Actions</div>
+          <div class="tbl-wrap">
+            <table style="font-size:12px">
+              <thead><tr><th>Client</th><th>Balance</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr><td><b>Mary Banda</b></td><td>MWK 280K</td><td><span class="pill pill-green">Current</span></td><td><button class="btn btn-sm btn-secondary">View</button></td></tr>
+                <tr><td><b>Peter Kachingwe</b></td><td>MWK 90K</td><td><span class="pill pill-red">5 days late</span></td><td><button class="btn btn-sm btn-danger" onclick="location.hash='#/followup'">Follow up</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Today's Collection Plan</div>
+          <div class="mb-12">
+            <div class="target-row"><div><div class="target-label">Collections Target</div><div class="target-vals">MWK 45K of MWK 65K target</div></div><span class="pill pill-amber">69%</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:69%;background:var(--amber)"></div></div>
+          </div>
+          <button class="btn btn-primary btn-sm w-full" onclick="location.hash='#/collections'">📱 Record Collection</button>
+        </div>
       </div>
     </div>
   `;
 }
 
 /**
- * Admin Dashboard
- * Focus: System health, Users, Audit.
+ * FAB (Floating Action Button)
  */
-function renderAdminDashboard(container, user) {
-  const users = getCollection(StorageKeys.USERS);
-  const auditLogs = getCollection(StorageKeys.AUDIT_LOG).slice(-10);
+function renderFAB() {
+  const existing = document.getElementById('fab-container');
+  if (existing) existing.remove();
 
+  const user = getValue(StorageKeys.SESSION);
+  if (!user || user.role !== 'md') return;
+
+  const fab = document.createElement('div');
+  fab.id = 'fab-container';
+  fab.className = 'fab-container';
+  fab.innerHTML = `
+    <div class="fab-actions" id="fab-actions">
+      <div class="fab-item" onclick="openDashboardModal('full-pl')">📊 Board Report</div>
+      <div class="fab-item" onclick="generateRBMReport()">📄 RBM Report</div>
+      <div class="fab-item" onclick="openDashboardModal('pending-approvals')">💰 Approve Loans (4)</div>
+      <div class="fab-item" onclick="scrollToSection('alerts-config')">⚙️ Alert Settings</div>
+      <div class="fab-item" onclick="showAIInsights()">🤖 Ask AI</div>
+    </div>
+    <button class="fab-main" id="fab-btn" onclick="toggleFAB()" title="Quick Actions">⚡</button>
+  `;
+  document.body.appendChild(fab);
+}
+
+function toggleFAB() {
+  const actions = document.getElementById('fab-actions');
+  const btn = document.getElementById('fab-btn');
+  if (actions && btn) {
+    actions.classList.toggle('open');
+    btn.textContent = actions.classList.contains('open') ? '✕' : '⚡';
+  }
+}
+
+/**
+ * Chart Initializations
+ */
+function initMDCharts() {
+  const parCtx = document.getElementById('par-trend-chart');
+  if (parCtx) {
+    new Chart(parCtx, {
+      type: 'line',
+      data: {
+        labels: ['Jul 25', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan 26', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [{
+          label: 'PAR 30 Trend',
+          data: [3.2, 3.5, 3.8, 3.6, 3.9, 4.1, 3.8, 4.2, 4.5, 4.8, 4.1, 4.2],
+          borderColor: '#2563EB',
+          backgroundColor: 'rgba(37, 99, 235, 0.08)',
+          fill: true,
+          tension: 0.4
+        }, {
+          label: 'Target (5%)',
+          data: Array(12).fill(5),
+          borderColor: '#DC2626',
+          borderDash: [5, 5],
+          fill: false,
+          pointRadius: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+            y: { beginAtZero: true, max: 8, ticks: { callback: v => v + '%' } },
+            x: { grid: { display: false } }
+        }
+      }
+    });
+  }
+
+  const donutCtx = document.getElementById('product-donut-chart');
+  if (donutCtx) {
+    new Chart(donutCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Payday', 'SML', 'Business', '3-Month', 'Special', 'Executive', 'Enterprise'],
+        datasets: [{
+          data: [40, 25, 15, 10, 5, 3, 2],
+          backgroundColor: ['#1E3A8A', '#2563EB', '#059669', '#D97706', '#7C3AED', '#DC2626', '#6B7280']
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        cutout: '60%'
+      }
+    });
+
+    const legend = document.getElementById('product-legend');
+    if (legend) {
+        const labels = ['Payday', 'SML', 'Business', '3-Month', 'Special', 'Executive', 'Enterprise'];
+        const colors = ['#1E3A8A', '#2563EB', '#059669', '#D97706', '#7C3AED', '#DC2626', '#6B7280'];
+        legend.innerHTML = labels.map((l, i) => `
+            <div class="bubble-legend-item">
+                <div class="bubble-dot" style="background:${colors[i]}"></div>
+                ${l}
+            </div>
+        `).join('');
+    }
+  }
+
+  const bubbleCtx = document.getElementById('product-bubble-chart');
+  if (bubbleCtx) {
+    new Chart(bubbleCtx, {
+      type: 'bubble',
+      data: {
+        datasets: [
+          { label: 'Payday', data: [{ x: 2.1, y: 18, r: 25 }], backgroundColor: '#1E3A8A' },
+          { label: 'SML', data: [{ x: 3.8, y: 12, r: 18 }], backgroundColor: '#2563EB' },
+          { label: 'Business', data: [{ x: 5.2, y: 8, r: 15 }], backgroundColor: '#059669' },
+          { label: 'Enterprise', data: [{ x: 6.8, y: -3, r: 10 }], backgroundColor: '#6B7280' },
+          { label: 'Executive', data: [{ x: 1.2, y: 22, r: 8 }], backgroundColor: '#DC2626' }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { title: { display: true, text: 'Risk (PAR 30%)' }, min: 0, max: 8 },
+          y: { title: { display: true, text: 'Growth (%)' }, min: -5, max: 25 }
+        }
+      }
+    });
+  }
+
+  const finCtx = document.getElementById('fin-bar-chart');
+  if (finCtx) {
+    new Chart(finCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [
+          { label: 'Revenue', data: [1.8, 2.0, 2.1, 2.2, 2.1, 2.2], backgroundColor: '#1E3A8A' },
+          { label: 'Expenses', data: [1.3, 1.4, 1.5, 1.5, 1.6, 1.6], backgroundColor: '#93C5FD' }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'top', align: 'start' } },
+        scales: { y: { ticks: { callback: v => v + 'M' } } }
+      }
+    });
+  }
+
+  const profitCtx = document.getElementById('profit-trend-chart');
+  if (profitCtx) {
+    new Chart(profitCtx, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        datasets: [{
+          label: 'Net Income',
+          data: [0.42, 0.48, 0.52, 0.56, 0.51, 0.58, 0.55, 0.60, 0.65, 0.62, 0.68, 0.72],
+          borderColor: '#059669',
+          backgroundColor: 'rgba(5, 150, 105, 0.05)',
+          fill: true,
+          tension: 0.4
+        }, {
+          label: 'Target',
+          data: Array(12).fill(0.6),
+          borderColor: '#D97706',
+          borderDash: [4, 4],
+          fill: false,
+          pointRadius: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'top', align: 'start' } },
+        scales: { y: { ticks: { callback: v => v + 'M' } } }
+      }
+    });
+  }
+}
+
+function initFMCharts() {
+  const cfCtx = document.getElementById('cashflow-chart');
+  if (cfCtx) {
+    new Chart(cfCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+        datasets: [
+          { label: 'Collections', data: [1.8, 2.1, 2.3, 2.3], backgroundColor: '#059669' },
+          { label: 'Disbursements', data: [1.5, 1.6, 1.5, 1.6], backgroundColor: '#D97706' }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom' } },
+        scales: { y: { ticks: { callback: v => v + 'M' } } }
+      }
+    });
+  }
+}
+
+/**
+ * MD Dashboard Helper Functions
+ */
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelectorAll('.sec-nav-item').forEach(n => n.classList.remove('active'));
+    const secNavItems = document.querySelectorAll('.sec-nav-item');
+    secNavItems.forEach(n => {
+      if (n.getAttribute('onclick') && n.getAttribute('onclick').includes(`'${id}'`)) n.classList.add('active');
+    });
+  }
+}
+
+function observeSections() {
+  const sections = ['brief','portfolio','branches','products','financial','efficiency','compliance','alerts-config','scenarios','benchmarks'];
+  const navItems = document.querySelectorAll('.sec-nav-item');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navItems.forEach(n => n.classList.remove('active'));
+        const idx = sections.indexOf(entry.target.id);
+        if (navItems[idx]) navItems[idx].classList.add('active');
+      }
+    });
+  }, { threshold: 0.3 });
+  sections.forEach(id => { const el = document.getElementById(id); if (el) observer.observe(el); });
+}
+
+function setPeriod(p) {
+  showAppToast(`Period set to ${p}`, 'success');
+}
+
+function refreshDashboard(btn) {
+  const original = btn.innerHTML;
+  btn.innerHTML = '🔄 Refreshing...';
+  btn.disabled = true;
+  setTimeout(() => {
+    btn.innerHTML = original;
+    btn.disabled = false;
+    location.reload();
+  }, 1000);
+}
+
+function showAIInsights() {
+  const container = document.createElement('div');
+  container.className = 'fixed inset-0 bg-black/60 flex items-center justify-center z-[10000] p-4';
   container.innerHTML = `
-    <div class="space-y-6">
-      <h1 class="text-2xl font-bold text-dark">System Administration</h1>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-         <div class="bg-dark text-white p-6 rounded-card shadow-xl">
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Users</p>
-            <h3 class="text-3xl font-bold">${escapeHtml(users.length.toString())}</h3>
-            <p class="text-xs text-emerald-400 mt-2 flex items-center gap-1">
-               <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-               System Online
-            </p>
-         </div>
-         <div class="bg-white border border-border p-6 rounded-card">
-            <p class="text-[10px] font-bold text-secondary uppercase tracking-widest mb-1">Storage Usage</p>
-            <h3 class="text-xl font-bold text-dark">1.2 MB / 5.0 MB</h3>
-            <div class="w-full bg-gray-100 h-1.5 rounded-full mt-3 overflow-hidden">
-               <div class="bg-primary h-full" style="width: 24%"></div>
-            </div>
-         </div>
-         <div class="bg-white border border-border p-6 rounded-card">
-            <p class="text-[10px] font-bold text-secondary uppercase tracking-widest mb-1">Sync Status</p>
-            <h3 class="text-xl font-bold text-emerald-600">Healthy</h3>
-            <p class="text-[10px] text-secondary mt-1">Last synced: Just now</p>
-         </div>
+    <div class="bg-white rounded-2xl max-w-2xl w-full p-8 shadow-2xl">
+      <div class="flex items-center gap-4 mb-6">
+        <span class="text-3xl">🤖</span>
+        <h2 class="text-2xl font-bold text-[#1E3A8A]">Saile AI Executive Insights</h2>
       </div>
+      <div style="font-size:13px;line-height:1.6">
+        <div style="margin-bottom:12px"><b>Key Finding:</b> Karonga branch is the single largest drag on portfolio quality. If brought to network average, overall PAR would drop to 3.7%.</div>
+        <div style="margin-bottom:12px"><b>Opportunity:</b> Executive product growth (+22%) is under-capitalized. Reallocating MWK 4M from Enterprise could add MWK 920K in net interest income with 1.1pp lower risk.</div>
+        <div style="margin-bottom:12px"><b>Alert:</b> 3 staff vacancies in high-PAR branches for 30+ days. Recommend fast-track hiring in Karonga.</div>
+        <div><b>Recommendation:</b> Approve 3 of 4 pending loans today. Escalate Karonga immediately.</div>
+      </div>
+      <div class="mt-8 flex justify-end gap-4">
+        <button class="btn btn-secondary" onclick="this.closest('.fixed').remove()">Dismiss</button>
+        <button class="btn btn-primary" onclick="this.closest('.fixed').remove(); scrollToSection('scenarios')">Model Impact</button>
+      </div>
+    </div>`;
+  document.body.appendChild(container);
+}
 
-      <div class="bg-white border border-border rounded-card p-6">
-         <h4 class="text-sm font-bold text-dark mb-4">User Management</h4>
-         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            ${users.slice(0, 6).map(u => `
-               <div class="p-3 border border-border rounded-xl flex items-center gap-3">
-                  <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center font-bold text-primary">
-                     ${escapeHtml((u.fullName || 'U').charAt(0))}
-                  </div>
-                  <div>
-                     <p class="text-xs font-bold text-dark">${escapeHtml(u.fullName)}</p>
-                     <p class="text-[10px] text-secondary uppercase tracking-tighter font-medium">${escapeHtml(u.role)}</p>
-                  </div>
-               </div>
-            `).join('')}
-         </div>
-         <div class="mt-4 pt-4 border-t border-border flex justify-end">
-            <button onclick="location.hash='#/users'" class="text-xs font-bold text-primary hover:underline">Manage All Users →</button>
-         </div>
+function updateScenario() {
+  const slLos = document.getElementById('sl-los');
+  if (!slLos) return;
+
+  const los = parseInt(slLos.value);
+  const growth = parseInt(document.getElementById('sl-growth').value);
+  const rate = parseInt(document.getElementById('sl-rate').value);
+  const parVal = parseInt(document.getElementById('sl-par').value);
+  const branch = parseInt(document.getElementById('sl-branch').value);
+
+  document.getElementById('sl-los-val').textContent = los;
+  document.getElementById('sl-growth-val').textContent = growth + '%';
+  document.getElementById('sl-rate-val').textContent = (rate >= 0 ? '+' : '') + rate + 'pp';
+  document.getElementById('sl-par-val').textContent = (parVal >= 0 ? '+' : '') + parVal + 'pp';
+  document.getElementById('sl-branch-val').textContent = branch + 'M';
+
+  const basePortfolio = 75.2;
+  const baseClients = 850;
+
+  const projPortfolio = basePortfolio * (1 + growth/100) + (los * 2.5) + (branch * 5);
+  const projClients = Math.round(baseClients * (1 + growth/100) + (los * 30) + (branch * 200));
+  const projIncome = (projPortfolio * 0.15) * (1 + rate/10);
+
+  document.getElementById('sc-portfolio').textContent = 'MWK ' + projPortfolio.toFixed(1) + 'M';
+  document.getElementById('sc-clients').textContent = projClients;
+  document.getElementById('sc-income').textContent = 'MWK ' + projIncome.toFixed(1) + 'M';
+  document.getElementById('sc-par').textContent = (4.2 + parVal).toFixed(1) + '%';
+}
+
+function saveScenario() {
+  showAppToast('Scenario saved successfully', 'success');
+}
+
+/**
+ * Modal Handling for Dashboards
+ */
+function openDashboardModal(id) {
+  let html = '';
+  // Check if it is a branch detail modal
+  if (id.startsWith('branch-detail-')) {
+      const branchId = id.replace('branch-detail-', '');
+      const branches = getCollection(StorageKeys.BRANCHES);
+      const b = branches.find(x => x.id === branchId);
+      if (b) {
+          const isKaronga = b.branchName.includes('Karonga');
+          html = renderBranchDetailModal(b.branchName.split('-')[0].trim(), b.managerName, isKaronga ? '6.8%' : '3.1%');
+      } else if (id === 'branch-detail-karonga') {
+          html = renderBranchDetailModal('Karonga', 'Geoffrey Ngwira', '6.8%');
+      } else if (id === 'branch-detail-lilongwe') {
+          html = renderBranchDetailModal('Lilongwe', 'Patrick Kalua', '3.1%');
+      }
+  }
+
+  if (!html) {
+      switch(id) {
+        case 'pending-approvals':
+          html = renderPendingApprovalsModal();
+          break;
+        case 'full-risk-report':
+          html = renderFullRiskReportModal();
+          break;
+        case 'full-pl':
+            html = renderPLModal();
+            break;
+        case 'balance-sheet':
+            html = renderBalanceSheetModal();
+            break;
+        case 'set-targets':
+            html = renderSetTargetsModal();
+            break;
+        case 'model-product':
+            html = renderModelProductModal();
+            break;
+        case 'staff-report':
+            html = renderStaffReportModal();
+            break;
+        case 'rbm-003-review':
+            html = renderRBMReviewModal();
+            break;
+        case 'par-drilldown-1-30':
+            html = `<div class="p-8"><h2>PAR 1-30 Drilldown</h2><p>Listing all 14 loans currently in 1-30 days late bucket...</p></div>`;
+            break;
+        default:
+          html = `<div class="p-8">Modal content for ${id} goes here.</div>`;
+      }
+  }
+
+  const modalOverlay = document.createElement('div');
+  modalOverlay.className = 'fixed inset-0 bg-black/50 flex items-center justify-center z-[10001] p-4';
+  modalOverlay.innerHTML = `
+    <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-auto shadow-2xl relative">
+      <button class="absolute top-4 right-4 text-gray-500 hover:text-black text-2xl" onclick="this.closest('.fixed').remove()">✕</button>
+      ${html}
+    </div>
+  `;
+  document.body.appendChild(modalOverlay);
+}
+
+function renderBranchDetailModal(name, manager, par) {
+  return `
+    <div class="p-8">
+      <h2 class="text-2xl font-bold text-red-700 mb-2">${name} Branch Analysis</h2>
+      <p class="text-gray-600 mb-6">Manager: ${manager} · Status: <span class="pill pill-red">CRITICAL</span></p>
+      <div class="grid grid-cols-2 gap-8 mb-8">
+        <div class="card bg-gray-50">
+          <h3 class="font-bold mb-2">Portfolio Quality</h3>
+          <p class="text-3xl font-bold text-red-600">${par} PAR 30</p>
+          <p class="text-xs text-gray-500 mt-1">Target: <5.0%</p>
+        </div>
+        <div class="card bg-gray-50">
+          <h3 class="font-bold mb-2">Loan Officers</h3>
+          <p class="text-sm">Bertha Mwale: 5.2% PAR</p>
+          <p class="text-sm">Charles Mwase: 8.4% PAR (Alert)</p>
+        </div>
+      </div>
+      <div class="flex gap-4">
+        <button class="btn btn-primary" onclick="showAppToast('Reminder sent to BM', 'success')">Send Management Alert</button>
+        <button class="btn btn-secondary">Download Branch Audit</button>
       </div>
     </div>
   `;
 }
 
+function renderPendingApprovalsModal() {
+  return `
+    <div class="p-8">
+      <h2 class="text-2xl font-bold mb-6">Loans Pending MD Approval</h2>
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-left border-b">
+            <th class="py-2">Client</th>
+            <th>Amount</th>
+            <th>Product</th>
+            <th>Branch</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y">
+          <tr>
+            <td class="py-3">Mary Banda</td>
+            <td>MWK 350,000</td>
+            <td>SML</td>
+            <td>Lilongwe</td>
+            <td><button class="btn btn-sm btn-green" onclick="showAppToast('Approved', 'success'); this.closest('tr').remove()">Approve</button></td>
+          </tr>
+          <tr>
+            <td class="py-3">Saile Farms Ltd</td>
+            <td>MWK 980,000</td>
+            <td>Business</td>
+            <td>Blantyre</td>
+            <td><button class="btn btn-sm btn-green" onclick="showAppToast('Approved', 'success'); this.closest('tr').remove()">Approve</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function renderFullRiskReportModal() {
+  return `
+    <div class="p-8">
+      <h2 class="text-2xl font-bold mb-6">Full Portfolio Risk Report</h2>
+      <div class="space-y-6">
+        <div class="card bg-emerald-50 border-emerald-200">
+          <h3 class="font-bold text-emerald-800">Overall Rating: HEALTHY (94/100)</h3>
+          <p class="text-sm text-emerald-700">All regulatory ratios within RBM limits. Provision coverage at 103%.</p>
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+          <div class="p-4 border rounded-xl">
+             <p class="text-xs font-bold uppercase text-gray-500">Capital Adequacy</p>
+             <p class="text-xl font-bold">22.4%</p>
+          </div>
+          <div class="p-4 border rounded-xl">
+             <p class="text-xs font-bold uppercase text-gray-500">Liquidity Ratio</p>
+             <p class="text-xl font-bold">28.7%</p>
+          </div>
+          <div class="p-4 border rounded-xl">
+             <p class="text-xs font-bold uppercase text-gray-500">Net Margin</p>
+             <p class="text-xl font-bold">28.2%</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderPLModal() {
+  return `
+    <div class="p-8">
+      <h2 class="text-2xl font-bold mb-6">Profit & Loss Statement — YTD June 2026</h2>
+      <table style="width:100%;font-size:13px">
+        <thead><tr><th>Line Item</th><th class="text-right">YTD 2026</th><th class="text-right">YTD 2025</th><th class="text-right">Variance</th></tr></thead>
+        <tbody>
+          <tr><td colspan="4" class="bold" style="background:#F9FAFB;padding:8px 12px">INCOME</td></tr>
+          <tr><td style="padding-left:24px">Interest Income</td><td class="text-right">MWK 10,800,000</td><td class="text-right">MWK 9,100,000</td><td class="text-right text-green">+18.7%</td></tr>
+          <tr><td style="padding-left:24px">Fee Income</td><td class="text-right">MWK 1,200,000</td><td class="text-right">MWK 980,000</td><td class="text-right text-green">+22.4%</td></tr>
+          <tr class="bold"><td>TOTAL INCOME</td><td class="text-right">MWK 12,400,000</td><td class="text-right">MWK 10,460,000</td><td class="text-right text-green">+18.5%</td></tr>
+          <tr><td colspan="4" class="bold" style="background:#F9FAFB;padding:8px 12px">EXPENSES</td></tr>
+          <tr><td style="padding-left:24px">Personnel Costs</td><td class="text-right">MWK 4,200,000</td><td class="text-right">MWK 3,800,000</td><td class="text-right text-red">+10.5%</td></tr>
+          <tr class="bold"><td>TOTAL EXPENSES</td><td class="text-right">MWK 8,900,000</td><td class="text-right">MWK 7,900,000</td><td class="text-right text-red">+12.7%</td></tr>
+          <tr class="bold" style="background:#EFF6FF"><td>NET INCOME</td><td class="text-right" style="color:var(--green)">MWK 3,500,000</td><td class="text-right" style="color:var(--green)">MWK 2,560,000</td><td class="text-right text-green">+36.7%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function renderBalanceSheetModal() {
+  return `
+    <div class="p-8">
+      <h2 class="text-2xl font-bold mb-6">Balance Sheet — June 17, 2026</h2>
+      <div class="grid grid-cols-2 gap-8">
+        <div>
+          <h3 class="font-bold mb-4">ASSETS</h3>
+          <table class="w-full text-sm">
+            <tr><td>Cash & Bank</td><td class="text-right">14,500,000</td></tr>
+            <tr><td>Loan Portfolio (Gross)</td><td class="text-right">75,200,000</td></tr>
+            <tr class="bold"><td>TOTAL ASSETS</td><td class="text-right">MWK 97,800,000</td></tr>
+          </table>
+        </div>
+        <div>
+          <h3 class="font-bold mb-4">LIABILITIES & EQUITY</h3>
+          <table class="w-full text-sm">
+            <tr><td>Savings & Deposits</td><td class="text-right">18,200,000</td></tr>
+            <tr><td>Borrowings</td><td class="text-right">32,500,000</td></tr>
+            <tr class="bold"><td>TOTAL LIABILITIES + EQUITY</td><td class="text-right">MWK 97,800,000</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderSetTargetsModal() {
+    return `<div class="p-8"><h2>Set Branch Targets</h2><p>Adjust growth and PAR targets for each branch.</p><button class="btn btn-primary mt-4" onclick="showAppToast('Targets Saved', 'success'); this.closest('.fixed').remove()">Save Targets</button></div>`;
+}
+
+function renderModelProductModal() {
+    return `<div class="p-8"><h2>Product Scenario Modeling</h2><p>Simulate new interest rates or loan terms.</p><button class="btn btn-primary mt-4" onclick="showAppToast('Product Concept Saved', 'success'); this.closest('.fixed').remove()">Save Concept</button></div>`;
+}
+
+function renderStaffReportModal() {
+    return `<div class="p-8"><h2>Staff Productivity Report</h2><p>Performance metrics for all Loan Officers across the network.</p></div>`;
+}
+
+function renderRBMReviewModal() {
+    return `<div class="p-8"><h2>RBM-003 Review & Sign-off</h2><p>Review the quarterly portfolio report before RBM submission.</p><button class="btn btn-primary mt-4" onclick="showAppToast('Report Signed', 'success'); this.closest('.fixed').remove()">Sign & Submit</button></div>`;
+}
+
 /**
- * Default Dashboard for unknown roles.
+ * Utilities
  */
+function getFormattedFullDate() {
+  const now = new Date();
+  const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  return now.toLocaleDateString('en-US', options);
+}
+
+function formatPercentage(val) {
+  return (val || 0).toFixed(1) + '%';
+}
+
+function calculateDashboardStats() {
+  const clients = getCollection(StorageKeys.CLIENTS);
+  const loans = getCollection(StorageKeys.LOANS);
+
+  return {
+    totalClients: clients.length,
+    activeClients: clients.filter(c => c.status === 'Active').length,
+    activeLoans: loans.filter(l => l.status === 'Disbursed' || l.status === 'Active').length,
+    totalPortfolio: loans.reduce((sum, l) => sum + (l.loanAmount || l.approvedAmount || 0), 0)
+  };
+}
+
+function sortTable(tableId, col) {
+  showAppToast('Sorting feature active', 'success');
+}
+
+function exportTableCSV(tableId, filename) {
+  const table = document.getElementById(tableId);
+  if (!table) {
+      showAppToast('Table not found for export', 'error');
+      return;
+  }
+
+  let csv = [];
+  const rows = table.querySelectorAll('tr');
+
+  for (let i = 0; i < rows.length; i++) {
+    const row = [], cols = rows[i].querySelectorAll('td, th');
+    for (let j = 0; j < cols.length; j++) {
+        row.push('"' + cols[j].innerText.replace(/"/g, '""') + '"');
+    }
+    csv.push(row.join(','));
+  }
+
+  const csvContent = "data:text/csv;charset=utf-8," + csv.join("\n");
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", (filename || 'export') + ".csv");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  showAppToast(`Exported ${filename}.csv`, 'success');
+}
+
+function simulateExportPDF() {
+  showAppToast('Generating PDF Report...', 'success');
+  setTimeout(() => {
+      showAppToast('PDF Downloaded', 'success');
+  }, 1500);
+}
+
+function reconcileGL(btn) {
+  const original = btn.innerHTML;
+  btn.innerHTML = 'Reconciling...';
+  btn.disabled = true;
+  setTimeout(() => {
+    btn.innerHTML = '✅ Reconciled';
+    showAppToast('General Ledger reconciled', 'success');
+  }, 1000);
+}
+
+function generateRBMReport(btn) {
+  const original = btn ? btn.innerHTML : '';
+  if (btn) {
+    btn.innerHTML = 'Generating...';
+    btn.disabled = true;
+  }
+  setTimeout(() => {
+    if (btn) {
+        btn.innerHTML = original;
+        btn.disabled = false;
+    }
+    openDashboardModal('rbm-003-review');
+    showAppToast('RBM-003 Draft Generated', 'success');
+  }, 1500);
+}
+
+function saveAlertSettings(btn) {
+    showAppToast('Alert settings saved', 'success');
+}
+
+function compareProducts() {
+    showAppToast('Product comparison matrix generated', 'success');
+}
+
+function initDashboardListeners() {
+  const slLos = document.getElementById('sl-los');
+  if (slLos) slLos.addEventListener('input', updateScenario);
+
+  const slGrowth = document.getElementById('sl-growth');
+  if (slGrowth) slGrowth.addEventListener('input', updateScenario);
+
+  const slRate = document.getElementById('sl-rate');
+  if (slRate) slRate.addEventListener('input', updateScenario);
+
+  const slPar = document.getElementById('sl-par');
+  if (slPar) slPar.addEventListener('input', updateScenario);
+
+  const slBranch = document.getElementById('sl-branch');
+  if (slBranch) slBranch.addEventListener('input', updateScenario);
+}
+
 function renderDefaultDashboard(container, user) {
   container.innerHTML = `
     <div class="p-12 text-center">
@@ -651,51 +1468,19 @@ function renderDefaultDashboard(container, user) {
   `;
 }
 
-/**
- * Helper to calculate basic stats for the dashboard.
- */
-function calculateDashboardStats() {
-  const clients = getCollection(StorageKeys.CLIENTS);
-  const loans = getCollection(StorageKeys.LOANS);
-
-  return {
-    totalClients: clients.length,
-    activeClients: clients.filter(c => c.status === 'Active').length,
-    activeLoans: loans.filter(l => l.status === 'Disbursed').length,
-    totalPortfolio: loans.reduce((sum, l) => sum + (l.loanAmount || 0), 0)
-  };
-}
-
-/**
- * Interactive Listeners for Dashboard Features
- */
-function initDashboardListeners() {
-  // Scenario Modeling Listeners
-  const rateSlider = document.getElementById('rate-slider');
-  const efficiencySlider = document.getElementById('efficiency-slider');
-  const revenueDisplay = document.getElementById('projected-revenue');
-
-  if (rateSlider && efficiencySlider && revenueDisplay) {
-    const updateProjection = () => {
-      const par = calculatePAR();
-      const portfolio = par.totalOutstanding || 0;
-      const rateInc = parseFloat(rateSlider.value) / 100;
-      const effInc = parseFloat(efficiencySlider.value) / 100;
-
-      // Simple heuristic for prototype: revenue = portfolio * (current_yield + rateInc) * (1 + effInc)
-      // We'll just calculate the *delta* for the prototype
-      const currentYield = 0.35; // 35% APR average
-      const currentRevenue = portfolio * currentYield;
-      const projectedRevenue = portfolio * (currentYield + rateInc) * (1 + effInc);
-      const delta = projectedRevenue - currentRevenue;
-
-      revenueDisplay.textContent = formatCurrency(Math.max(0, delta));
-    };
-
-    rateSlider.addEventListener('input', updateProjection);
-    efficiencySlider.addEventListener('input', updateProjection);
-
-    // Initial calc
-    updateProjection();
-  }
-}
+window.renderDashboard = renderDashboard;
+window.scrollToSection = scrollToSection;
+window.setPeriod = setPeriod;
+window.refreshDashboard = refreshDashboard;
+window.showAIInsights = showAIInsights;
+window.updateScenario = updateScenario;
+window.saveScenario = saveScenario;
+window.openDashboardModal = openDashboardModal;
+window.generateRBMReport = generateRBMReport;
+window.reconcileGL = reconcileGL;
+window.exportTableCSV = exportTableCSV;
+window.simulateExportPDF = simulateExportPDF;
+window.sortTable = sortTable;
+window.saveAlertSettings = saveAlertSettings;
+window.compareProducts = compareProducts;
+window.toggleFAB = toggleFAB;

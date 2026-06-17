@@ -346,7 +346,7 @@ function seedData() {
     },
     {
       id: generateId(),
-      fullName: 'Mr. Isaac Nkhambule',
+      fullName: 'Mr. Isaac Banda',
       email: 'isaac@saile.mw',
       passwordHash: hashPassword('password123'),
       pin: hashPin('1236'),
@@ -373,8 +373,8 @@ function seedData() {
     // Mzuzu Employee/Pensioner Branch
     {
       id: generateId(),
-      fullName: 'Mr. Francis Mughandira',
-      email: 'francis@saile.mw',
+      fullName: 'Mr. Blessings Chirwa',
+      email: 'blessings@saile.mw',
       passwordHash: hashPassword('password123'),
       pin: hashPin('1240'),
       role: 'branch_manager',
@@ -413,8 +413,8 @@ function seedData() {
     // Mzuzu Business Branch
     {
       id: generateId(),
-      fullName: 'Mr. Jericho Nyirenda',
-      email: 'jericho@saile.mw',
+      fullName: 'Ms. Agness Mhango',
+      email: 'agness@saile.mw',
       passwordHash: hashPassword('password123'),
       pin: hashPin('1243'),
       role: 'branch_manager',
@@ -440,8 +440,8 @@ function seedData() {
     // Lilongwe Branch
     {
       id: generateId(),
-      fullName: 'Mr. Kenneth Malita',
-      email: 'kenneth@saile.mw',
+      fullName: 'Mr. Patrick Kalua',
+      email: 'patrick@saile.mw',
       passwordHash: hashPassword('password123'),
       pin: hashPin('1238'),
       role: 'branch_manager',
@@ -467,8 +467,8 @@ function seedData() {
     // Blantyre Branch
     {
       id: generateId(),
-      fullName: 'Mr. Ambwene Mwang\'onda',
-      email: 'ambwene@saile.mw',
+      fullName: 'Ms. Esnart Tembo',
+      email: 'esnart@saile.mw',
       passwordHash: hashPassword('password123'),
       pin: hashPin('1245'),
       role: 'branch_manager',
@@ -494,8 +494,8 @@ function seedData() {
     // Karonga Branch
     {
       id: generateId(),
-      fullName: 'Mr. Moses Maloya',
-      email: 'moses@saile.mw',
+      fullName: 'Mr. Geoffrey Ngwira',
+      email: 'geoffrey@saile.mw',
       passwordHash: hashPassword('password123'),
       pin: hashPin('1247'),
       role: 'branch_manager',
@@ -521,8 +521,8 @@ function seedData() {
     // Zomba Branch
     {
       id: generateId(),
-      fullName: 'Mr. Davie Ndhlovu',
-      email: 'davie@saile.mw',
+      fullName: 'Ms. Mary Chavula',
+      email: 'mary@saile.mw',
       passwordHash: hashPassword('password123'),
       pin: hashPin('1249'),
       role: 'branch_manager',

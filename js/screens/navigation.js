@@ -37,8 +37,8 @@ function renderNavigation(role) {
   var branchName = (settings && settings.branchName) || 'Lilongwe';
 
   renderTopBar(session, branchName);
-  renderLeftRail(navItems, role, isCollapsed);
-  renderRightPanel(session);
+  // renderLeftRail(navItems, role, isCollapsed); // Removed as per requirement
+  // renderRightPanel(session); // Removed as per requirement
   renderMobileTabs(navItems);
   startClock();
 }
@@ -56,9 +56,13 @@ function renderTopBar(session, branchName) {
   topBar.innerHTML = '' +
     '<!-- Left: Logo + action buttons -->' +
     '<div class="flex items-center gap-2">' +
-      '<div class="w-9 h-9 rounded-lg bg-[#f4f4f5] border border-[#d1d5db] flex items-center justify-center">' +
+      '<div class="w-9 h-9 rounded-lg bg-[#f4f4f5] border border-[#d1d5db] flex items-center justify-center cursor-pointer hover:bg-gray-100" onclick="window.location.hash=\'#/dashboard\'" title="Dashboard">' +
         '<svg class="w-5 h-5 text-[#0f766e]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L3 7v10l9 5 9-5V7l-9-5zm0 2.18l6.5 3.64v7.36L12 18.82l-6.5-3.64V7.82L12 4.18z"/></svg>' +
       '</div>' +
+      '<button id="topbar-modules-btn" class="bg-[#f4f4f5] border border-[#d1d5db] rounded-lg px-3 py-1.5 text-sm text-[#0f766e] hover:bg-[#d1d5db] transition-colors hidden md:flex items-center gap-1.5 font-medium">' +
+        '<span>Modules</span>' +
+        '<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>' +
+      '</button>' +
       '<button id="topbar-search-btn" class="bg-[#f4f4f5] border border-[#d1d5db] rounded-lg px-3 py-1.5 text-sm text-[#6b7280] hover:bg-[#d1d5db] transition-colors hidden md:flex items-center gap-1.5">' +
         '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>' +
         '<span>Search</span>' +
@@ -102,6 +106,15 @@ function renderTopBar(session, branchName) {
   var logoutBtnMobile = document.getElementById('logout-btn-mobile');
   if (logoutBtnMobile) {
     logoutBtnMobile.addEventListener('click', function() { destroySession(); });
+  }
+
+  // Modules button action
+  var modulesBtn = document.getElementById('topbar-modules-btn');
+  if (modulesBtn) {
+    modulesBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      showModulesDropdown(this, session.role);
+    });
   }
 
   // Create button action
@@ -156,6 +169,48 @@ function showCreateDropdown(anchor) {
       dropdown.remove();
     };
     dropdown.appendChild(item);
+  });
+
+  document.body.appendChild(dropdown);
+
+  const closeDropdown = (e) => {
+    if (!dropdown.contains(e.target) && e.target !== anchor) {
+      dropdown.remove();
+      document.removeEventListener('click', closeDropdown);
+    }
+  };
+  setTimeout(() => document.addEventListener('click', closeDropdown), 0);
+}
+
+/**
+ * Show a dropdown for all permitted modules.
+ */
+function showModulesDropdown(anchor, role) {
+  const existing = document.getElementById('modules-dropdown');
+  if (existing) {
+    existing.remove();
+    return;
+  }
+
+  const navItems = getNavigationItems(role);
+  const dropdown = document.createElement('div');
+  dropdown.id = 'modules-dropdown';
+  dropdown.className = 'fixed mt-2 w-56 bg-white rounded-xl shadow-xl border border-[#d1d5db] z-[60] overflow-y-auto py-1 max-h-[80vh]';
+
+  const rect = anchor.getBoundingClientRect();
+  dropdown.style.top = rect.bottom + 'px';
+  dropdown.style.left = rect.left + 'px';
+
+  navItems.forEach(item => {
+    const btn = document.createElement('button');
+    btn.className = 'w-full text-left px-4 py-2.5 text-sm text-[#6b7280] hover:bg-[#f4f4f5] transition-colors flex items-center gap-3';
+    btn.innerHTML = '<span class="text-[#0f766e]">' + (NAV_ICONS[item.icon] || '') + '</span>' +
+                    '<span class="font-medium">' + item.label + '</span>';
+    btn.onclick = () => {
+      window.location.hash = item.route;
+      dropdown.remove();
+    };
+    dropdown.appendChild(btn);
   });
 
   document.body.appendChild(dropdown);
@@ -244,6 +299,7 @@ function showSearchOverlay() {
 function renderLeftRail(navItems, role, isCollapsed) {
   var leftRail = document.getElementById('left-rail');
   if (!leftRail) return;
+  leftRail.classList.add('hidden'); // Force sidebar hidden as per "remove existing side bar" requirement
 
   var session = getSession();
   var currentHash = window.location.hash || '';
@@ -335,132 +391,10 @@ function renderLeftRail(navItems, role, isCollapsed) {
     });
   }
 
-  // Update main content margin
+  // Update main content margin - Left sidebar removed per requirement
   var appContent = document.getElementById('app-content');
   if (appContent) {
-    appContent.className = isCollapsed
-      ? 'pt-20 lg:ml-16 xl:mr-72 min-h-screen px-5 pb-6 lg:px-6 lg:pb-8'
-      : 'pt-20 lg:ml-56 xl:mr-72 min-h-screen px-5 pb-6 lg:px-6 lg:pb-8';
-  }
-}
-
-/**
- * Render the right panel with notifications and info cards.
- */
-function renderRightPanel(session) {
-  var rightPanel = document.getElementById('right-panel');
-  if (!rightPanel) return;
-
-  var auditLog = getCollection(StorageKeys.AUDIT_LOG);
-  var recentLogs = auditLog.slice(0, 5);
-
-  var html = '';
-
-  // Notifications card (collapsible)
-  html += '<div id="notif-card" class="bg-white rounded-2xl border border-[#d1d5db] p-4 mb-4">';
-  html += '<div class="flex items-center justify-between mb-3">';
-  html += '<h3 class="text-sm font-semibold text-[#0f766e]">Notifications</h3>';
-  html += '<button id="btn-hide-notif" class="p-1 rounded-lg hover:bg-[#f4f4f5] transition-colors text-[#6b7280]" title="Hide notifications">';
-  html += '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>';
-  html += '</button>';
-  html += '</div>';
-  html += '<div id="notif-content" class="space-y-2">';
-
-  if (recentLogs.length === 0) {
-    html += '<p class="text-xs text-[#6b7280]">No recent notifications.</p>';
-  } else {
-    for (var i = 0; i < recentLogs.length; i++) {
-      var log = recentLogs[i];
-      var actionLabel = (log.action || 'unknown').replace(/_/g, ' ');
-      html += '<div class="bg-[#f4f4f5] rounded-xl p-3">';
-      html += '<div class="flex items-start gap-2">';
-      html += '<div class="w-6 h-6 rounded-full bg-[#111827]/10 flex items-center justify-center flex-shrink-0 mt-0.5">';
-      html += '<svg class="w-3 h-3 text-[#0f766e]" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4"/></svg>';
-      html += '</div>';
-      html += '<div class="flex-1 min-w-0">';
-      html += '<p class="text-xs font-medium text-[#0f766e] capitalize truncate">' + escapeHtml(actionLabel) + '</p>';
-      html += '<p class="text-xs text-[#6b7280]">' + escapeHtml(log.user || '') + '</p>';
-      html += '</div></div></div>';
-    }
-  }
-
-  html += '</div>';
-  html += '<button class="w-full mt-3 bg-[#111827] text-white rounded-xl px-4 py-2 text-xs font-medium hover:bg-gray-800 transition-colors">See all notifications &rarr;</button>';
-  html += '</div>';
-
-  // Quick Info card (collapsible)
-  html += '<div id="info-card" class="bg-white rounded-2xl border border-[#d1d5db] p-4 mb-4">';
-  html += '<div class="flex items-center justify-between mb-3">';
-  html += '<h3 class="text-sm font-semibold text-[#0f766e]">Quick Info</h3>';
-  html += '<button id="btn-hide-info" class="p-1 rounded-lg hover:bg-[#f4f4f5] transition-colors text-[#6b7280]" title="Hide quick info">';
-  html += '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>';
-  html += '</button>';
-  html += '</div>';
-  html += '<div id="info-content" class="space-y-2">';
-  html += '<div class="bg-[#f4f4f5] rounded-xl p-3">';
-  html += '<p class="text-xs font-medium text-[#0f766e]">Logged in as</p>';
-  html += '<p class="text-xs text-[#6b7280]">' + (session ? escapeHtml(session.name) + ' (' + escapeHtml(session.role.replace(/_/g, ' ')) + ')' : 'Unknown') + '</p>';
-  html += '</div>';
-  html += '<div class="bg-[#f4f4f5] rounded-xl p-3">';
-  html += '<p class="text-xs font-medium text-[#0f766e]">Sync Status</p>';
-  html += '<p class="text-xs text-[#0f766e]">&bull; Online</p>';
-  html += '</div>';
-  html += '</div>';
-  html += '<button class="w-full mt-3 bg-[#f4f4f5] border border-[#d1d5db] text-[#0f766e] rounded-xl px-4 py-2 text-xs font-medium hover:bg-[#d1d5db] transition-colors">Notes</button>';
-  html += '</div>';
-
-  // Show buttons (visible when cards are hidden)
-  html += '<div id="panel-show-btns" class="hidden space-y-2">';
-  html += '<button id="btn-show-notif" class="w-full bg-white border border-[#d1d5db] rounded-xl px-4 py-2.5 text-xs font-medium text-[#0f766e] hover:bg-[#f4f4f5] transition-colors flex items-center gap-2">';
-  html += '<svg class="w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>';
-  html += 'Show Notifications</button>';
-  html += '<button id="btn-show-info" class="w-full bg-white border border-[#d1d5db] rounded-xl px-4 py-2.5 text-xs font-medium text-[#0f766e] hover:bg-[#f4f4f5] transition-colors flex items-center gap-2">';
-  html += '<svg class="w-4 h-4 text-[#6b7280]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
-  html += 'Show Quick Info</button>';
-  html += '</div>';
-
-  rightPanel.innerHTML = html;
-
-  // Attach hide/show events
-  var hideNotifBtn = document.getElementById('btn-hide-notif');
-  var hideInfoBtn = document.getElementById('btn-hide-info');
-  var showNotifBtn = document.getElementById('btn-show-notif');
-  var showInfoBtn = document.getElementById('btn-show-info');
-  var notifCard = document.getElementById('notif-card');
-  var infoCard = document.getElementById('info-card');
-  var showBtns = document.getElementById('panel-show-btns');
-
-  if (hideNotifBtn) {
-    hideNotifBtn.addEventListener('click', function() {
-      notifCard.classList.add('hidden');
-      showBtns.classList.remove('hidden');
-      showNotifBtn.classList.remove('hidden');
-    });
-  }
-  if (hideInfoBtn) {
-    hideInfoBtn.addEventListener('click', function() {
-      infoCard.classList.add('hidden');
-      showBtns.classList.remove('hidden');
-      showInfoBtn.classList.remove('hidden');
-    });
-  }
-  if (showNotifBtn) {
-    showNotifBtn.addEventListener('click', function() {
-      notifCard.classList.remove('hidden');
-      showNotifBtn.classList.add('hidden');
-      if (infoCard && !infoCard.classList.contains('hidden')) {
-        showBtns.classList.add('hidden');
-      }
-    });
-  }
-  if (showInfoBtn) {
-    showInfoBtn.addEventListener('click', function() {
-      infoCard.classList.remove('hidden');
-      showInfoBtn.classList.add('hidden');
-      if (notifCard && !notifCard.classList.contains('hidden')) {
-        showBtns.classList.add('hidden');
-      }
-    });
+    appContent.className = 'pt-16 min-h-screen px-5 pb-6 lg:px-8 lg:pb-8 transition-all duration-300';
   }
 }
 
