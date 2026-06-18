@@ -9,16 +9,28 @@
  */
 function renderCollections(container, options) {
   var readOnly = options && options.readOnly;
-  var collections = getCollection(StorageKeys.COLLECTIONS);
-  var loans = getCollection(StorageKeys.LOANS).filter(function(l) { return l.status === 'Disbursed'; });
+  var session = getSession();
+  var allCollections = getCollection(StorageKeys.COLLECTIONS);
+
+  // If Loan Officer or Branch Manager, filter collections by their branch
+  var collections = allCollections.filter(function(c) {
+    if ((session.role === 'loan_officer' || session.role === 'branch_manager') && session.branchId && c.branchId !== session.branchId) return false;
+    return true;
+  });
+
+  var loans = getCollection(StorageKeys.LOANS).filter(function(l) {
+    if (l.status !== 'Disbursed' && l.status !== 'Active') return false;
+    if ((session.role === 'loan_officer' || session.role === 'branch_manager') && session.branchId && l.branchId !== session.branchId) return false;
+    return true;
+  });
   var filterTab = 'all';
 
   function render() {
     // Calculate progress
     var totalDue = 0, totalCollected = 0;
     for (var i = 0; i < collections.length; i++) {
-      totalDue += collections[i].dueAmount;
-      totalCollected += collections[i].collectedAmount;
+      totalDue += (collections[i].dueAmount || 0);
+      totalCollected += (collections[i].collectedAmount || 0);
     }
     var progressPct = totalDue > 0 ? Math.round((totalCollected / totalDue) * 100) : 0;
 
@@ -128,7 +140,12 @@ function renderProgressDial(pct) {
  * Render collection payment form.
  */
 function renderCollectionForm(container, options) {
-  var loans = getCollection(StorageKeys.LOANS).filter(function(l) { return l.status === 'Disbursed'; });
+  var session = getSession();
+  var loans = getCollection(StorageKeys.LOANS).filter(function(l) {
+    if (l.status !== 'Disbursed' && l.status !== 'Active') return false;
+    if (session.role === 'loan_officer' && session.branchId && l.branchId !== session.branchId) return false;
+    return true;
+  });
   var clients = getCollection(StorageKeys.CLIENTS);
 
   var html = '<div class="space-y-6">';
@@ -180,10 +197,14 @@ function renderCollectionForm(container, options) {
     var selectedOption = loanSelect.options[loanSelect.selectedIndex];
     var session = getSession();
 
+    var loanId = form.loanId.value;
+    var loan = loans.find(l => l.id === loanId);
+
     var data = {
       clientId: selectedOption.getAttribute('data-clientid') || '',
       clientName: selectedOption.getAttribute('data-client') || '',
-      loanId: form.loanId.value,
+      loanId: loanId,
+      branchId: loan ? loan.branchId : session.branchId,
       dueAmount: Number(form.dueAmount.value),
       collectedAmount: Number(form.collectedAmount.value),
       paymentMode: form.paymentMode.value,

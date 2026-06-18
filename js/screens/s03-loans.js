@@ -409,7 +409,13 @@ function addSMSLog(templateCode, clientId, clientName, productCode, amount, date
  * Render loan application form with Saile products.
  */
 function renderLoanForm(container, options) {
-  var clients = getCollection(StorageKeys.CLIENTS).filter(function(c) { return c.status === 'Active'; });
+  var session = getSession();
+  var clients = getCollection(StorageKeys.CLIENTS).filter(function(c) {
+    if (c.status !== 'Active') return false;
+    // If loan officer, only show clients in their branch
+    if (session.role === 'loan_officer' && session.branchId && c.branchId !== session.branchId) return false;
+    return true;
+  });
   var products = getCollection(StorageKeys.PRODUCTS);
 
   var html = '<div class="space-y-6">';

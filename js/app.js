@@ -994,7 +994,8 @@ function seedData() {
     effectiveInterestRateCalculated: 135.0, disclosureStatementGenerated: true,
     rbmReportingCategory: 'SHORT_TERM',
     auditTrail: JSON.stringify([{action:'created',by:'Mercy Jere',date:'2026-05-10'},{action:'approved',by:'Blessings Chirwa',date:'2026-05-10'},{action:'disbursed',by:'Mercy Jere',date:'2026-05-15'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[0].branchId,
   });
 
   // Payday Loan - SUBMITTED - James Phiri
@@ -1009,7 +1010,8 @@ function seedData() {
     compulsorySavingsAmount: null, effectiveInterestRateCalculated: null,
     disclosureStatementGenerated: false, rbmReportingCategory: 'SHORT_TERM',
     auditTrail: JSON.stringify([{action:'created',by:'Liness Nkhata',date:'2026-06-08'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[1].branchId,
   });
 
   // Payday Loan - ACTIVE - Agnes Kamanga
@@ -1026,7 +1028,8 @@ function seedData() {
     effectiveInterestRateCalculated: 135.0, disclosureStatementGenerated: true,
     rbmReportingCategory: 'SHORT_TERM',
     auditTrail: JSON.stringify([{action:'created',by:'Jones Mwalwanda',date:'2026-04-15'},{action:'approved',by:'Esнart Tembo',date:'2026-04-15'},{action:'disbursed',by:'Jones Mwalwanda',date:'2026-04-20'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[2].branchId,
   });
 
   // 3-Month Loan - ACTIVE - Mary Chirwa
@@ -1043,7 +1046,8 @@ function seedData() {
     effectiveInterestRateCalculated: 65.3, disclosureStatementGenerated: true,
     rbmReportingCategory: 'SHORT_TERM',
     auditTrail: JSON.stringify([{action:'created',by:'Jones Mwalwanda',date:'2026-03-01'},{action:'approved',by:'Esнart Tembo',date:'2026-03-02'},{action:'disbursed',by:'Jones Mwalwanda',date:'2026-03-10'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[3].branchId,
   });
 
   // 3-Month Loan - UNDER_REVIEW - Wonderful Singini
@@ -1058,7 +1062,8 @@ function seedData() {
     compulsorySavingsAmount: null, effectiveInterestRateCalculated: null,
     disclosureStatementGenerated: false, rbmReportingCategory: 'SHORT_TERM',
     auditTrail: JSON.stringify([{action:'created',by:'Liness Nkhata',date:'2026-06-05'},{action:'under_review',by:'Patrick Kalua',date:'2026-06-06'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[4].branchId,
   });
 
   // SML - ACTIVE - Moses Kalimbuka
@@ -1075,7 +1080,8 @@ function seedData() {
     effectiveInterestRateCalculated: 58.3, disclosureStatementGenerated: true,
     rbmReportingCategory: 'MEDIUM_TERM',
     auditTrail: JSON.stringify([{action:'created',by:'Steven Gondwe',date:'2026-01-05'},{action:'approved',by:'Agness Mhango',date:'2026-01-06'},{action:'disbursed',by:'Steven Gondwe',date:'2026-01-15'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[5].branchId,
   });
 
   // SML - ACTIVE - Norman Kapito
@@ -1092,7 +1098,8 @@ function seedData() {
     effectiveInterestRateCalculated: 58.3, disclosureStatementGenerated: true,
     rbmReportingCategory: 'MEDIUM_TERM',
     auditTrail: JSON.stringify([{action:'created',by:'Steven Gondwe',date:'2026-01-20'},{action:'approved',by:'Agness Mhango',date:'2026-01-21'},{action:'disbursed',by:'Steven Gondwe',date:'2026-02-01'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[6].branchId,
   });
 
   // Special Scheme - ACTIVE - Golden Moyo
@@ -1109,7 +1116,8 @@ function seedData() {
     effectiveInterestRateCalculated: 48.2, disclosureStatementGenerated: true,
     rbmReportingCategory: 'MEDIUM_TERM',
     auditTrail: JSON.stringify([{action:'created',by:'Mercy Jere',date:'2025-11-15'},{action:'approved',by:'Blessings Chirwa',date:'2025-11-16'},{action:'disbursed',by:'Mercy Jere',date:'2025-12-01'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[7].branchId,
   });
 
   // Executive Scheme - ACTIVE - Samuel Nkhoma
@@ -1126,7 +1134,8 @@ function seedData() {
     effectiveInterestRateCalculated: 44.1, disclosureStatementGenerated: true,
     rbmReportingCategory: 'LONG_TERM',
     auditTrail: JSON.stringify([{action:'created',by:'Liness Nkhata',date:'2025-09-15'},{action:'approved',by:'Patrick Kalua',date:'2025-09-18'},{action:'disbursed',by:'Liness Nkhata',date:'2025-10-01'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[8].branchId,
   });
 
   // Business Loan - ACTIVE - Hastings Nkhata
@@ -1143,7 +1152,8 @@ function seedData() {
     effectiveInterestRateCalculated: 54.4, disclosureStatementGenerated: true,
     rbmReportingCategory: 'SMALL_ENTERPRISE',
     auditTrail: JSON.stringify([{action:'created',by:'Jones Mwalwanda',date:'2026-01-15'},{action:'approved',by:'Esнart Tembo',date:'2026-01-18'},{action:'disbursed',by:'Jones Mwalwanda',date:'2026-02-01'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[9].branchId,
   });
 
   // Enterprise Loan - DRAFT - Chimwemwe Mwale
@@ -1158,7 +1168,8 @@ function seedData() {
     compulsorySavingsAmount: null, effectiveInterestRateCalculated: null,
     disclosureStatementGenerated: false, rbmReportingCategory: 'MICRO_ENTERPRISE',
     auditTrail: JSON.stringify([{action:'created',by:'Bertha Mwale',date:'2026-06-09'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[10].branchId,
   });
 
   // SML - APPROVED - Patuma Salima
@@ -1174,7 +1185,8 @@ function seedData() {
     compulsorySavingsAmount: 240000, effectiveInterestRateCalculated: 58.3,
     disclosureStatementGenerated: true, rbmReportingCategory: 'MEDIUM_TERM',
     auditTrail: JSON.stringify([{action:'created',by:'Steven Gondwe',date:'2026-05-28'},{action:'approved',by:'Agness Mhango',date:'2026-06-01'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[11].branchId,
   });
 
   // Payday Loan - ACTIVE - Faithful Manda
@@ -1191,7 +1203,8 @@ function seedData() {
     effectiveInterestRateCalculated: 135.0, disclosureStatementGenerated: true,
     rbmReportingCategory: 'SHORT_TERM',
     auditTrail: JSON.stringify([{action:'created',by:'Liness Nkhata',date:'2026-03-28'},{action:'approved',by:'Blessings Chirwa',date:'2026-03-28'},{action:'disbursed',by:'Liness Nkhata',date:'2026-04-01'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[12].branchId,
   });
 
   // Special Scheme - DRAFT - Chimwemwe Jere
@@ -1206,7 +1219,8 @@ function seedData() {
     compulsorySavingsAmount: null, effectiveInterestRateCalculated: null,
     disclosureStatementGenerated: false, rbmReportingCategory: 'MEDIUM_TERM',
     auditTrail: JSON.stringify([{action:'created',by:'Bertha Mwale',date:'2026-06-07'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[13].branchId,
   });
 
   // Business Loan - SUBMITTED - Peter Mwale
@@ -1221,7 +1235,8 @@ function seedData() {
     compulsorySavingsAmount: null, effectiveInterestRateCalculated: null,
     disclosureStatementGenerated: false, rbmReportingCategory: 'SMALL_ENTERPRISE',
     auditTrail: JSON.stringify([{action:'created',by:'Jones Mwalwanda',date:'2026-06-01'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[14].branchId,
   });
 
   // SML - ACTIVE - Mphatso Kalua
@@ -1238,7 +1253,8 @@ function seedData() {
     effectiveInterestRateCalculated: 58.3, disclosureStatementGenerated: true,
     rbmReportingCategory: 'MEDIUM_TERM',
     auditTrail: JSON.stringify([{action:'created',by:'Mercy Jere',date:'2026-03-10'},{action:'approved',by:'Blessings Chirwa',date:'2026-03-11'},{action:'disbursed',by:'Mercy Jere',date:'2026-03-20'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[15].branchId,
   });
 
   // Enterprise Loan - ACTIVE - Fletcher Gondwe
@@ -1255,7 +1271,8 @@ function seedData() {
     effectiveInterestRateCalculated: 42.6, disclosureStatementGenerated: true,
     rbmReportingCategory: 'MICRO_ENTERPRISE',
     auditTrail: JSON.stringify([{action:'created',by:'Jones Mwalwanda',date:'2025-08-15'},{action:'approved',by:'Esнart Tembo',date:'2025-08-20'},{action:'disbursed',by:'Jones Mwalwanda',date:'2025-09-01'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[16].branchId,
   });
 
   // 3-Month Loan - ACTIVE - Peaceful Kachali
@@ -1272,7 +1289,8 @@ function seedData() {
     effectiveInterestRateCalculated: 65.3, disclosureStatementGenerated: true,
     rbmReportingCategory: 'SHORT_TERM',
     auditTrail: JSON.stringify([{action:'created',by:'Mercy Jere',date:'2026-03-25'},{action:'approved',by:'Blessings Chirwa',date:'2026-03-25'},{action:'disbursed',by:'Mercy Jere',date:'2026-04-01'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[17].branchId,
   });
 
   // Payday Loan - REJECTED - Tiyamike Kachali
@@ -1287,7 +1305,8 @@ function seedData() {
     compulsorySavingsAmount: null, effectiveInterestRateCalculated: null,
     disclosureStatementGenerated: false, rbmReportingCategory: 'SHORT_TERM',
     auditTrail: JSON.stringify([{action:'created',by:'Charles Mwase',date:'2026-05-20'},{action:'rejected',by:'Mary Chavula',date:'2026-06-01',reason:'Insufficient income proof'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[18].branchId,
   });
 
   // Payday Loan - ACTIVE - Golden Moyo (second loan)
@@ -1304,7 +1323,8 @@ function seedData() {
     effectiveInterestRateCalculated: 135.0, disclosureStatementGenerated: true,
     rbmReportingCategory: 'SHORT_TERM',
     auditTrail: JSON.stringify([{action:'created',by:'Mercy Jere',date:'2026-04-25'},{action:'approved',by:'Blessings Chirwa',date:'2026-04-25'},{action:'disbursed',by:'Mercy Jere',date:'2026-05-01'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[19].branchId,
   });
 
   // SML - DRAFT - John Nkhoma
@@ -1319,7 +1339,8 @@ function seedData() {
     compulsorySavingsAmount: null, effectiveInterestRateCalculated: null,
     disclosureStatementGenerated: false, rbmReportingCategory: 'MEDIUM_TERM',
     auditTrail: JSON.stringify([{action:'created',by:'Jones Mwalwanda',date:'2026-06-03'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[0].branchId,
   });
 
   // 3-Month Loan - ACTIVE - Patuma Salima
@@ -1336,7 +1357,8 @@ function seedData() {
     effectiveInterestRateCalculated: 65.3, disclosureStatementGenerated: true,
     rbmReportingCategory: 'SHORT_TERM',
     auditTrail: JSON.stringify([{action:'created',by:'Steven Gondwe',date:'2026-04-20'},{action:'approved',by:'Agness Mhango',date:'2026-04-20'},{action:'disbursed',by:'Steven Gondwe',date:'2026-05-01'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[1].branchId,
   });
 
   // Business Loan - ACTIVE - John Nkhoma
@@ -1353,7 +1375,8 @@ function seedData() {
     effectiveInterestRateCalculated: 54.4, disclosureStatementGenerated: true,
     rbmReportingCategory: 'SMALL_ENTERPRISE',
     auditTrail: JSON.stringify([{action:'created',by:'Jones Mwalwanda',date:'2026-03-20'},{action:'approved',by:'Esнart Tembo',date:'2026-03-25'},{action:'disbursed',by:'Jones Mwalwanda',date:'2026-04-10'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[2].branchId,
   });
 
   // Executive Scheme - APPROVED - Agnes Kamanga
@@ -1369,7 +1392,8 @@ function seedData() {
     compulsorySavingsAmount: 1600000, effectiveInterestRateCalculated: 44.1,
     disclosureStatementGenerated: true, rbmReportingCategory: 'LONG_TERM',
     auditTrail: JSON.stringify([{action:'created',by:'Jones Mwalwanda',date:'2026-05-15'},{action:'approved',by:'Esнart Tembo',date:'2026-05-20'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[3].branchId,
   });
 
   // Special Scheme - ACTIVE - Tiyamike Kachali
@@ -1386,7 +1410,8 @@ function seedData() {
     effectiveInterestRateCalculated: 48.2, disclosureStatementGenerated: true,
     rbmReportingCategory: 'MEDIUM_TERM',
     auditTrail: JSON.stringify([{action:'created',by:'Bertha Mwale',date:'2025-12-20'},{action:'approved',by:'Geoffrey Ngwira',date:'2025-12-22'},{action:'disbursed',by:'Bertha Mwale',date:'2026-01-10'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[4].branchId,
   });
 
   // SML - ACTIVE - Samuel Nkhoma
@@ -1403,7 +1428,8 @@ function seedData() {
     effectiveInterestRateCalculated: 58.3, disclosureStatementGenerated: true,
     rbmReportingCategory: 'MEDIUM_TERM',
     auditTrail: JSON.stringify([{action:'created',by:'Mercy Jere',date:'2026-04-30'},{action:'approved',by:'Blessings Chirwa',date:'2026-05-01'},{action:'disbursed',by:'Mercy Jere',date:'2026-05-10'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[5].branchId,
   });
 
   // Payday Loan - ACTIVE - Norman Kapito
@@ -1420,7 +1446,8 @@ function seedData() {
     effectiveInterestRateCalculated: 135.0, disclosureStatementGenerated: true,
     rbmReportingCategory: 'SHORT_TERM',
     auditTrail: JSON.stringify([{action:'created',by:'Steven Gondwe',date:'2026-05-25'},{action:'approved',by:'Agness Mhango',date:'2026-05-25'},{action:'disbursed',by:'Steven Gondwe',date:'2026-06-01'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[6].branchId,
   });
 
   // 3-Month Loan - ACTIVE - Peter Mwale
@@ -1437,7 +1464,8 @@ function seedData() {
     effectiveInterestRateCalculated: 65.3, disclosureStatementGenerated: true,
     rbmReportingCategory: 'SHORT_TERM',
     auditTrail: JSON.stringify([{action:'created',by:'Jones Mwalwanda',date:'2026-02-15'},{action:'approved',by:'Esнart Tembo',date:'2026-02-16'},{action:'disbursed',by:'Jones Mwalwanda',date:'2026-03-01'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[7].branchId,
   });
 
   // Payday Loan - REJECTED - Peter Mwale
@@ -1452,7 +1480,8 @@ function seedData() {
     compulsorySavingsAmount: null, effectiveInterestRateCalculated: null,
     disclosureStatementGenerated: false, rbmReportingCategory: 'SHORT_TERM',
     auditTrail: JSON.stringify([{action:'created',by:'Jones Mwalwanda',date:'2026-06-05'},{action:'rejected',by:'Blessings Chirwa',date:'2026-06-06',reason:'Existing active loan balance too high'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[8].branchId,
   });
 
   // Enterprise Loan - ACTIVE - Chimwemwe Jere
@@ -1469,7 +1498,8 @@ function seedData() {
     effectiveInterestRateCalculated: 42.6, disclosureStatementGenerated: true,
     rbmReportingCategory: 'MICRO_ENTERPRISE',
     auditTrail: JSON.stringify([{action:'created',by:'Steven Gondwe',date:'2025-12-10'},{action:'approved',by:'Esнart Tembo',date:'2025-12-15'},{action:'disbursed',by:'Steven Gondwe',date:'2026-01-01'}]),
-    createdAt: now, updatedAt: now
+    createdAt: now, updatedAt: now,
+    branchId: clients[9].branchId,
   });
 
   setCollection(StorageKeys.LOANS, loans);

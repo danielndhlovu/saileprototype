@@ -18,6 +18,7 @@ function createSession(user) {
     name: user.fullName,
     email: user.email,
     role: user.role,
+    branchId: user.branchId,
     loginAt: new Date().toISOString(),
     lastActivity: new Date().toISOString()
   };

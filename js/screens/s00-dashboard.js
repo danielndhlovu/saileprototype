@@ -662,7 +662,7 @@ function renderAuditorDashboard(container, user) {
  */
 function renderBMDashboard(container, user) {
   const branches = getCollection(StorageKeys.BRANCHES);
-  const branch = branches.find(b => b.id === user.branchId) || branches[3];
+  const branch = branches.find(b => b.id === user.branchId) || branches[2]; // Default to LLW if not found
   const allLoans = getCollection(StorageKeys.LOANS);
   const branchLoans = allLoans.filter(l => l.branchId === branch.id);
   const pendingLoans = branchLoans.filter(l => l.status === 'Pending' || l.status === 'Under_Review');
@@ -855,7 +855,8 @@ function renderAccountantDashboard(container, user) {
  */
 function renderLODashboard(container, user) {
   const allLoans = getCollection(StorageKeys.LOANS);
-  const myLoans = allLoans.filter(l => l.branchId === user.branchId);
+  const branchId = user.branchId || getCollection(StorageKeys.BRANCHES)[2].id; // Fallback to LLW
+  const myLoans = allLoans.filter(l => l.branchId === branchId);
   const activeLoans = myLoans.filter(l => l.status === 'Active' || l.status === 'Disbursed');
   const lateLoans = myLoans.filter(l => l.status === 'Active' && Math.random() > 0.8); // Mocking late loans for UI
 
