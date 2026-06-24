@@ -24,7 +24,7 @@ function renderLoans(container, options) {
     html += '<h1 class="text-lg font-semibold text-[#0f766e]">Saile Loan Management</h1>';
     html += '<p class="text-sm text-[#6b7280]">' + loans.length + ' total applications across ' + products.length + ' products</p>';
     html += '</div>';
-    if (!readOnly && role !== 'accountant') {
+    if (!readOnly && canPerformAction(role, 'create')) {
       html += '<button id="btn-new-loan" class="bg-[#111827] text-white px-6 py-2.5 rounded-xl hover:bg-[#047857] font-medium text-sm">+ New Application</button>';
     }
     html += '</div>';
@@ -409,7 +409,13 @@ function addSMSLog(templateCode, clientId, clientName, productCode, amount, date
  * Render loan application form with Saile products.
  */
 function renderLoanForm(container, options) {
-  var clients = getCollection(StorageKeys.CLIENTS).filter(function(c) { return c.status === 'Active'; });
+  var session = getSession();
+  var clients = getCollection(StorageKeys.CLIENTS).filter(function(c) {
+    if (c.status !== 'Active') return false;
+    // If loan officer, only show clients in their branch
+    if (session.role === 'loan_officer' && session.branchId && c.branchId !== session.branchId) return false;
+    return true;
+  });
   var products = getCollection(StorageKeys.PRODUCTS);
 
   var html = '<div class="space-y-6">';

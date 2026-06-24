@@ -4,18 +4,20 @@
 **Saile Financial Services Platform v2** — A microfinance and lending management system for small-to-medium financial institutions in Malawi (MWK currency).
 
 **Architecture:**
-- Pure frontend web application (no backend server)
+- High-fidelity functional prototype / EIS (Executive Information System)
+- Immersive full-width workspace (no sidebars)
 - Single Page Application (SPA) with hash-based routing
 - Client-side storage via `localStorage`
-- Role-Based Access Control (RBAC) system
-- Modular screen-based architecture
+- Advanced RBAC (Role-Based Access Control) with role-specific navigation and hubs
+- Modular screen-based architecture with strategic data visualization
 
-**Target Users:**
-- Admin (full access)
-- Branch Manager
-- Field Officer
-- Accountant
-- Auditor (read-only)
+**Target Roles:**
+- MD (Managing Director) — Strategic Hub & Scenario Engine
+- Branch Manager — Operational Dashboard
+- Loan Officer — Field Management (Merged with Field Officer)
+- Accountant / Finance — Financial GL & Treasury
+- Auditor — Compliance & Anomaly Detection
+- Admin — System Configuration
 
 ---
 
@@ -65,7 +67,9 @@ graph TD
             Users[Users Management ✅]
             Settings[System Config ✅]
             PIN[PIN Management ✅]
-            Nav[Dynamic Navigation ✅]
+            Nav[Advanced Role-Based Nav ✅]
+            AISearch[Saile AI Global Search ✅]
+            Breadcrumbs[Dynamic Breadcrumbs ✅]
         end
         
         subgraph "Security & Validation"
@@ -168,36 +172,33 @@ graph TD
 
 ### ✅ Working Components
 
-#### 1. **Core Infrastructure**
-- **Router**: Hash-based navigation (`#/route`) working perfectly
-- **Session Management**: 15-minute timeout with warnings
-- **localStorage Layer**: Complete CRUD abstraction with error handling
-- **RBAC**: 5 roles (admin, branch_manager, field_officer, accountant, auditor) with proper permissions
-- **Auth**: Login/logout with role switching
-- **UI Components**: Toast notifications, modals, responsive design
+#### 1. **Core Infrastructure & Navigation**
+- **Router**: Hash-based navigation (`#/route`) with support for `scroll:` and `action:` triggers.
+- **Advanced Navigation**: Role-specific dropdown menus with notification badges and status counts.
+- **Saile AI Search**: Natural language intent detection and quick-action shortcuts.
+- **Immersive Layout**: Sidebar-free, full-width workspace for data-heavy operations.
+- **Session Management**: 15-minute timeout with warnings and user profile management.
+- **RBAC**: Multi-role configuration (MD, Finance, Auditor, BM, LO, Admin) with tailored functional hubs.
 
-#### 2. **Financial Algorithms** (All implemented per specs)
-- **Amortization Schedule**: Flat and declining balance methods
-- **PAR Calculation**: Portfolio at Risk (1-30, 31-90, 90+ days buckets)
-- **Collection Efficiency**: Collected vs Due ratio
-- **Trial Balance**: Debit/credit voucher balancing
-- **Due Date Calculator**: Weekly, biweekly, monthly frequencies
+#### 2. **Executive Information System (EIS)**
+- **MD Strategic Hub**: Morning brief, risk thermometer, and interactive Scenario Modeling engine.
+- **Auditor Hub**: Forensic anomaly detection and risk heatmap visualization.
+- **Branch/LO Hubs**: Real-time target tracking and productivity scoring.
+- **Financial Visualization**: Integrated Chart.js for portfolio trends, revenue mix, and cash flow projections.
 
-#### 3. **Business Modules** (13 screens)
-All screens render with full CRUD:
-- Dashboard with KPIs
-- Client Registry with search/filter
-- Groups Management
-- Loan Products (7 types)
-- Repayment tracking
-- Collections
-- Follow-up
-- Savings
-- Accounting with vouchers
-- Audit Trail
-- Sync module
-- Users management
-- Settings
+#### 3. **Financial Algorithms** (All implemented per specs)
+- **Amortization Schedule**: Flat and declining balance methods.
+- **PAR Calculation**: Automated risk bucket classification (1-30, 31-90, 90+ days).
+- **Collection Efficiency**: Real-time collected vs. due analysis.
+- **Trial Balance**: Real-time debit/credit voucher balancing.
+
+#### 4. **Business Modules** (13 screens)
+All screens render with full CRUD and role-specific action guards:
+- Strategic & Operational Dashboards
+- Client Registry & Groups Management
+- Loan Lifecycle (Products, Repayment, Collections, Follow-up)
+- Savings & Accounting (Vouchers, GL)
+- Audit Trail & System Sync
 
 #### 4. **Security Features**
 - HTML escaping for XSS prevention

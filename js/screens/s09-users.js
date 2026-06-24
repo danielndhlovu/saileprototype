@@ -134,7 +134,6 @@ function renderUserForm(container, options) {
   html += '<div><label class="block text-sm font-medium text-[#0f766e] mb-1.5">Role *</label>';
   html += '<select name="role" class="w-full px-3 py-2.5 border border-[#d1d5db] rounded-xl text-sm" required>';
   html += '<option value="admin">Admin</option>';
-  html += '<option value="field_officer">Field Officer</option>';
   html += '<option value="accountant">Accountant</option>';
   html += '<option value="auditor">Auditor</option>';
   html += '</select></div>';

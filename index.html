@@ -10,6 +10,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <!-- Tailwind CSS v3 Play CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -66,17 +69,9 @@
     <header id="top-bar" class="fixed top-0 left-0 right-0 h-14 bg-white border-b border-[#d1d5db] z-50 flex items-center px-4 lg:px-5">
     </header>
 
-    <!-- Left-rail navigation (desktop) -->
-    <nav id="left-rail" class="hidden lg:block fixed top-14 left-0 bottom-0 w-56 bg-white border-r border-[#d1d5db] z-40 overflow-y-auto">
-    </nav>
-
-    <!-- Main content area -->
-    <main id="app-content" class="pt-20 lg:ml-56 xl:mr-72 min-h-screen px-5 pb-6 lg:px-6 lg:pb-8">
+    <!-- Main content area - Full width, sidebar removed per requirement -->
+    <main id="app-content" class="pt-16 min-h-screen px-5 pb-6 lg:px-10 lg:pb-8">
     </main>
-
-    <!-- Right panel (notifications & info) -->
-    <aside id="right-panel" class="hidden xl:block fixed top-14 right-0 bottom-0 w-72 p-4 overflow-y-auto">
-    </aside>
 
     <!-- Mobile bottom tabs -->
     <nav id="mobile-tabs" class="block lg:hidden fixed bottom-0 left-0 right-0 h-16 px-4 bg-white border-t border-[#d1d5db] z-50 flex items-center justify-around">
